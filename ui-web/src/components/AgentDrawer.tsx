@@ -1520,22 +1520,6 @@ export function AgentDrawer({ displayMode = 'drawer' }: { displayMode?: 'drawer'
               </>
             ) : null}
           </div>
-          <button
-            type="button"
-            data-testid="agent-computer-button"
-            onClick={openComputerPanel}
-            title="电脑"
-            aria-label="打开电脑面板"
-            aria-pressed={Boolean(activeBotID)}
-            className={`relative flex h-7 w-7 items-center justify-center rounded-full bg-brand-surface/90 shadow-sm ring-1 ring-black/5 transition ${
-              activeBotID ? 'text-brand-accent' : 'text-brand-muted hover:text-brand-muted'
-            }`}
-          >
-            <Monitor className="h-4 w-4" />
-            {runBusy ? (
-              <span aria-hidden="true" data-testid="agent-computer-live" className="absolute right-0.5 top-0.5 h-1.5 w-1.5 animate-pulse rounded-full bg-brand-success/100" />
-            ) : null}
-          </button>
           {displayMode === 'drawer' ? (
             <button
               type="button"

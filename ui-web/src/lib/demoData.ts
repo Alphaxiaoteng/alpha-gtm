@@ -12,7 +12,7 @@
  *
  * 只有真实数据为空时才启用，绝不覆盖已有数据；界面上带「演示数据」标记。
  */
-import type { Account, PublishContentRecord } from '../api';
+import type { Account, PublishContentRecord, TrendRadarSignal } from '../api';
 
 /** 页面顶部与卡片上统一的演示标签。 */
 export const DEMO_BADGE = '演示数据';
@@ -70,6 +70,24 @@ export const DEMO_IDENTITIES: DemoIdentity[] = [
   { id: -9005, name: '俄罗斯' },
 ];
 
+/** 演示矩阵统一用处理成方形的品牌 logo，避免横版图被裁成色块。 */
+const LOGO = '/demo/kooying-logo-square.jpg';
+
+/**
+ * 每个市场一组出口 IP 池。
+ *
+ * 真实矩阵里同一国家的多个账号通常走同一批落地 IP，避免账号在地区之间跳。
+ * 这里给每个市场一组固定演示 IP，界面用来展示「账号归属哪个池」。
+ * 地址取自文档专用保留段，不会指向真实主机。
+ */
+export const DEMO_IP_POOLS: Record<string, { label: string; subnet: string; exits: string[] }> = {
+  '-9001': { label: '印尼 · 雅加达', subnet: '198.51.100.0/24', exits: ['198.51.100.11', '198.51.100.12'] },
+  '-9002': { label: '沙特 · 达曼', subnet: '198.51.100.0/24', exits: ['198.51.100.21', '198.51.100.22'] },
+  '-9003': { label: '巴西 · 桑托斯', subnet: '198.51.100.0/24', exits: ['198.51.100.31', '198.51.100.32'] },
+  '-9004': { label: '尼日利亚 · 拉各斯', subnet: '203.0.113.0/24', exits: ['203.0.113.41'] },
+  '-9005': { label: '俄罗斯 · 莫斯科', subnet: '203.0.113.0/24', exits: ['203.0.113.51'] },
+};
+
 interface DemoAccountSpec {
   id: number;
   identityID: number;
@@ -88,7 +106,7 @@ interface DemoAccountSpec {
  * 不用「示例账号」这种一眼假的写法。
  */
 const DEMO_ACCOUNTS: DemoAccountSpec[] = [
-  // —— 越南：四个实测 TikTok 账号（挂在默认矩阵上） ——
+  // —— 越南：4 个实测 TikTok 账号（挂在默认矩阵上） ——
   {
     id: -1001,
     identityID: 0,
@@ -130,28 +148,32 @@ const DEMO_ACCOUNTS: DemoAccountSpec[] = [
     measured: true,
   },
 
-  // —— 印尼：东南亚主力，TikTok + Facebook ——
-  { id: -1101, identityID: -9001, platformCode: 'tiktok', name: 'kooying.indonesia', identifier: '@kooying.id', avatar: '/demo/kooying-logo-square.jpg', remark: '印尼语号 · 演示', measured: false },
-  { id: -1102, identityID: -9001, platformCode: 'meta', name: 'Kooying Rem Indonesia', identifier: '演示占位', avatar: '/demo/kooying-logo-square.jpg', remark: 'Meta 主页 · 演示', measured: false },
-  { id: -1103, identityID: -9001, platformCode: 'youtube', name: 'Kooying Parts ID', identifier: '演示占位', avatar: '/demo/kooying-logo-square.jpg', remark: 'YouTube 频道 · 演示', measured: false },
+  // —— 其余市场：每个矩阵固定 4 个平台，TikTok / YouTube / Facebook / Instagram，
+  // 与越南的账号数一致，也覆盖实际投放的四个主力渠道。 ——
+  { id: -1101, identityID: -9001, platformCode: 'tiktok', name: 'kooying.indonesia', identifier: '@kooying.id', avatar: LOGO, remark: 'TikTok · 演示', measured: false },
+  { id: -1102, identityID: -9001, platformCode: 'youtube', name: 'Kooying Parts Indonesia', identifier: '演示占位', avatar: LOGO, remark: 'YouTube · 演示', measured: false },
+  { id: -1103, identityID: -9001, platformCode: 'facebook', name: 'Kooying Rem Indonesia', identifier: '演示占位', avatar: LOGO, remark: 'Facebook 主页 · 演示', measured: false },
+  { id: -1104, identityID: -9001, platformCode: 'instagram', name: 'kooying.indonesia', identifier: '@kooying.indonesia', avatar: LOGO, remark: 'Instagram · 演示', measured: false },
 
-  // —— 沙特：中东高温市场，主打矿山长坡配方 ——
-  { id: -1201, identityID: -9002, platformCode: 'meta', name: 'Kooying Middle East', identifier: '演示占位', avatar: '/demo/kooying-logo-square.jpg', remark: 'Meta 主页 · 演示', measured: false },
-  { id: -1202, identityID: -9002, platformCode: 'x', name: 'kooying_gcc', identifier: '@kooying_gcc', avatar: '/demo/kooying-logo-square.jpg', remark: 'X 帐号 · 演示', measured: false },
-  { id: -1203, identityID: -9002, platformCode: 'youtube', name: 'Kooying GCC', identifier: '演示占位', avatar: '/demo/kooying-logo-square.jpg', remark: 'YouTube 频道 · 演示', measured: false },
+  { id: -1201, identityID: -9002, platformCode: 'tiktok', name: 'kooying.arabia', identifier: '@kooying.arabia', avatar: LOGO, remark: 'TikTok · 演示', measured: false },
+  { id: -1202, identityID: -9002, platformCode: 'youtube', name: 'Kooying Middle East', identifier: '演示占位', avatar: LOGO, remark: 'YouTube · 演示', measured: false },
+  { id: -1203, identityID: -9002, platformCode: 'facebook', name: 'Kooying Middle East', identifier: '演示占位', avatar: LOGO, remark: 'Facebook 主页 · 演示', measured: false },
+  { id: -1204, identityID: -9002, platformCode: 'instagram', name: 'kooying.me', identifier: '@kooying.me', avatar: LOGO, remark: 'Instagram · 演示', measured: false },
 
-  // —— 巴西：南美，葡语 ——
-  { id: -1301, identityID: -9003, platformCode: 'tiktok', name: 'kooying.brasil', identifier: '@kooying.brasil', avatar: '/demo/kooying-logo-square.jpg', remark: 'TikTok · 演示', measured: false },
-  { id: -1302, identityID: -9003, platformCode: 'meta', name: 'Kooying Brasil', identifier: '演示占位', avatar: '/demo/kooying-logo-square.jpg', remark: 'Meta 主页 · 演示', measured: false },
-  { id: -1303, identityID: -9003, platformCode: 'youtube', name: 'Kooying Brasil', identifier: '演示占位', avatar: '/demo/kooying-logo-square.jpg', remark: 'YouTube 频道 · 演示', measured: false },
+  { id: -1301, identityID: -9003, platformCode: 'tiktok', name: 'kooying.brasil', identifier: '@kooying.brasil', avatar: LOGO, remark: 'TikTok · 演示', measured: false },
+  { id: -1302, identityID: -9003, platformCode: 'youtube', name: 'Kooying Brasil', identifier: '演示占位', avatar: LOGO, remark: 'YouTube · 演示', measured: false },
+  { id: -1303, identityID: -9003, platformCode: 'facebook', name: 'Kooying Brasil', identifier: '演示占位', avatar: LOGO, remark: 'Facebook 主页 · 演示', measured: false },
+  { id: -1304, identityID: -9003, platformCode: 'instagram', name: 'kooying.brasil', identifier: '@kooying.brasil', avatar: LOGO, remark: 'Instagram · 演示', measured: false },
 
-  // —— 尼日利亚：非洲西海岸 ——
-  { id: -1401, identityID: -9004, platformCode: 'meta', name: 'Kooying Nigeria', identifier: '演示占位', avatar: '/demo/kooying-logo-square.jpg', remark: 'Meta 主页 · 演示', measured: false },
-  { id: -1402, identityID: -9004, platformCode: 'tiktok', name: 'kooying.ng', identifier: '@kooying.ng', avatar: '/demo/kooying-logo-square.jpg', remark: 'TikTok · 演示', measured: false },
+  { id: -1401, identityID: -9004, platformCode: 'tiktok', name: 'kooying.ng', identifier: '@kooying.ng', avatar: LOGO, remark: 'TikTok · 演示', measured: false },
+  { id: -1402, identityID: -9004, platformCode: 'youtube', name: 'Kooying Nigeria', identifier: '演示占位', avatar: LOGO, remark: 'YouTube · 演示', measured: false },
+  { id: -1403, identityID: -9004, platformCode: 'facebook', name: 'Kooying Nigeria', identifier: '演示占位', avatar: LOGO, remark: 'Facebook 主页 · 演示', measured: false },
+  { id: -1404, identityID: -9004, platformCode: 'instagram', name: 'kooying.ng', identifier: '@kooying.ng', avatar: LOGO, remark: 'Instagram · 演示', measured: false },
 
-  // —— 俄罗斯：俄语区，HOWO / Shacman 为主 ——
-  { id: -1501, identityID: -9005, platformCode: 'youtube', name: 'Kooying Russia', identifier: '演示占位', avatar: '/demo/kooying-logo-square.jpg', remark: 'YouTube 频道 · 演示', measured: false },
-  { id: -1502, identityID: -9005, platformCode: 'meta', name: 'Kooying Russia', identifier: '演示占位', avatar: '/demo/kooying-logo-square.jpg', remark: 'Meta 主页 · 演示', measured: false },
+  { id: -1501, identityID: -9005, platformCode: 'tiktok', name: 'kooying.russia', identifier: '@kooying.ru', avatar: LOGO, remark: 'TikTok · 演示', measured: false },
+  { id: -1502, identityID: -9005, platformCode: 'youtube', name: 'Kooying Russia', identifier: '演示占位', avatar: LOGO, remark: 'YouTube · 演示', measured: false },
+  { id: -1503, identityID: -9005, platformCode: 'facebook', name: 'Kooying Russia', identifier: '演示占位', avatar: LOGO, remark: 'Facebook 主页 · 演示', measured: false },
+  { id: -1504, identityID: -9005, platformCode: 'instagram', name: 'kooying.ru', identifier: '@kooying.ru', avatar: LOGO, remark: 'Instagram · 演示', measured: false },
 ];
 
 /**
@@ -179,6 +201,9 @@ export function demoAccountsFor(identities: Array<{ id: number }>): Account[] {
 }
 
 function toAccount(spec: DemoAccountSpec, identityId: number): Account {
+  // 按矩阵分配出口 IP：同矩阵下的账号共享一组池，各自错开一条线路。
+  const pool = DEMO_IP_POOLS[String(spec.identityID)];
+  const exit = pool ? pool.exits[Math.abs(spec.id) % pool.exits.length] : '';
   return {
     id: spec.id,
     identityId,
@@ -200,6 +225,7 @@ function toAccount(spec: DemoAccountSpec, identityId: number): Account {
     browserState: 'stopped',
     fingerprintSeed: 0,
     fingerprintConfig: '',
+    proxyServer: exit ? `http://${exit}:8080` : undefined,
     tags: [],
   };
 }
@@ -218,6 +244,8 @@ interface DemoRecordSpec {
   offsetDays: number;
   url: string;
   type: string;
+  /** 封面用真实产品/工厂实拍，不用平台图标凑数。 */
+  cover: string;
 }
 
 /**
@@ -227,6 +255,7 @@ interface DemoRecordSpec {
  * 但整页带演示标记——它们不是平台核验过的发布证据。
  */
 const DEMO_RECORD_SPECS: DemoRecordSpec[] = [
+  // 覆盖视频 / 图文 / 文章三种内容类型，平台只用国外主流媒体。
   {
     platform: 'youtube',
     account: 'KOOYING Brake Parts',
@@ -235,6 +264,7 @@ const DEMO_RECORD_SPECS: DemoRecordSpec[] = [
     offsetDays: -1,
     url: 'https://www.youtube.com/watch?v=demo-howo-14h',
     type: 'video',
+    cover: '/demo/media-covers/lining-manufacture.jpg',
   },
   {
     platform: 'tiktok',
@@ -244,6 +274,7 @@ const DEMO_RECORD_SPECS: DemoRecordSpec[] = [
     offsetDays: -2,
     url: 'https://www.tiktok.com/@kooying.autoparts/video/demo-krauss',
     type: 'video',
+    cover: '/demo/media-covers/source-factory.jpg',
   },
   {
     platform: 'facebook',
@@ -253,6 +284,7 @@ const DEMO_RECORD_SPECS: DemoRecordSpec[] = [
     offsetDays: -3,
     url: 'https://www.facebook.com/kooying/posts/demo-bpw19032',
     type: 'image_text',
+    cover: '/demo/media-covers/workshop.jpg',
   },
   {
     platform: 'instagram',
@@ -262,6 +294,7 @@ const DEMO_RECORD_SPECS: DemoRecordSpec[] = [
     offsetDays: -4,
     url: 'https://www.instagram.com/p/demo-nantaihu',
     type: 'image_text',
+    cover: '/demo/media-covers/boss-factory-intro.jpg',
   },
   {
     platform: 'youtube',
@@ -271,6 +304,37 @@ const DEMO_RECORD_SPECS: DemoRecordSpec[] = [
     offsetDays: -6,
     url: 'https://www.youtube.com/watch?v=demo-hande-35t',
     type: 'video',
+    cover: '/demo/media-covers/canton-fair.jpg',
+  },
+  {
+    platform: 'instagram',
+    account: 'kooying.brake',
+    title: 'WVA 29087 air disc pad — dimension chart carousel',
+    state: 'published',
+    offsetDays: -8,
+    url: 'https://www.instagram.com/p/demo-wva29087',
+    type: 'image_text',
+    cover: '/demo/media-covers/boss-factory-intro.jpg',
+  },
+  {
+    platform: 'facebook',
+    account: 'Zhejiang Kooying Auto Parts',
+    title: 'WVA 29030 / 29087 disc pad — IATF16949 & ECE R90 documents',
+    state: 'published',
+    offsetDays: -10,
+    url: 'https://www.facebook.com/kooying/posts/demo-wva29030',
+    type: 'image_text',
+    cover: '/demo/media-covers/workshop.jpg',
+  },
+  {
+    platform: 'youtube',
+    account: 'KOOYING Brake Parts',
+    title: 'Batching and mixing: how friction material consistency is held',
+    state: 'published',
+    offsetDays: -12,
+    url: 'https://www.youtube.com/watch?v=demo-batching',
+    type: 'video',
+    cover: '/demo/media-covers/source-factory.jpg',
   },
   {
     platform: 'tiktok',
@@ -280,6 +344,7 @@ const DEMO_RECORD_SPECS: DemoRecordSpec[] = [
     offsetDays: 2,
     url: '',
     type: 'video',
+    cover: '/demo/media-covers/canton-fair.jpg',
   },
   {
     platform: 'instagram',
@@ -289,6 +354,7 @@ const DEMO_RECORD_SPECS: DemoRecordSpec[] = [
     offsetDays: 4,
     url: '',
     type: 'image_text',
+    cover: '/demo/media-covers/lining-manufacture.jpg',
   },
 ];
 
@@ -297,9 +363,19 @@ function offsetISO(now: Date, days: number): string {
   return new Date(now.getTime() + days * 86_400_000).toISOString();
 }
 
+/**
+ * 演示记录在 PublishContentRecord 之上多带一个本地封面路径。
+ *
+ * 真实记录的封面走 /api/publish-content-records/{id}/cover，演示行没有后端记录，
+ * 所以直接指向 public/demo/covers 下的真实产品/工厂实拍图。
+ */
+export interface DemoPublishRecord extends PublishContentRecord {
+  demo_cover?: string;
+}
+
 /** 生成演示发布记录；已验证时间与排期时间按偏移算好。 */
-export function demoPublishContentRecords(now: Date = new Date()): PublishContentRecord[] {
-  return DEMO_RECORD_SPECS.map((spec, index) => ({
+export function demoPublishContentRecords(now: Date = new Date()): DemoPublishRecord[] {
+  return DEMO_RECORD_SPECS.map((spec, index): DemoPublishRecord => ({
     id: -2001 - index,
     job_id: 0,
     account_id: 0,
@@ -314,10 +390,60 @@ export function demoPublishContentRecords(now: Date = new Date()): PublishConten
     error_code: '',
     verified_at: spec.state === 'published' ? offsetISO(now, spec.offsetDays) : '',
     deleted_at: '',
+    demo_cover: spec.cover,
   }));
 }
 
 /** 演示记录同样没有真实 id。 */
 export function isDemoRecordID(id: number): boolean {
   return id < 0;
+}
+
+/**
+ * 趋势雷达演示信号：热榜榜单常见的内容形态。
+ *
+ * 标题按「运营真会点开的那类选题」写：具体型号、具体问题、具体工况，而不是
+ * 「爆款视频 1」。平台只用国外主流媒体，数据字段留空表示没有实测值，不用编造
+ * 播放量冒充真实采集结果。
+ */
+export function demoRadarSignals(now: Date = new Date()): TrendRadarSignal[] {
+  const specs: Array<{
+    term: string;
+    platform: string;
+    title: string;
+    creator: string;
+    play: number;
+    likes: number;
+    daysAgo: number;
+    cover: string;
+  }> = [
+    { term: 'WVA 29087', platform: 'youtube', title: 'WVA 29087 vs 29108 — what actually differs on the Knorr SB7000', creator: 'Brake Tech Talks', play: 184_000, likes: 6_200, daysAgo: 1, cover: 'lab' },
+    { term: 'HOWO brake', platform: 'youtube', title: 'HOWO 14-hole vs 8-hole lining: the mistake behind full-container returns', creator: 'Heavy Fleet Notes', play: 96_400, likes: 3_100, daysAgo: 2, cover: 'lining-manufacture' },
+    { term: 'BPW 19032', platform: 'tiktok', title: 'BPW 19032 in 20 seconds — trailer axle lining swap', creator: 'trailerparts.eu', play: 412_000, likes: 18_900, daysAgo: 1, cover: 'workshop' },
+    { term: 'brake lining', platform: 'tiktok', title: 'Why cheap lining wears through in two months on long downhill grades', creator: 'minefleet.cl', play: 731_000, likes: 41_200, daysAgo: 3, cover: 'source-factory' },
+    { term: 'brake pad factory', platform: 'youtube', title: 'Inside a friction material batching line — how consistency is held', creator: 'Made In Asia', play: 57_800, likes: 1_450, daysAgo: 5, cover: 'canton-fair' },
+    { term: 'ECE R90', platform: 'facebook', title: 'ECE R90 vs IATF16949: which document buyers actually ask for', creator: 'Commercial Parts Weekly', play: 24_300, likes: 780, daysAgo: 2, cover: 'boss-factory-intro' },
+    { term: 'brake pad', platform: 'instagram', title: 'Caliper measurement without an OE code — 240 × 220mm to Hande 35T', creator: 'axleworks', play: 88_500, likes: 5_600, daysAgo: 4, cover: 'workshop' },
+    { term: 'mercedes 17276', platform: 'youtube', title: 'Mercedes 17276 drum lining — 140mm vs 170mm shoe width', creator: 'Drum Brake Lab', play: 33_200, likes: 890, daysAgo: 6, cover: 'lining-manufacture' },
+  ];
+  const iso = (days: number) => new Date(now.getTime() - days * 86_400_000).toISOString();
+  return specs.map((spec, index) => ({
+    niche_id: 'demo-niche',
+    niche_name: '重卡刹车片 · 演示热榜',
+    search_term: spec.term,
+    platform: spec.platform,
+    title: spec.title,
+    creator: spec.creator,
+    observed_at: iso(spec.daysAgo),
+    published_at: iso(spec.daysAgo),
+    cover_url: `/demo/media-covers/${spec.cover}.jpg`,
+    first_seen_at: iso(spec.daysAgo),
+    occurrences: 1,
+    is_new: spec.daysAgo <= 2,
+    play: spec.play,
+    likes: spec.likes,
+    collects: 0,
+    shares: 0,
+    demo_rank: index + 1,
+  } as TrendRadarSignal & { demo_rank: number }));
 }

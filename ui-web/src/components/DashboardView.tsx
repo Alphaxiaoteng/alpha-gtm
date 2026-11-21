@@ -48,6 +48,7 @@ import {
   type TrendRadarSignal,
 } from '../api';
 import { useUIStore } from '../store';
+import { demoRadarSignals, isDemoModeEnabled } from '../lib/demoData';
 import AddCreatorDialog from './AddCreatorDialog';
 import { LocalLoadingState } from './LocalLoadingState';
 import { PlatformIcon } from './PlatformIcon';
@@ -337,7 +338,7 @@ export const DashboardView: React.FC = () => {
   const videoLookupSearching = videoLookupStage !== 'idle';
 
   const {
-    data,
+    data: summaryRaw,
     error,
     isLoading,
     isValidating,
@@ -347,6 +348,12 @@ export const DashboardView: React.FC = () => {
     revalidateOnReconnect: false,
     refreshInterval: 0,
   });
+  // 本机还没有抓到任何信号时，用演示热榜填满列表（需 ?demo=1）。真实数据一旦
+  // 出现就完全让位；演示只补 signals，不改动其余统计口径。
+  const usingDemoSignals = isDemoModeEnabled() && summaryRaw !== undefined && (summaryRaw.signals?.length ?? 0) === 0;
+  const data = usingDemoSignals && summaryRaw
+    ? { ...summaryRaw, signals: demoRadarSignals() }
+    : summaryRaw;
   const {
     data: config,
     mutate: mutateConfig,
@@ -3267,10 +3274,10 @@ const SignalRow: React.FC<{
     <article
       data-testid={`trend-signal-${signal.call_id || `${signal.platform}-${signal.title}`}`}
       onClick={() => onDetail(signal)}
-      className="group flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 px-4 py-3 cursor-pointer transition-all duration-150 hover:hover:bg-brand-surface-raised hover:shadow-sm"
+      className="group flex flex-col gap-3 px-4 py-3 cursor-pointer transition-all duration-150 hover:bg-brand-surface-raised hover:shadow-sm lg:flex-row lg:items-start"
     >
       {/* 左侧：排名勋章 + 9:16 竖屏大封面 */}
-      <div className="flex items-center gap-3 shrink-0">
+      <div className="flex shrink-0 items-start gap-3">
         {rank !== undefined ? (
           <span
             className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs font-black shadow-sm ${
@@ -3291,7 +3298,7 @@ const SignalRow: React.FC<{
 
         <div
           aria-label={`查看作品详情：${signal.title}`}
-          className="relative aspect-[9/16] h-32 sm:h-40 shrink-0 overflow-hidden rounded-xl border border-brand-border bg-black text-left shadow-sm transition group-hover:scale-[1.02] group-hover:shadow"
+          className="relative aspect-[9/16] h-28 shrink-0 overflow-hidden rounded-xl border border-brand-border bg-black text-left shadow-sm transition group-hover:scale-[1.02] group-hover:shadow lg:h-36"
         >
           {signal.cover_url ? (
             <img
@@ -3315,9 +3322,9 @@ const SignalRow: React.FC<{
           </span>
         </div>
       </div>
-      {/* 中间：标题、作者、赛道、摘要 */}
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
+      {/* 中间：标题、作者、赛道、摘要。min-w 保证窄屏下还能正常横排换行。 */}
+      <div className="min-w-[12rem] flex-1">
+        <div className="flex flex-wrap items-center gap-1.5">
           <span className="rounded bg-brand-surface-raised px-2 py-0.5 text-[10px] font-bold text-brand-accent">
             {signal.niche_name}
           </span>
@@ -3357,7 +3364,7 @@ const SignalRow: React.FC<{
       </div>
 
       {/* 右侧：超大醒目互动数据看板 + 操作按钮 */}
-      <div className="flex shrink-0 items-center justify-between md:justify-end gap-4 border-t border-brand-border pt-3 md:border-t-0 md:pt-0 md:self-stretch">
+      <div className="flex shrink-0 flex-wrap items-center gap-4 lg:justify-end">
         {/* 数据块：大字体强调 */}
         <div className="flex items-center gap-4 sm:gap-6">
           <div className="text-center">

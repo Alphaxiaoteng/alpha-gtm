@@ -23,7 +23,7 @@ import {
 import { canVerifyXHSCreatorBackend } from '../publishPlanReadiness';
 import { describePublishIntent, type PublishIntent } from '../publishOutcome';
 import { useUIStore } from '../store';
-import { DEMO_BADGE, demoPublishContentRecords, isDemoModeEnabled, isDemoRecordID } from '../lib/demoData';
+import { DEMO_BADGE, demoPublishContentRecords, isDemoModeEnabled, isDemoRecordID, type DemoPublishRecord } from '../lib/demoData';
 import { PlatformIcon } from './PlatformIcon';
 
 const attentionStatuses = new Set([
@@ -445,18 +445,18 @@ export function PublishRecordsView() {
             {contentRecords.map((item) => (
               <article key={item.id} className="flex items-center gap-3 p-3">
                 <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden border border-brand-border bg-brand-bg">
-                  {isDemoRecordID(item.id) ? (
-                    // 演示行没有真实封面，用平台图标占位，不伪造截图。
-                    <PlatformIcon platform={item.platform_code} className="h-7 w-7 opacity-60" />
-                  ) : (
-                    <img
-                      src={`/api/publish-content-records/${item.id}/cover`}
-                      alt=""
-                      loading="lazy"
-                      className="h-full w-full object-cover"
-                      onError={(event) => { event.currentTarget.style.visibility = 'hidden'; }}
-                    />
-                  )}
+                  {/* 演示行也放真实产品/工厂实拍封面，不用平台图标凑数。 */}
+                  <img
+                    src={
+                      isDemoRecordID(item.id)
+                        ? (item as DemoPublishRecord).demo_cover ?? ''
+                        : `/api/publish-content-records/${item.id}/cover`
+                    }
+                    alt=""
+                    loading="lazy"
+                    className="h-full w-full object-cover"
+                    onError={(event) => { event.currentTarget.style.visibility = 'hidden'; }}
+                  />
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">

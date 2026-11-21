@@ -7,7 +7,8 @@ const source = (path) => readFile(new URL(path, import.meta.url), 'utf8');
 test('the default skin is a cold-white precision workbench with semantic colors', async () => {
   const css = await source('../src/index.css');
   assert.match(css, /--brand-bg:\s*#fcfcfb/i);
-  assert.match(css, /--brand-sidebar:\s*#f5f5f3/i);
+  // 侧栏改为纯白：与主内容区同底，靠分隔线与留白分栏，而不是靠灰底。
+  assert.match(css, /--brand-sidebar:\s*#ffffff/i);
   assert.match(css, /--brand-border:\s*#e5e5e1/i);
   assert.match(css, /--font-body-runtime:[^;]*PingFang SC/);
   assert.match(css, /--brand-success:\s*#15803d/);

@@ -14,6 +14,7 @@ import {
   Gauge,
   LogIn,
   Monitor,
+  Network,
   Plus,
   RefreshCw,
   Settings2,
@@ -48,6 +49,10 @@ const platformOrder = [
   'tiktok',
   'youtube',
   'meta',
+  // Facebook 与 Instagram 在发布链路上仍走统一 meta 容器，但账号页要把它们
+  // 分开列出——运营需要知道是哪个主页/哪个 IG 在发。
+  'facebook',
+  'instagram',
   'wechat_mp',
   'csdn',
 	'acfun',
@@ -1029,6 +1034,18 @@ export function BrowserWorkspaceView({ initialSection: _initialSection = 'accoun
                               <span className="truncate text-[10px] font-medium text-gray-400">{secondaryIdentity}</span>
                             ) : null}
                           </div>
+                          {account.proxyServer ? (
+                            // 出口线路来自哪个 IP 池，直接标在账号上：矩阵按市场分工时，
+                            // 运营最容易搞错的就是「这个号走的是哪个国家的 IP」。
+                            <p
+                              data-testid={`ego-account-egress-${account.id}`}
+                              title={`出口线路 ${account.proxyServer}`}
+                              className="mt-0.5 inline-flex max-w-full items-center gap-1 truncate rounded bg-brand-surface-raised px-1.5 py-0.5 font-mono text-[9.5px] font-medium text-gray-500"
+                            >
+                              <Network className="h-2.5 w-2.5 shrink-0" />
+                              {account.proxyServer.replace(/^https?:\/\//, '').replace(/:\d+$/, '')}
+                            </p>
+                          ) : null}
                           <p className="truncate text-[11px] font-medium text-gray-500">
                             {displayName}
                             {account.loginState === 'unknown' ? (

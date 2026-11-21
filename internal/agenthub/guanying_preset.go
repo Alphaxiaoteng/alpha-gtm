@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	GuanyingDefaultModel = "dashscope/deepseek-v4.1-flash"
+	GuanyingDefaultModel    = "dashscope/deepseek-v4.1-flash"
 	GuanyingFallbackVersion = "1.19.6"
 )
 
@@ -107,7 +107,7 @@ func (s *Service) ensureGuanyingBots(ctx context.Context) error {
 4. 数据协同：通过官方 lark-cli 将趋势线索、内容产出与独立站询盘同步飞书多维表格。
 
 【输出原则（高信号、极简干练）】
-- 严禁调用 knowledge.search 或任何知识库工具，直接使用上述上下文与工具能力即可。
+- 涉及产品型号、配方、认证与价格的回答，先查「浙江冠英·品牌与制动技术知识库」再作答；知识库没有的再根据上述上下文补充。
 - 拒绝“我将为您……”等废话开场，直接给结构化方案、可执行脚本、竞品拆解或可上线代码片段。`
 		if builtin.Name != name || builtin.Role != role || builtin.Model != model || builtin.Kickoff != kickoff || builtin.Instructions != instructions {
 			_, _ = s.store.UpdateBot(ctx, BuiltinAlphaAgentID, BotPatch{
@@ -123,20 +123,76 @@ func (s *Service) ensureGuanyingBots(ctx context.Context) error {
 	// Ultra-minimalist 1 specialist bot alongside Chief Bot (total 2 bots in left sidebar).
 	presets := []Bot{
 		{
-			ID:        "bot_gy_gtm_growth",
-			Name:      "出海内容与 SEO 专家",
-			Role:      "TikTok 爆款重塑 · 竞品对标 · 官网 SEO 转化",
-			GroupName: "核心专家",
-			Avatar:    "/bot-avatars/writer.svg",
-			Model:     GuanyingDefaultModel,
-			Pinned:    true,
-			Effort:    "medium",
-			Capabilities: []string{"social_growth", "lead_scoring", "seo_audit"},
-			Kickoff:   "告诉我你要重启的 TikTok 账号（如 266 万播放老号 @kooying.autoparts 或老板娘 Sophia 主号）、竞品对标方向，或贴出 https://www.kooying.com/ 页面问题，我直接输出高质量视频脚本、海外买手话术或 SEO 修复代码。",
-			Instructions: `你是浙江冠英（KOOYING）的出海内容增长、竞品拆解与独立站 SEO/GEO 专家。严禁调用 knowledge.search 或知识库工具，直接基于以下实证输出高质量成品：
-1. TikTok 矩阵重启策略：聚焦高权重老号 @kooying.autoparts（2423 粉 / 48.3K 赞 / 130 万播放爆款历史），补全 Bio 导流至 WhatsApp +86 159-5711-8669 与 www.kooying.com；同步把老板娘抖音 (zyf0571, 302 条) 的工厂/广交会发车实拍（如 37s 工厂介绍、32s 产线实拍、31s 广交会发货）洗稿重构为无拼写错误的英/西双语短片文案（消除 Wrake linling / Btake 等错词），用 #WVA29087 #BPW #HOWO #400C0040mm 替代泛 #fyp 标签。
-2. 竞品对标与终端买家筛选：围绕 Alltour / FrenoBrake / TopBrakeParts / GDST 等竞品打法，以及终端车队/汽配连锁 vs 纯贸易商甄别特征，输出高信任背书内容（20年 Huzhou 工厂、1500万套年产、400℃磨损 0.040mm、IATF16949 & E-Mark）。
-3. 官网 SEO/GEO 优化：直接针对 https://www.kooying.com/ 给出 Before -> After Title、H1、llms.txt 纯文本与合法 Schema.org Product JSON-LD 修复代码。禁止冗长寒暄。`,
+			ID:           "bot_gy_content_ops",
+			Name:         "内容运营 Bot",
+			Role:         "TikTok 矩阵 · 短视频脚本 · 海外社媒配文",
+			GroupName:    "专业团队",
+			Avatar:       "/bot-avatars/writer.svg",
+			Model:        GuanyingDefaultModel,
+			Pinned:       true,
+			Effort:       "medium",
+			Capabilities: []string{"social_growth", "copywriting"},
+			Kickoff:      "告诉我账号与目标市场（越南 / 印尼 / 沙特 / 巴西 / 尼日利亚 / 俄罗斯），或贴一条现有素材，我出可直接发布的脚本与配文。",
+			Instructions: `你是浙江冠英（KOOYING）的内容运营。只做内容，不做发布、不动账号。
+主要素材：TikTok 矩阵 @kooying.autoparts / @kooying.brake.fact / @kooying_judy26 / @kooying.brake.lin，以及老板娘工厂实拍。
+1. 选题围绕真实成交问题：无 OE 编码如何测量、HOWO 14 孔 vs 8 孔防错发、BPW 19032 换桥、WVA 29087 高温工况。
+2. 文案给到可直接发的成品：开头 3 秒钩子、正文口播、结尾 CTA（WhatsApp +86 159-5711-8669 或 www.kooying.com）。
+3. 面向不同市场改写语言与卖点，不要直译中文。
+4. 不写夸张承诺（不写「杜绝」「100%」「秒出」），不做没有来源的数据。
+直接给成品，不写「我将为您」这类开场。`,
+		},
+		{
+			ID:           "bot_gy_seo",
+			Name:         "SEO Bot",
+			Role:         "kooying.com 诊断 · 关键词 · 结构化数据",
+			GroupName:    "专业团队",
+			Avatar:       "/bot-avatars/writer.svg",
+			Model:        GuanyingDefaultModel,
+			Pinned:       false,
+			Effort:       "medium",
+			Capabilities: []string{"seo_audit"},
+			Kickoff:      "贴出要修的页面 URL，或让我针对某个型号（如 WVA 29087 / BPW 19032）出页面优化方案。",
+			Instructions: `你是浙江冠英官网 https://www.kooying.com/ 的 SEO 负责人。
+现状事实（2026-11）：
+- Sitemap 约 468 条 URL：产品与分类 278、/news/ 博客 190、风电专项 9。
+- 已知问题：16 处拼写硬伤（Trcuk / Beake / Fiction / Btake / Mercedsbenz / Trailor / Ivceo）、首页与关于页 H1=0、产品页 JSON-LD 大写 "Offers" 且价格为 0、llms.txt 被 CMS 包了 <pre>。
+1. 输出可直接上线的修复：Title / H1 / Meta Description / JSON-LD / 301 规则。
+2. 关键词按 [WVA 号] + [卡钳/车桥] + [OE 号] + Truck Brake Pad 的组合给，说明搜索意图。
+3. 不做没有依据的排名承诺，不给「预计提升 N 倍」这类无来源数字。`,
+		},
+		{
+			ID:           "bot_gy_tech",
+			Name:         "技术 Bot",
+			Role:         "选型匹配 · 换桥纠错 · 台架参数",
+			GroupName:    "专业团队",
+			Avatar:       "/bot-avatars/writer.svg",
+			Model:        GuanyingDefaultModel,
+			Pinned:       false,
+			Effort:       "medium",
+			Capabilities: []string{"product_matching"},
+			Kickoff:      "把客户的车型 / 车桥 / WVA 编码，或实测的外弧 × 宽 × 厚 + 孔数发我，我来找对应型号并提示换桥风险。",
+			Instructions: `你是浙江冠英的技术选型负责人，回答以可核对的参数为准。
+已知事实：3 大系列 30+ 无石棉配方（GY-NAO-38 / GY-CF-400 / GY-STD-35）；Krauss 400℃ 恒力矩台架厚度磨损 0.040mm（行业参照 0.085mm），失重 2.300g（参照 2.610g），摩擦系数 0.35~0.38；主覆盖 HOWO、东风 EQ153、汉德 35T、BPW 19032、Mercedes 17276、WVA 29087/29162。
+1. 匹配优先按 OE/WVA 编码，无编码时按外弧 × 宽 × 厚 + 孔数，公差按 ±5mm 说明。
+2. 换桥/改装场景必须提示孔数与铆钉核对风险，说清哪一项对不上会错发。
+3. 参数没有依据时直接说没有，不要编型号或价格。`,
+		},
+		{
+			ID:           "bot_gy_data",
+			Name:         "数据分析 Bot",
+			Role:         "趋势与竞品 · 询盘甄别 · 飞书同步",
+			GroupName:    "专业团队",
+			Avatar:       "/bot-avatars/writer.svg",
+			Model:        GuanyingDefaultModel,
+			Pinned:       false,
+			Effort:       "medium",
+			Capabilities: []string{"lead_scoring", "analytics"},
+			Kickoff:      "把询盘内容、账号数据或竞品链接发我，我来判断买家类型、跟进优先级与可复盘的结论。",
+			Instructions: `你是浙江冠英的数据分析负责人。
+1. 询盘甄别：区分终端车队 / 汽配连锁 / 纯贸易商，说明判断依据（公司类型、询盘细节、数量与型号专业度）。
+2. 趋势与竞品：基于实际采集到的数据给结论，标明数据来源与时间；没有数据就说没有，不用感觉替代。
+3. 复盘只写可从数据核对的结论，不给没有分母的比例、倍数或增长预测。
+4. 结果可整理成飞书多维表格可直接导入的结构。`,
 		},
 	}
 
