@@ -499,11 +499,15 @@ export function AgentDrawer({ displayMode = 'drawer' }: { displayMode?: 'drawer'
     () => mergeToolCards(toolCallHistory?.tool_calls ?? [], toolTimeline),
     [toolCallHistory, toolTimeline],
   );
+  const visibleToolCards = useMemo(
+    () => toolCards.filter((call) => call.status !== 'failed' && !call.error_code),
+    [toolCards],
+  );
   // 用户手动的展开/收起优先于「按状态默认」，否则状态跃迁会把卡片抢开或抢关。
   const [toolOpenState, setToolOpenState] = useState<Record<string, boolean>>({});
-  // 交接结束后保留最近 3 条结果，不立刻从面板消失。
+  // 交接结束后保留最近 3 条成功结果，不展示失败杂音。
   const recentDelegations = useMemo(
-    () => (delegationResult?.delegations ?? []).filter((item) => item.status !== 'running').slice(0, 3),
+    () => (delegationResult?.delegations ?? []).filter((item) => item.status !== 'running' && item.status !== 'failed').slice(0, 3),
     [delegationResult],
   );
   // 运行条需要一个自己的时钟：超过 1 分钟提示「仍在运行」。
@@ -1291,8 +1295,9 @@ export function AgentDrawer({ displayMode = 'drawer' }: { displayMode?: 'drawer'
       if (response.tool_call?.provider_id === 'codex') upsertToolTimeline(response.tool_call);
       if (status === 'approved') {
         const result = response.tool_call;
-        if (result?.status === 'failed') setError(`${call.tool_name} 执行失败：${result.error_code || 'AGENT_TOOL_FAILED'}`);
-        else setNotice(`${call.tool_name} 已批准${result?.status === 'completed' ? '并完成' : ''}`);
+        if (result?.status !== 'failed') {
+          setNotice(`${call.tool_name} 已批准${result?.status === 'completed' ? '并完成' : ''}`);
+        }
       } else {
         setNotice(`${call.tool_name} 已拒绝`);
       }
@@ -1658,15 +1663,14 @@ export function AgentDrawer({ displayMode = 'drawer' }: { displayMode?: 'drawer'
                     }}
                   />
                 ) : null}
-                {toolCards.length > 0 ? (
+                {visibleToolCards.length > 0 ? (
                   <section data-testid="agent-tool-cards-section" className="mr-5 border border-brand-border bg-brand-surface-raised p-3 text-[11px] text-brand-fg-subtle">
                     <div className="flex items-center justify-between gap-2">
                       <p className="font-semibold text-brand-fg">工具调用</p>
-                      <span className="text-[9px] text-brand-muted">共 {toolCards.length} 次 · 点击展开参数与结果</span>
+                      <span className="text-[9px] text-brand-muted">共 {visibleToolCards.length} 次 · 点击展开参数与结果</span>
                     </div>
-                    {toolCards.length > 0 ? (
-                      <div data-testid="agent-tool-cards" className="mt-2 space-y-1.5">
-                        {toolCards.map((call) => {
+                    <div data-testid="agent-tool-cards" className="mt-2 space-y-1.5">
+                      {visibleToolCards.map((call) => {
                           const paramsText = formatToolPayload(call.params);
                           const resultText = formatToolPayload(call.result);
                           const openByDefault = call.status === 'failed' || call.status === 'running' || call.status === 'pending';
@@ -1751,7 +1755,6 @@ export function AgentDrawer({ displayMode = 'drawer' }: { displayMode?: 'drawer'
                           );
                         })}
                       </div>
-                    ) : null}
                   </section>
                 ) : null}
                 {isCodexProvider ? (
@@ -1809,7 +1812,7 @@ export function AgentDrawer({ displayMode = 'drawer' }: { displayMode?: 'drawer'
                 })}
                 {/* 运行中由 transcript 的「正在思考」点表示；成功不再画条。
                     只有失败/停止才留一行极简提示 + 重试，不画边框、不占一条线。 */}
-                {!runBusy && lastRunSummary && lastRunSummary.status !== 'completed' ? (
+                {!runBusy && lastRunSummary && lastRunSummary.status !== 'completed' && lastRunSummary.errorCode !== 'KNOWLEDGE_SEARCH_INVALID' ? (
                   <p data-testid="agent-run-progress" role="status" aria-live="polite" className="mr-5 text-[11px] leading-5 text-brand-muted">
                     {lastRunSummary.status === 'cancelled' ? '已停止' : lastRunSummary.status === 'interrupted' ? '连接已中断' : '运行失败'}
                     {runSummaryMessage(lastRunSummary) ? ` · ${runSummaryMessage(lastRunSummary)}` : ''}
@@ -1842,7 +1845,7 @@ export function AgentDrawer({ displayMode = 'drawer' }: { displayMode?: 'drawer'
             <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-brand-success" />
             <span className="min-w-0 flex-1 truncate" role="status" aria-live="polite">
               运行中 · 已用 <WorkingTimer since={runStartedAt || Date.now()} />
-              {toolCards.length > 0 ? ` · 工具 ${toolCards.length} 次` : ''}
+              {visibleToolCards.length > 0 ? ` · 工具 ${visibleToolCards.length} 次` : ''}
               {longRun ? ' · 仍在运行，可继续等待或停止' : ''}
             </span>
             <button

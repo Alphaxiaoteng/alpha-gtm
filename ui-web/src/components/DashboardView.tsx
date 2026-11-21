@@ -3573,7 +3573,7 @@ const SignalDetailModal: React.FC<{
                   <div className="max-w-xl">
                     <div className="flex items-center gap-2 text-brand-accent">
                       <Sparkles className="h-5 w-5" />
-                      <h3 className="text-base font-bold text-brand-fg">AI 爆款内容拆解与深度分析</h3>
+                      <h3 className="text-base font-bold text-brand-fg">AI 爆款内容拆解</h3>
                     </div>
                     <p className="mt-1.5 text-xs sm:text-[13px] leading-relaxed text-brand-fg-subtle">
                       一键提炼该爆款的【开场3秒钩子】、【情绪共鸣点】、【对标受众画像】与【复刻脚本结构】。
@@ -3586,7 +3586,7 @@ const SignalDetailModal: React.FC<{
                     disabled={analyzing}
                   >
                     {analyzing ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
-                    {analyzing ? '正在深度拆解中…' : '开始 AI 深度拆解'}
+                    {analyzing ? '正在拆解…' : '开始 AI 拆解'}
                   </button>
                 </div>
               </section>
@@ -3652,7 +3652,7 @@ const SignalDetailModal: React.FC<{
 
                   <div className="grid gap-2 sm:grid-cols-2">
                     <AnalysisCard title="爆款潜力与传播因子">{videoResult.viral_potential}</AnalysisCard>
-                    <AnalysisCard title="前 3 秒黄金钩子 (Hook)" tone="text-brand-warning">{videoResult.hook}</AnalysisCard>
+                    <AnalysisCard title="前 3 秒钩子 (Hook)" tone="text-brand-warning">{videoResult.hook}</AnalysisCard>
                     <AnalysisCard title="目标受众人群" tone="text-brand-muted">{videoResult.audience}</AnalysisCard>
                     <AnalysisCard title="核心情绪驱动力" tone="text-brand-muted">{videoResult.emotional_drivers.join('；') || '未验证'}</AnalysisCard>
                   </div>

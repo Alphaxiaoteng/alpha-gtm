@@ -68,7 +68,7 @@ const TIER_META: Record<CognitiveMemoryTier, { label: string; desc: string; colo
   },
   semantic: {
     label: 'Semantic (实体与领域知识)',
-    desc: '行业术语、竞品特征、知识库沉淀资料及主体关系映射',
+    desc: '行业术语、竞品特征、知识库资料及主体关系映射',
     color: 'border-brand-border bg-brand-surface-raised text-brand-fg',
     icon: BookOpen,
   },
@@ -332,7 +332,7 @@ export const CognitiveMemoryView: React.FC = () => {
               rows={3}
               value={newContent}
               onChange={(e) => setNewContent(e.target.value)}
-              placeholder="沉淀具体结论、禁忌或策略；不写空话..."
+              placeholder="写具体结论、禁忌或策略；不写空话..."
               className="w-full rounded-lg border border-brand-border bg-white px-3 py-2 text-xs font-mono"
             />
           </div>
@@ -348,7 +348,7 @@ export const CognitiveMemoryView: React.FC = () => {
           </div>
           <div className="flex justify-end gap-2 pt-2">
             <button type="submit" className="ui-btn ui-btn-primary">
-              确认沉淀到记忆库
+              确认存入记忆库
             </button>
           </div>
         </form>
@@ -442,7 +442,7 @@ export const CognitiveMemoryView: React.FC = () => {
           <EmptyState
             icon={Brain}
             title="暂无对应分层记忆"
-            message="点击“沉淀新记忆”或切换分层标签查看已沉淀的认知知识。"
+            message="点击“新增记忆”或切换分层标签查看已保存的记忆。"
           />
         </section>
       ) : (

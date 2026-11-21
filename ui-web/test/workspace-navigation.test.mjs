@@ -11,19 +11,27 @@ test('workspace navigation exposes the Ego hierarchy and keeps removed products 
   const socialWorkspace = await readFile(new URL('../src/components/SocialMediaWorkspaceView.tsx', import.meta.url), 'utf8');
   const localContent = await readFile(new URL('../src/components/LocalContentView.tsx', import.meta.url), 'utf8');
 
-  for (const id of ['ego', 'studio', 'social', 'dashboard', 'publish', 'settings']) {
-    assert.match(layout, new RegExp(`id: '${id}'`));
+  // 趋势雷达与旧的「竞品分析」合并成一个入口；其余业务入口保留。
+  for (const id of ['dashboard', 'social', 'studio', 'ego', 'publish', 'settings']) {
+    assert.match(layout, new RegExp(`id: '${id}',`), `侧栏缺少 ${id} 入口`);
   }
+  assert.match(layout, /label: '趋势雷达'/);
+  // crawler 自己不再占一行，而是并在趋势雷达这一行里高亮。
+  assert.doesNotMatch(layout, /id: 'crawler',\s*\n\s*label:/);
+  assert.match(layout, /matches: \['dashboard', 'crawler'\]/);
+  assert.doesNotMatch(layout, /label: '竞品分析'/);
   assert.doesNotMatch(layout, /id: 'creation'/);
   assert.doesNotMatch(layout, /id: 'skills'/);
   for (const removed of ['browser', 'agent', 'ai-image']) {
-    assert.doesNotMatch(layout, new RegExp(`id: '${removed}'`));
+    assert.doesNotMatch(layout, new RegExp(`id: '${removed}',`));
   }
   assert.match(layout, /data-testid={`nav-\$\{workspace\.id\}`}/);
-  assert.match(layout, /label: '浏览器与账号'/);
-  assert.match(layout, /label: '内容库'/);
   assert.match(layout, /matches: \['settings', 'proxies', 'skills', 'logs'\]/);
-  assert.match(layout, /label: '趋势雷达'/);
+  // 趋势雷达三个子项是页面的主要导航。
+  for (const sub of ['keywords', 'videos', 'creators']) {
+    assert.match(layout, new RegExp(`id: '${sub}'`), `缺少子项 ${sub}`);
+  }
+  assert.match(layout, /aria-label="趋势雷达子功能"/);
   assert.doesNotMatch(layout, /subnav-|const navItems =/);
   assert.doesNotMatch(layout, /data-testid="agent-conversation-sidebar"/);
   assert.match(layout, /<AgentContextDrawer selection=/);

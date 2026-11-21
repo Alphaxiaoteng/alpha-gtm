@@ -6,14 +6,13 @@ import { LoginView } from './components/LoginView';
 const BrowserWorkspaceView = lazy(() => import('./components/BrowserWorkspaceView').then((m) => ({ default: m.BrowserWorkspaceView })));
 const PublishWorkspaceView = lazy(() => import('./components/PublishWorkspaceView').then((m) => ({ default: m.PublishWorkspaceView })));
 const SocialMediaWorkspaceView = lazy(() => import('./components/SocialMediaWorkspaceView').then((m) => ({ default: m.SocialMediaWorkspaceView })));
-const DashboardView = lazy(() => import('./components/GuanyingWorkspaceViews').then((m) => ({ default: m.GuanyingDataFeishuView })));
+const DashboardView = lazy(() => import('./components/DashboardView').then((m) => ({ default: m.DashboardView })));
 const XHSDataDashboardView = lazy(() => import('./components/XHSDataDashboardView').then((m) => ({ default: m.XHSDataDashboardView })));
 const ContentCalendarView = lazy(() => import('./components/ContentCalendarView').then((m) => ({ default: m.ContentCalendarView })));
 const ShopWorkspaceView = lazy(() => import('./components/ShopWorkspaceView').then((m) => ({ default: m.ShopWorkspaceView })));
 const StudioWorkspaceView = lazy(() => import('./components/GuanyingWorkspaceViews').then((m) => ({ default: m.GuanyingSeoBuilderView })));
-const RuntimeMonitorView = lazy(() => import('./components/RuntimeMonitorView').then((m) => ({ default: m.RuntimeMonitorView })));
-const ShopWorkspaceView = lazy(() => import('./components/ShopWorkspaceView').then((m) => ({ default: m.ShopWorkspaceView })));
-const CrawlerView = lazy(() => import('./components/GuanyingWorkspaceViews').then((m) => ({ default: m.GuanyingDatabaseView })));
+const RuntimeMonitorView = lazy(() => import('./components/GuanyingWorkspaceViews').then((m) => ({ default: m.GuanyingSiteMaintenanceView })));
+const CrawlerView = lazy(() => import('./components/CrawlerView').then((m) => ({ default: m.CrawlerView })));
 const CognitiveMemoryView = lazy(() => import('./components/CognitiveMemoryView').then((m) => ({ default: m.CognitiveMemoryView })));
 import { LocalLoadingState } from './components/LocalLoadingState';
 import { ViewErrorBoundary } from './components/ViewErrorBoundary';
@@ -188,7 +187,7 @@ function App() {
       case 'skills':
         return <EgoSettingsView initialSection="skills" />;
       case 'knowledge':
-        return <CrawlerView />;
+        return <DashboardView />;
       case 'calendar':
         return <ContentCalendarView />;
       case 'xhs-data':

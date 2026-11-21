@@ -269,12 +269,14 @@ test('summary client normalizes nullable latest_posts so cards never crash', () 
 });
 
 test('trend radar sub-views keep distinct child routes', () => {
-  // 新地址挂在 /SM/trend/* 下；旧 /trend/* 仍可解析。
-  assert.match(store, /'\/SM\/trend\/keywords': 'keywords'/);
-  assert.match(store, /'\/SM\/trend\/videos': 'videos'/);
-  assert.match(store, /'\/SM\/trend\/creators': 'creators'/);
-  assert.match(store, /'\/media\/trend\/keywords': 'keywords'/);
-  assert.match(store, /const targetPath = `\/SM\/trend\/\$\{RADAR_VIEW_SEGMENT\[view\]\}`/);
+  // 侧栏收敛成单一「趋势雷达」后，子视图统一挂在 /GTM/trend/* 下；
+  // 历史 /SM、/media、/trend 前缀仍可解析，避免旧书签失效。
+  assert.match(store, /'\/GTM\/trend\/keywords': 'keywords'/i);
+  assert.match(store, /'\/GTM\/trend\/videos': 'videos'/i);
+  assert.match(store, /'\/GTM\/trend\/creators': 'creators'/i);
+  assert.match(store, /'\/SM\/trend\/keywords': 'keywords'/i);
+  assert.match(store, /'\/media\/trend\/keywords': 'keywords'/i);
+  assert.match(store, /const targetPath = `\/GTM\/trend\/\$\{RADAR_VIEW_SEGMENT\[view\]\}`/);
   assert.match(store, /getRadarViewFromPathname/);
   assert.match(store, /syncRadarViewURL/);
 });

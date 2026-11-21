@@ -13,16 +13,16 @@ async function routes() {
   return import(`data:text/javascript;base64,${Buffer.from(outputText).toString('base64')}`);
 }
 
-test('自媒体统一 /SM，店铺统一 /shop，Bot 独立', async () => {
+test('GTM 统一 /GTM，店铺统一 /shop，Bot 独立', async () => {
   const { routeForTab } = await routes();
-  assert.equal(routeForTab('social-media', 'media'), '/SM');
-  assert.equal(routeForTab('contents', 'media'), '/SM/content');
-  assert.equal(routeForTab('templates', 'media'), '/SM/templates');
-  assert.equal(routeForTab('accounts', 'media'), '/SM/accounts');
-  assert.equal(routeForTab('fleet', 'media'), '/SM/accounts/spaces');
-  assert.equal(routeForTab('xhs-data', 'media'), '/SM/analytics');
-  assert.equal(routeForTab('dashboard', 'media'), '/SM/trend');
-  assert.equal(routeForTab('batch', 'media'), '/SM/publish/batch');
+  assert.equal(routeForTab('social-media', 'media'), '/GTM');
+  assert.equal(routeForTab('contents', 'media'), '/GTM/content');
+  assert.equal(routeForTab('templates', 'media'), '/GTM/templates');
+  assert.equal(routeForTab('accounts', 'media'), '/GTM/accounts');
+  assert.equal(routeForTab('fleet', 'media'), '/GTM/accounts/spaces');
+  assert.equal(routeForTab('xhs-data', 'media'), '/GTM/analytics');
+  assert.equal(routeForTab('dashboard', 'media'), '/GTM/trend');
+  assert.equal(routeForTab('batch', 'media'), '/GTM/publish/batch');
 
   assert.equal(routeForTab('accounts', 'shop'), '/shop/accounts');
   assert.equal(routeForTab('contents', 'shop'), '/shop/content');
@@ -36,15 +36,21 @@ test('自媒体统一 /SM，店铺统一 /shop，Bot 独立', async () => {
 
 test('地址能反向解析出板块和模式', async () => {
   const { parseRoute } = await routes();
-  assert.deepEqual(parseRoute('/SM'), { tab: 'social-media', mode: 'media' });
-  assert.deepEqual(parseRoute('/SM/accounts'), { tab: 'accounts', mode: 'media' });
-  assert.deepEqual(parseRoute('/SM/content'), { tab: 'contents', mode: 'media' });
+  assert.deepEqual(parseRoute('/GTM'), { tab: 'social-media', mode: 'media' });
+  assert.deepEqual(parseRoute('/GTM/accounts'), { tab: 'accounts', mode: 'media' });
+  assert.deepEqual(parseRoute('/GTM/content'), { tab: 'contents', mode: 'media' });
   assert.deepEqual(parseRoute('/shop'), { tab: 'shop', mode: 'shop' });
   assert.deepEqual(parseRoute('/shop/accounts'), { tab: 'accounts', mode: 'shop' });
   assert.deepEqual(parseRoute('/bot'), { tab: 'bot' });
-  // 旧 /agent 与旧 /media 前缀仍然可打开。
+  // 旧 /agent、/media、/SM 前缀仍然可打开。
   assert.deepEqual(parseRoute('/agent'), { tab: 'bot' });
   assert.deepEqual(parseRoute('/media/accounts'), { tab: 'accounts', mode: 'media' });
+  assert.deepEqual(parseRoute('/SM'), { tab: 'social-media', mode: 'media' });
+  assert.deepEqual(parseRoute('/SM/accounts'), { tab: 'accounts', mode: 'media' });
+  // 趋势雷达子视图是当前主要入口，必须能反解。
+  assert.deepEqual(parseRoute('/GTM/trend/keywords'), { tab: 'dashboard', mode: 'media' });
+  assert.deepEqual(parseRoute('/GTM/trend/videos'), { tab: 'dashboard', mode: 'media' });
+  assert.deepEqual(parseRoute('/GTM/trend/creators'), { tab: 'dashboard', mode: 'media' });
 });
 
 test('每个板块在两种模式下都能往返', async () => {

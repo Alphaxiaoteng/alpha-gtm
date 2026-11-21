@@ -4,7 +4,7 @@ import { prefetchView } from '../lib/routePrefetch';
 import { BUILTIN_ALPHA_AGENT_ID } from '../lib/botInbox';
 import useSWR from 'swr';
 import { api, setToken } from '../api';
-import { Activity, BarChart3, Bot, CheckCircle, ChevronDown, ChevronRight, Film, FolderOpen, Globe, PanelLeftOpen, Radio, Settings, Sparkles, UserRoundSearch, XCircle, type LucideIcon } from 'lucide-react';
+import { Activity, Bot, CheckCircle, ChevronDown, ChevronRight, Film, FolderOpen, Globe, PanelLeftOpen, Radio, Send, Settings, Sparkles, TrendingUp, UserRoundSearch, Users, XCircle, type LucideIcon } from 'lucide-react';
 import { applySkin, getStoredSkin, type SkinId } from '../themes';
 import { LocalLoadingState } from './LocalLoadingState';
 import { AgentContextDrawer, AGENT_CONTEXT_OPEN_EVENT, type AgentContextSelection } from './AgentContextDrawer';
@@ -30,41 +30,44 @@ interface Workspace {
   matches: TabType[];
 }
 
+// 趋势雷达与旧的「竞品分析」是同一批内容/趋势页面，合并成一个入口：
+// 侧栏只留趋势雷达（下挂赛道热榜 / 视频搜索 / 博主监控），crawler 页并进来后
+// 仍在这一行高亮。其余业务入口保持原样，不因为合并而消失。
 const WORKSPACES: Workspace[] = [
   {
-    id: 'crawler',
-    label: '识片报价与防漏单',
-    icon: Sparkles,
-    defaultTab: 'crawler',
-    matches: ['crawler'],
-  },
-  {
-    id: 'studio',
-    label: '官网 SEO 诊断与优化',
-    icon: Globe,
-    defaultTab: 'studio',
-    matches: ['studio'],
-  },
-  {
-    id: 'monitor',
-    label: '站点维护与巡检',
-    icon: Activity,
-    defaultTab: 'monitor',
-    matches: ['monitor'],
+    id: 'dashboard',
+    label: '趋势雷达',
+    icon: TrendingUp,
+    defaultTab: 'dashboard',
+    matches: ['dashboard', 'crawler'],
   },
   {
     id: 'social',
-    label: '短视频与内容运营',
+    label: '媒体内容',
     icon: FolderOpen,
     defaultTab: 'social-media',
     matches: ['social-media', 'contents', 'templates'],
   },
   {
-    id: 'dashboard',
-    label: '数据与飞书协同',
-    icon: BarChart3,
-    defaultTab: 'dashboard',
-    matches: ['dashboard'],
+    id: 'studio',
+    label: 'SEO 独立站',
+    icon: Globe,
+    defaultTab: 'studio',
+    matches: ['studio'],
+  },
+  {
+    id: 'ego',
+    label: '浏览器管理',
+    icon: Users,
+    defaultTab: 'accounts',
+    matches: ['accounts', 'fleet'],
+  },
+  {
+    id: 'publish',
+    label: '发布记录',
+    icon: Send,
+    defaultTab: 'records',
+    matches: ['publish', 'batch', 'records', 'metrics', 'notifications'],
   },
   {
     id: 'settings',
@@ -217,7 +220,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }
     const isActive = !agentSurfaceActive && currentWorkspace.id === workspace.id;
     const badge = workspace.id === 'ego' ? activeInstances || undefined : undefined;
     const label = workspaceLabel(workspace);
-    const isDashboard = false;
+    const isDashboard = workspace.id === 'dashboard';
 
     return (
       <div key={workspace.id} className="w-full">
@@ -349,10 +352,10 @@ export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }
             <button
               type="button"
               data-testid="workspace-mode-media"
-              aria-label="切换到 GTM 工作台"
+              aria-label="切换到 GTM"
               aria-pressed={activeTab !== 'bot'}
-              onClick={() => setActiveTab(activeTab === 'bot' ? 'crawler' : activeTab)}
-              title="GTM 工作台"
+              onClick={() => setActiveTab(activeTab === 'bot' ? 'dashboard' : activeTab)}
+              title="GTM"
               className={`relative flex items-center justify-center ${sidebarState === 'rail' ? 'w-full py-1.5' : 'flex-1 min-w-0 gap-1.5 py-1.5 px-2'} rounded-[6px] text-[11.5px] font-semibold transition-colors duration-200 select-none ${
                 activeTab !== 'bot'
                   ? 'alpha-glass-thumb text-brand-fg'
@@ -364,7 +367,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }
                 className={`h-3.5 w-3.5 transition-transform duration-200 ${activeTab !== 'bot' ? 'scale-105 text-brand-fg' : 'text-brand-muted'}`}
                 strokeWidth={activeTab !== 'bot' ? 2 : 1.75}
               />
-              {sidebarState !== 'rail' && <span className="min-w-0 truncate tracking-tight">GTM 工作台</span>}
+              {sidebarState !== 'rail' && <span className="min-w-0 truncate tracking-tight">GTM</span>}
             </button>
             <button
               type="button"
@@ -393,7 +396,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }
           <BotRail />
         ) : (
           <nav
-            className={`min-h-0 flex-1 ${sidebarState === 'rail' ? 'px-1.5 py-2.5 space-y-1' : 'px-2.5 py-2.5 space-y-0.5'} overflow-y-auto ui-thin-scrollbar`}
+            className={`min-h-0 flex-1 ${sidebarState === 'rail' ? 'px-1.5 py-3 space-y-1.5' : 'px-3 py-3 space-y-1.5'} overflow-y-auto ui-thin-scrollbar`}
             aria-label={`${productMode === 'media' ? 'Media' : 'Shop'} 业务入口`}
           >
             {visiblePrimaryWorkspaces.map(renderWorkspaceButton)}

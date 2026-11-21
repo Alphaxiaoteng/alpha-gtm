@@ -48,7 +48,7 @@ function sectionFromLocation(): SettingsSection | null {
 }
 
 function settingsPathFor(section: SettingsSection): string {
-  const prefix = typeof window !== 'undefined' && window.location.pathname.startsWith('/shop') ? '/shop' : '/SM';
+  const prefix = typeof window !== 'undefined' && window.location.pathname.startsWith('/shop') ? '/shop' : '/GTM';
   return `${prefix}/settings/${section}`;
 }
 
