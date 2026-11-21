@@ -11,14 +11,16 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"alpha-nexus-egolite/internal/db"
 )
 
 type Store struct {
-	db  *db.DB
-	now func() time.Time
+	db      *db.DB
+	now     func() time.Time
+	writeMu sync.Mutex
 }
 
 func NewStore(database *db.DB) *Store {
@@ -671,6 +673,8 @@ func (s *Store) CreateRun(ctx context.Context, conversationID string, provider P
 	if err != nil {
 		return nil, fmt.Errorf("encode agent context: %w", err)
 	}
+	s.writeMu.Lock()
+	defer s.writeMu.Unlock()
 	tx, err := s.db.BeginTx(ctx, nil)
 	if err != nil {
 		return nil, err
@@ -812,6 +816,8 @@ func (s *Store) AppendAssistantMessage(ctx context.Context, run *Run, content st
 	if run == nil {
 		return fmt.Errorf("agent assistant message requires a run")
 	}
+	s.writeMu.Lock()
+	defer s.writeMu.Unlock()
 	now := nowText(s.now())
 	_, err := s.db.ExecContext(ctx, `INSERT INTO agent_messages(id,conversation_id,provider_id,run_id,role,content,context_json,created_at) VALUES(?,?,?,?,?,?,?,?)`, newID("msg"), run.ConversationID, run.ProviderID, run.ID, "assistant", strings.TrimSpace(content), "{}", now)
 	return err
@@ -829,25 +835,18 @@ func (s *Store) AppendEvent(ctx context.Context, run *Run, event ProviderEvent) 
 	if err != nil {
 		return nil, fmt.Errorf("encode agent event: %w", err)
 	}
-	tx, err := s.db.BeginTx(ctx, nil)
-	if err != nil {
-		return nil, err
-	}
-	defer tx.Rollback()
-	var seq int64
-	if err := tx.QueryRowContext(ctx, `SELECT COALESCE(MAX(seq),0)+1 FROM agent_events WHERE run_id=?`, run.ID).Scan(&seq); err != nil {
-		return nil, err
-	}
+	s.writeMu.Lock()
+	defer s.writeMu.Unlock()
 	now := nowText(s.now())
-	result, err := tx.ExecContext(ctx, `INSERT INTO agent_events(run_id,conversation_id,provider_id,seq,timestamp,type,payload_json) VALUES(?,?,?,?,?,?,?)`, run.ID, run.ConversationID, run.ProviderID, seq, now, event.Type, string(encoded))
+	var id, seq int64
+	err = s.db.QueryRowContext(
+		ctx,
+		`INSERT INTO agent_events(run_id,conversation_id,provider_id,seq,timestamp,type,payload_json)
+		 VALUES(?,?,?,COALESCE((SELECT MAX(seq) FROM agent_events WHERE run_id=?),0)+1,?,?,?)
+		 RETURNING id, seq`,
+		run.ID, run.ConversationID, run.ProviderID, run.ID, now, event.Type, string(encoded),
+	).Scan(&id, &seq)
 	if err != nil {
-		return nil, err
-	}
-	id, err := result.LastInsertId()
-	if err != nil {
-		return nil, err
-	}
-	if err := tx.Commit(); err != nil {
 		return nil, err
 	}
 	return &Event{ID: id, RunID: run.ID, ConversationID: run.ConversationID, ProviderID: run.ProviderID, Seq: seq, Timestamp: now, Type: event.Type, Payload: payload}, nil
@@ -1118,6 +1117,8 @@ func (s *Store) FinishRun(ctx context.Context, runID, status, code, providerSess
 	if status != "completed" && status != "failed" && status != "cancelled" && status != "interrupted" {
 		return fmt.Errorf("invalid agent run status")
 	}
+	s.writeMu.Lock()
+	defer s.writeMu.Unlock()
 	now := nowText(s.now())
 	result, err := s.db.ExecContext(ctx, `UPDATE agent_runs SET status=?,error_code=?,provider_session_id=CASE WHEN ?<>'' THEN ? ELSE provider_session_id END,updated_at=? WHERE id=? AND status='running'`, status, code, providerSessionID, providerSessionID, now, runID)
 	if err != nil {

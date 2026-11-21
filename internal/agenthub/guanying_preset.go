@@ -6,7 +6,13 @@ import (
 	"fmt"
 	"os/exec"
 	"strings"
+	"sync"
 	"time"
+)
+
+var (
+	openCodeVersionOnce   sync.Once
+	cachedOpenCodeVersion string
 )
 
 const (
@@ -38,21 +44,30 @@ func (s *Service) EnsureGuanyingHackathonPreset(ctx context.Context) error {
 }
 
 func detectOpenCodeVersion(ctx context.Context) string {
-	binary := resolveOpenCode()
-	if strings.TrimSpace(binary) == "" {
+	openCodeVersionOnce.Do(func() {
+		binary := resolveOpenCode()
+		if strings.TrimSpace(binary) == "" {
+			cachedOpenCodeVersion = GuanyingFallbackVersion
+			return
+		}
+		probeCtx, cancel := context.WithTimeout(ctx, 2*time.Second)
+		defer cancel()
+		out, err := exec.CommandContext(probeCtx, binary, "--version").Output()
+		if err != nil {
+			cachedOpenCodeVersion = GuanyingFallbackVersion
+			return
+		}
+		v := strings.TrimSpace(string(out))
+		if v == "" {
+			cachedOpenCodeVersion = GuanyingFallbackVersion
+			return
+		}
+		cachedOpenCodeVersion = v
+	})
+	if cachedOpenCodeVersion == "" {
 		return GuanyingFallbackVersion
 	}
-	probeCtx, cancel := context.WithTimeout(ctx, 4*time.Second)
-	defer cancel()
-	out, err := exec.CommandContext(probeCtx, binary, "--version").Output()
-	if err != nil {
-		return GuanyingFallbackVersion
-	}
-	v := strings.TrimSpace(string(out))
-	if v == "" {
-		return GuanyingFallbackVersion
-	}
-	return v
+	return cachedOpenCodeVersion
 }
 
 func (s *Service) seedOpenCodeVerifiedModels(ctx context.Context, version string) error {
@@ -146,7 +161,7 @@ func (s *Service) ensureGuanyingBots(ctx context.Context) error {
 			Name:         "SEO Bot",
 			Role:         "kooying.com 诊断 · 关键词 · 结构化数据",
 			GroupName:    "专业团队",
-			Avatar:       "/bot-avatars/writer.svg",
+			Avatar:       "/bot-avatars/planner.svg",
 			Model:        GuanyingDefaultModel,
 			Pinned:       false,
 			Effort:       "medium",
@@ -165,7 +180,7 @@ func (s *Service) ensureGuanyingBots(ctx context.Context) error {
 			Name:         "技术 Bot",
 			Role:         "选型匹配 · 换桥纠错 · 台架参数",
 			GroupName:    "专业团队",
-			Avatar:       "/bot-avatars/writer.svg",
+			Avatar:       "/bot-avatars/engineer.svg",
 			Model:        GuanyingDefaultModel,
 			Pinned:       false,
 			Effort:       "medium",
@@ -182,7 +197,7 @@ func (s *Service) ensureGuanyingBots(ctx context.Context) error {
 			Name:         "数据分析 Bot",
 			Role:         "趋势与竞品 · 询盘甄别 · 飞书同步",
 			GroupName:    "专业团队",
-			Avatar:       "/bot-avatars/writer.svg",
+			Avatar:       "/bot-avatars/analyst.svg",
 			Model:        GuanyingDefaultModel,
 			Pinned:       false,
 			Effort:       "medium",
@@ -193,6 +208,22 @@ func (s *Service) ensureGuanyingBots(ctx context.Context) error {
 2. 趋势与竞品：基于实际采集到的数据给结论，标明数据来源与时间；没有数据就说没有，不用感觉替代。
 3. 复盘只写可从数据核对的结论，不给没有分母的比例、倍数或增长预测。
 4. 结果可整理成飞书多维表格可直接导入的结构。`,
+		},
+		{
+			ID:           "bot_gy_sales",
+			Name:         "外贸跟单 Bot",
+			Role:         "WhatsApp 跨时差接单 · FOB 阶梯报价 · 样品与交期跟进",
+			GroupName:    "专业团队",
+			Avatar:       "/bot-avatars/support.svg",
+			Model:        GuanyingDefaultModel,
+			Pinned:       false,
+			Effort:       "medium",
+			Capabilities: []string{"b2b_quoting", "multilingual_outreach"},
+			Kickoff:      "把海外买家的 WhatsApp / 邮件原文、目标港口或需求型号发我，我按混批 MOQ、FOB 阶梯价与交期出双语回复。",
+			Instructions: `你是浙江冠英（KOOYING）的外贸跟单与报价负责人。
+1. 报价口径：默认报 FOB Ningbo / Shanghai 美金阶梯价（试单混批 MOQ 50~100 套 vs 整柜 20GP 优惠价），明确包装规格（中性白盒 / KOOYING 彩盒 / 客户 OEM 打标）与交期（常规现货 7~15 天，定制配方 20~25 天）。
+2. 跨时差首响：中东（沙特/阿联酋）、拉美（巴西/智利）、非洲（尼日利亚/坦桑尼亚）买家询盘，先确认 WVA/OE 号或实测尺寸+孔数，主动提供免费寄样（运费到付或首单抵扣）与 2026 PDF 交叉对照目录。
+3. 语言与风控：直接输出英/西/阿/俄对应双语商务回复，付款方式按 T/T 30% 定金 + 70% 见提单副本为准，不随意承诺无定金放账。`,
 		},
 	}
 
@@ -229,13 +260,14 @@ func (s *Service) ensureGuanyingBots(ctx context.Context) error {
 	now := nowText(s.store.now())
 	for _, bot := range presets {
 		if prev, ok := existingMap[bot.ID]; ok {
-			if prev.Name != bot.Name || prev.Role != bot.Role || prev.Kickoff != bot.Kickoff || prev.GroupName != bot.GroupName || prev.Instructions != bot.Instructions || prev.Model != bot.Model {
+			if prev.Name != bot.Name || prev.Role != bot.Role || prev.Kickoff != bot.Kickoff || prev.GroupName != bot.GroupName || prev.Instructions != bot.Instructions || prev.Model != bot.Model || prev.Avatar != bot.Avatar {
 				name := bot.Name
 				role := bot.Role
 				model := bot.Model
 				kickoff := bot.Kickoff
 				grp := bot.GroupName
 				instr := bot.Instructions
+				avatar := bot.Avatar
 				pinned := bot.Pinned
 				_, _ = s.store.UpdateBot(ctx, bot.ID, BotPatch{
 					Name:         &name,
@@ -244,8 +276,23 @@ func (s *Service) ensureGuanyingBots(ctx context.Context) error {
 					Kickoff:      &kickoff,
 					GroupName:    &grp,
 					Instructions: &instr,
+					Avatar:       &avatar,
 					Pinned:       &pinned,
 				})
+			}
+			var convCount int
+			_ = s.store.db.QueryRowContext(ctx, `SELECT COUNT(*) FROM agent_conversations WHERE bot_id = ?`, bot.ID).Scan(&convCount)
+			if convCount == 0 {
+				conv, convErr := s.store.CreateConversation(ctx, ProviderOpenCode, bot.Name, bot.Model, ContextSnapshot{
+					Workspace:   "bot",
+					Page:        "bot-chat",
+					ProductMode: WorkspaceModeMedia,
+				})
+				if convErr == nil && conv != nil {
+					if bound, bindErr := s.store.SetConversationBot(ctx, conv.ID, bot.ID); bindErr == nil && bound != nil {
+						_ = s.store.AppendKickoffMessage(ctx, bound.ID, ProviderOpenCode, bot.Kickoff)
+					}
+				}
 			}
 			continue
 		}
@@ -269,29 +316,52 @@ func (s *Service) ensureGuanyingBots(ctx context.Context) error {
 		}
 	}
 
-	// Idempotently seed persistent Markdown context memories for Kooying 2-bot core roster.
+	// Idempotently seed persistent 4-section Markdown conversation memories for all 5 specialist bots + main controller.
 	seedBotMemories := map[string][]struct {
 		section string
 		entry   string
 	}{
 		BuiltinAlphaAgentID: {
+			{"用户偏好", "结论先行，直接输出可落地代码、选型表或脚本，不要客套寒暄。"},
+			{"品牌语气", "20年源头工厂硬核工业风，重实测数据与车桥工程参数，禁用夸张营销词。"},
+			{"历史教训", "官网页脚曾挂个人 Facebook 与 linkedin.cn 链接且留 QQ 邮箱，需统一收口到企业域名与官方 WhatsApp。"},
 			{"关键事实", "独立站目录 web/ 挂载在 /brand-site/index.html（135款实拍）；线上官网 https://www.kooying.com/（468个URL）；飞书 Base 通过 lark-cli 同步。"},
 			{"关键事实", "已验证 TikTok 官方矩阵：@kooying.autoparts（2423粉/48.3K赞/累计266.1万播）、@kooying.brake.fact（Sophia +8615957118669）、@kooying_judy26、@kooying.brake.lin。"},
 		},
 		"bot_gy_content_ops": {
+			{"用户偏好", "短视频脚本控制在 30~45 秒，必须标明前 3 秒画面钩子、英文/当地语言口播词与结尾 WhatsApp CTA。"},
+			{"品牌语气", "源头工厂老板娘 Sophia 真实车间直拍口吻，朴实专业，禁用感叹号堆砌与虚假承诺。"},
+			{"历史教训", "老号 @kooying.autoparts 曾有 130 万播放爆款但因未挂 Bio 与 WhatsApp 且拼错 Wrake linling 流失大量询盘。"},
 			{"关键事实", "已入库 5 条 ≤60s 老板娘 Sophia 实拍短片（ui-web/public/guanying-videos/manifest.json），可直接用于 TikTok/WhatsApp 二创与独立站背书。"},
 			{"关键事实", "TikTok 实测账号：@kooying.autoparts（2423粉/2.66M播放，2023-10 后停更）、@kooying.brake.fact（Sophia +86 159-5711-8669）、@kooying_judy26（Bio 挂官网）、@kooying.brake.lin（备用）。"},
 		},
 		"bot_gy_seo": {
-			{"关键事实", "kooying.com Sitemap 约 468 URL（产品与分类 278 / news 190 / 风电 9）；已知 16 处拼写硬伤（Trcuk/Beake/Fiction/Btake/Mercedsbenz/Trailor/Ivceo）、首页与关于页 H1=0、产品页 JSON-LD 大写 Offers 且价格为 0、llms.txt 被 <pre> 包裹。"},
+			{"用户偏好", "输出 Title、Meta Description、H1、JSON-LD 和 301 规则时直接给可复制粘贴的完整代码块。"},
+			{"品牌语气", "遵循海外商用车采购习惯，标题按 [WVA号] + [卡钳/车桥如 Knorr/BPW] + [OE号] + Truck Brake Pad 命名。"},
+			{"历史教训", "CMS 批量建站曾把 Truck 拼成 Trcuk、Brake 拼成 Beake/Btake、Friction 拼成 Fiction，改 URL 必须同步配 301 重定向。"},
+			{"关键事实", "kooying.com Sitemap 约 468 URL（产品与分类 278 / news 190 / 风电 9）；已知 16 处拼写硬伤、首页与关于页 H1=0、产品页 JSON-LD 大写 Offers 且价格为 0、llms.txt 被 <pre> 包裹。"},
+			{"关键事实", "四大对标竞品：Alltour（ECE R90 与实验室背书）、FrenoBrake（Top 10 榜单截流）、TopBrakeParts（混批买家指南）、GDST（西/俄/阿多语种矩阵）。"},
 		},
 		"bot_gy_tech": {
+			{"用户偏好", "选型回复先给匹配型号、外弧×宽×厚×孔数对照表，再单列换桥改装风险提示。"},
+			{"品牌语气", "严谨工程师口径，所有摩擦系数、磨损率与公差（±5mm）均以台架实测或目录图纸为准。"},
+			{"历史教训", "中东与非洲二手机车队经常把 HOWO 后桥 8 孔改成 14 孔，未核对孔数与铆钉规格直接发货会导致整柜无法安装。"},
 			{"关键事实", "台架实测：Krauss 400℃ 恒力矩厚度磨损 0.040mm（行业参照 0.085mm），失重 2.300g（参照 2.610g），摩擦系数 0.35~0.38；三大配方系列 GY-NAO-38 / GY-CF-400 / GY-STD-35。"},
 			{"关键事实", "高频换桥风险：HOWO 后桥 14 孔 vs 8 孔、Mercedes 17276 的 140mm vs 170mm 蹄铁宽度、BPW 19032 为 8 孔挂车桥专用；错孔直接导致整柜退货。"},
 		},
 		"bot_gy_data": {
+			{"用户偏好", "数据分析与询盘评分统一输出结构化字段，方便一键写入飞书多维表格。"},
+			{"品牌语气", "客观实证，所有比例和结论必须标明样本分母与采集时间，不写拍脑袋预测。"},
+			{"历史教训", "纯比价贸易商常群发无型号询盘，必须与给出具体 WVA 编号和月采购量的终端车队区分优先级。"},
 			{"关键事实", "询盘甄别口径：终端车队 / 汽配连锁 / 纯贸易商；判断依据是公司类型、询盘是否给出具体型号与数量、以及是否只问价格。"},
 			{"关键事实", "结果同步走官方 lark-cli 写飞书多维表格；本地 SQLite 是业务真源，飞书是镜像。"},
+		},
+		"bot_gy_sales": {
+			{"用户偏好", "外贸报价邮件与 WhatsApp 回复默认提供中英/中西双语版本，并附带混批 MOQ 与整柜 20GP 两档阶梯结构。"},
+			{"品牌语气", "专业敏捷的工厂外贸总监口吻，响应迅速、条款清晰、主动提供样品与 PDF 目录。"},
+			{"历史教训", "南美与非洲新客户首次合作严禁无定金放账（OA/D/P 风险高），必须坚持 T/T 30% 定金 + 70% 见提单副本。"},
+			{"关键事实", "核心联络通道：WhatsApp +86 159-5711-8669（Sophia Zhao），出货港 FOB Ningbo / Shanghai，常规交期 7~15 天，支持中性白盒、KOOYING 彩盒与 OEM 打标。"},
+			{"关键事实", "高转化留资诱饵：引导买家下载《2026 Heavy-Duty Truck Brake Pad PDF Catalog & OE Cross-Reference List》或寄送 2 套免费测试样片。"},
 		},
 	}
 	for botID, entries := range seedBotMemories {

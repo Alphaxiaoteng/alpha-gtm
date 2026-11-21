@@ -18,6 +18,11 @@ test('Bot 详情高级页有可编辑的记忆区', async () => {
   assert.match(panel, /api\.updateBotMemory\(botID, value\)/);
   // 记忆区只在高级 tab 里出现
   assert.match(panel, /\{bot \? <BotMemorySection botID=\{bot\.id\} \/> : null\}/);
+  // 支持 4 大记忆分区快捷追加与一键刷新
+  assert.match(panel, /data-testid="bot-detail-open-memory"/);
+  assert.match(panel, /data-testid="bot-memory-quick-input"/);
+  assert.match(panel, /data-testid="bot-memory-quick-add"/);
+  assert.match(panel, /data-testid="bot-memory-refresh"/);
 });
 
 test('记忆 API 走 /api/agent-bots/{id}/memory', async () => {

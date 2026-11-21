@@ -197,6 +197,8 @@ type Service struct {
 	probes            map[ProviderID]ProviderProbe
 	probing           map[ProviderID]bool
 	validationCancels map[ProviderID]context.CancelFunc
+
+	memoryMu sync.RWMutex
 }
 
 func NewService(store *Store, registry *Registry, dataDir string) (*Service, error) {
@@ -210,7 +212,7 @@ func NewService(store *Store, registry *Registry, dataDir string) (*Service, err
 		probing:           make(map[ProviderID]bool),
 		validationCancels: make(map[ProviderID]context.CancelFunc),
 		brokerTokens:      make(map[string]string),
-		runTimeout:        2 * time.Minute,
+		runTimeout:        10 * time.Minute,
 	}
 	for _, descriptor := range registry.Descriptors(context.Background()) {
 		service.probes[descriptor.ID] = ProviderProbe{ProviderID: descriptor.ID, State: ProviderStateUnknown, Cached: true}
@@ -1422,6 +1424,12 @@ func (s *Service) startRun(ctx context.Context, conversationID string, providerI
 	if block := s.unattributedTranscriptBlock(ctx, conversationID); block != "" {
 		providerMessage += "\n\n" + block
 	}
+	providerSessionID := s.providerSession(ctx, conversationID, providerID)
+	if providerSessionID == "" {
+		if recentBlock := s.recentConversationMemoryBlock(ctx, conversation); recentBlock != "" {
+			providerMessage += "\n\n" + recentBlock
+		}
+	}
 	if len(providerMessage) > 64*1024 {
 		return nil, fmt.Errorf("agent prompt is too large")
 	}
@@ -1437,7 +1445,6 @@ func (s *Service) startRun(ctx context.Context, conversationID string, providerI
 		_ = s.failRun(context.Background(), run, "AGENT_WORKSPACE_UNAVAILABLE")
 		return run, nil
 	}
-	providerSessionID := s.providerSession(ctx, conversationID, providerID)
 	brokerToken := ""
 	s.mu.Lock()
 	brokerEndpoint := s.brokerEndpoint
@@ -1477,7 +1484,7 @@ func (s *Service) startRun(ctx context.Context, conversationID string, providerI
 		Executable:     executable,
 		SkillRoot:      skillRoot,
 		Skills:         skillInputs,
-	})
+	}, message)
 	return run, nil
 }
 
@@ -1550,19 +1557,25 @@ func normalizeStructuredSkillInputs(root string, resolved []map[string]string) (
 	return root, inputs, nil
 }
 
-func (s *Service) execute(ctx context.Context, provider Provider, run *Run, request RunRequest) {
+func (s *Service) execute(ctx context.Context, provider Provider, run *Run, request RunRequest, userMessage string) {
 	defer func() {
+		if recovered := recover(); recovered != nil {
+			_ = s.failRun(context.Background(), run, "AGENT_PROVIDER_PANIC")
+		}
 		s.mu.Lock()
 		delete(s.cancels, run.ID)
 		delete(s.brokerTokens, run.ID)
 		s.mu.Unlock()
 		s.runWG.Done()
 	}()
+	const maxRunOutputBytes = 512 << 10
 	var answer strings.Builder
 	emit := func(event ProviderEvent) {
 		if event.Type == "message.delta" {
 			if text, ok := event.Payload["text"].(string); ok {
-				answer.WriteString(text)
+				if answer.Len()+len(text) <= maxRunOutputBytes {
+					answer.WriteString(text)
+				}
 			}
 		}
 		// Provider-run tools (e.g. the dsh harness executing its own bash) do
@@ -1594,12 +1607,13 @@ func (s *Service) execute(ctx context.Context, provider Provider, run *Run, requ
 	if providerSessionID != "" {
 		_, _ = s.store.AppendEvent(context.Background(), run, ProviderEvent{Type: "provider.session.saved", Payload: map[string]any{"session_saved": true}})
 	}
+	// Persist extracted conversation memory before flipping run status to
+	// "completed", so any caller observing run.Status == "completed" is
+	// guaranteed to read the updated bot memory immediately.
+	s.rememberBotConversationTurn(request.ConversationID, userMessage, answer.String())
 	if err := s.store.FinishRun(context.Background(), run.ID, "completed", "", providerSessionID); err != nil {
 		return
 	}
-	// Only after a completed run: half-finished output is not a lesson worth
-	// keeping, and a failed run must not write to the roster's memory files.
-	s.rememberBotConversation(request.ConversationID, answer.String())
 	_, _ = s.store.AppendEvent(context.Background(), run, ProviderEvent{Type: "run.completed"})
 }
 

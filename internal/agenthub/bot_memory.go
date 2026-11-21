@@ -55,6 +55,12 @@ func (s *Service) ReadBotMemory(_ context.Context, botID string) (string, error)
 	if err != nil {
 		return "", err
 	}
+	s.memoryMu.RLock()
+	defer s.memoryMu.RUnlock()
+	return readBotMemoryUnlocked(path)
+}
+
+func readBotMemoryUnlocked(path string) (string, error) {
 	data, err := os.ReadFile(path)
 	if errors.Is(err, os.ErrNotExist) {
 		return "", nil
@@ -81,14 +87,17 @@ func (s *Service) AppendBotMemory(ctx context.Context, botID, section, content s
 	if entry == "" {
 		return nil
 	}
-	existing, err := s.ReadBotMemory(ctx, botID)
+	title := s.botMemoryTitle(ctx, botID)
+	s.memoryMu.Lock()
+	defer s.memoryMu.Unlock()
+	existing, err := readBotMemoryUnlocked(path)
 	if err != nil {
 		return err
 	}
 	if strings.Contains(existing, entry) {
 		return nil
 	}
-	next := appendBotMemoryEntry(existing, section, entry, s.botMemoryTitle(ctx, botID))
+	next := appendBotMemoryEntry(existing, section, entry, title)
 	if len(next) > botMemoryMaxBytes {
 		return fmt.Errorf("agent bot memory is full")
 	}
@@ -117,6 +126,8 @@ func (s *Service) WriteBotMemory(_ context.Context, botID, content string) error
 			return fmt.Errorf("%w: agent bot memory contains control bytes", ErrBotInvalid)
 		}
 	}
+	s.memoryMu.Lock()
+	defer s.memoryMu.Unlock()
 	return s.writeBotMemoryFile(path, content+"\n")
 }
 
@@ -127,6 +138,8 @@ func (s *Service) ClearBotMemory(_ context.Context, botID string) error {
 	if err != nil {
 		return err
 	}
+	s.memoryMu.Lock()
+	defer s.memoryMu.Unlock()
 	if err := os.Remove(path); err != nil && !errors.Is(err, os.ErrNotExist) {
 		return fmt.Errorf("clear agent bot memory: %w", err)
 	}
@@ -143,11 +156,32 @@ func (s *Service) writeBotMemoryFile(path, content string) error {
 	if err := os.Chmod(dir, botMemoryDirMode); err != nil {
 		return fmt.Errorf("secure agent bot memory directory: %w", err)
 	}
-	if err := os.WriteFile(path, []byte(content), botMemoryFileMode); err != nil {
+	tmp, err := os.CreateTemp(dir, ".bot-memory-*.tmp")
+	if err != nil {
+		return fmt.Errorf("create temp agent bot memory: %w", err)
+	}
+	tmpPath := tmp.Name()
+	cleanupTmp := true
+	defer func() {
+		if cleanupTmp {
+			_ = os.Remove(tmpPath)
+		}
+	}()
+	if _, err := tmp.WriteString(content); err != nil {
+		_ = tmp.Close()
 		return fmt.Errorf("write agent bot memory: %w", err)
 	}
-	// WriteFile only applies the mode when creating; chmod guarantees 0600 on
-	// a file that already existed.
+	if err := tmp.Chmod(botMemoryFileMode); err != nil {
+		_ = tmp.Close()
+		return fmt.Errorf("secure agent bot memory: %w", err)
+	}
+	if err := tmp.Close(); err != nil {
+		return fmt.Errorf("close temp agent bot memory: %w", err)
+	}
+	if err := os.Rename(tmpPath, path); err != nil {
+		return fmt.Errorf("commit agent bot memory: %w", err)
+	}
+	cleanupTmp = false
 	if err := os.Chmod(path, botMemoryFileMode); err != nil {
 		return fmt.Errorf("secure agent bot memory: %w", err)
 	}
@@ -294,15 +328,27 @@ func botMemoryPromptBlock(memory string) string {
 	return "【Bot 记忆】\n" + memory
 }
 
-// botMemoryPreferenceKeys route a matched sentence into 用户偏好; the recall
-// keys route into 关键事实. Matching is plain substring search: no model call,
-// no added latency and no new dependency.
+// Keyword routing across all four managed memory sections: 用户偏好, 品牌语气,
+// 历史教训, 关键事实. Matching is plain substring search: zero extra model call,
+// zero added latency, and deterministic behavior under stress testing.
 var (
-	botMemoryPreferenceKeys = []string{"偏好", "语气", "风格", "品牌", "禁用", "不要"}
-	botMemoryRecallKeys     = []string{"记住", "下次", "以后", "教训"}
+	botMemoryLessonKeys     = []string{"教训", "踩坑", "避坑", "失误", "错发", "风险教训"}
+	botMemoryToneKeys       = []string{"品牌语气", "口吻", "文风", "调性", "话术风格"}
+	botMemoryPreferenceKeys = []string{"偏好", "语气", "风格", "品牌", "禁用", "不要", "优先", "习惯"}
+	botMemoryRecallKeys     = []string{"记住", "下次", "以后", "关键事实", "核心参数", "交期", "报价口径", "MOQ"}
 )
 
 func botMemorySectionForSentence(sentence string) string {
+	for _, key := range botMemoryLessonKeys {
+		if strings.Contains(sentence, key) {
+			return "历史教训"
+		}
+	}
+	for _, key := range botMemoryToneKeys {
+		if strings.Contains(sentence, key) {
+			return "品牌语气"
+		}
+	}
 	for _, key := range botMemoryPreferenceKeys {
 		if strings.Contains(sentence, key) {
 			return "用户偏好"
@@ -383,8 +429,15 @@ type botMemoryCandidate struct {
 // failure is ignored on purpose: memory is an enhancement, and losing it must
 // never turn a completed answer into a failed run.
 func (s *Service) rememberBotConversation(conversationID, answer string) {
+	s.rememberBotConversationTurn(conversationID, "", answer)
+}
+
+// rememberBotConversationTurn extracts durable memory entries from both the
+// user's explicit instruction/preference in this turn and the assistant's
+// completed reply.
+func (s *Service) rememberBotConversationTurn(conversationID, userMessage, answer string) {
 	conversationID = strings.TrimSpace(conversationID)
-	if conversationID == "" || strings.TrimSpace(answer) == "" {
+	if conversationID == "" || (strings.TrimSpace(userMessage) == "" && strings.TrimSpace(answer) == "") {
 		return
 	}
 	ctx := context.Background()
@@ -392,7 +445,60 @@ func (s *Service) rememberBotConversation(conversationID, answer string) {
 	if err != nil || conversation == nil || strings.TrimSpace(conversation.BotID) == "" {
 		return
 	}
+	for _, candidate := range botMemoryCandidates(userMessage) {
+		_ = s.AppendBotMemory(ctx, conversation.BotID, candidate.Section, candidate.Entry)
+	}
 	for _, candidate := range botMemoryCandidates(answer) {
 		_ = s.AppendBotMemory(ctx, conversation.BotID, candidate.Section, candidate.Entry)
 	}
+}
+
+// recentConversationMemoryBlock builds a bounded summary of recent attributed
+// user/assistant turns in the same conversation when no live provider session
+// exists, ensuring multi-turn dialogue continuity across restarts or stateless
+// long-task runners.
+func (s *Service) recentConversationMemoryBlock(ctx context.Context, conversation *Conversation) string {
+	if conversation == nil || len(conversation.Messages) == 0 {
+		return ""
+	}
+	const (
+		header          = "【近期对话上下文记忆】\n"
+		maxTurns        = 6
+		maxTurnRunes    = 400
+		maxTotalBytes   = 3200
+	)
+	attributed := make([]Message, 0, len(conversation.Messages))
+	for _, msg := range conversation.Messages {
+		if strings.TrimSpace(msg.RunID) == "" || strings.TrimSpace(msg.Content) == "" {
+			continue
+		}
+		attributed = append(attributed, msg)
+	}
+	if len(attributed) == 0 {
+		return ""
+	}
+	if len(attributed) > maxTurns {
+		attributed = attributed[len(attributed)-maxTurns:]
+	}
+	var builder strings.Builder
+	builder.WriteString(header)
+	for _, msg := range attributed {
+		content := strings.TrimSpace(msg.Content)
+		if runes := []rune(content); len(runes) > maxTurnRunes {
+			content = string(runes[:maxTurnRunes]) + "…"
+		}
+		role := "用户"
+		if msg.Role == "assistant" {
+			role = "Bot"
+		}
+		line := fmt.Sprintf("- [%s] %s\n", role, strings.ReplaceAll(content, "\n", " "))
+		if builder.Len()+len(line) > maxTotalBytes {
+			break
+		}
+		builder.WriteString(line)
+	}
+	if builder.Len() <= len(header) {
+		return ""
+	}
+	return strings.TrimSpace(builder.String())
 }

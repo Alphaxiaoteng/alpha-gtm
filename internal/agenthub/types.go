@@ -60,8 +60,9 @@ const maxAgentMessageBytes = 16000
 
 // MaxConcurrentRuns caps how many runs may be running at the same time across
 // all conversations. Runs stay mutually exclusive per conversation; this global
-// cap only guards shared provider resources.
-const MaxConcurrentRuns = 4
+// cap only guards shared provider resources and supports 5+ bots running
+// concurrent long tasks and stress tests simultaneously.
+const MaxConcurrentRuns = 16
 
 var (
 	ErrConversationNotFound      = errors.New("agent conversation not found")

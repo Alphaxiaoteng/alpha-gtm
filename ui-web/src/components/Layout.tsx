@@ -43,7 +43,7 @@ const WORKSPACES: Workspace[] = [
   },
   {
     id: 'social',
-    label: '媒体内容',
+    label: '素材裂变',
     icon: FolderOpen,
     defaultTab: 'social-media',
     matches: ['social-media', 'contents', 'templates'],

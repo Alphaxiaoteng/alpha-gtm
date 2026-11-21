@@ -165,6 +165,15 @@ export function BotDetailPanel() {
           <div className="mt-2.5 flex gap-2 px-1">
             <button
               type="button"
+              data-testid="bot-detail-open-memory"
+              disabled={!bot}
+              onClick={() => setTab('advanced')}
+              className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-brand-surface-raised px-2 py-2 text-[11px] font-semibold text-brand-fg transition hover:brightness-95 disabled:opacity-50"
+            >
+              对话记忆
+            </button>
+            <button
+              type="button"
               data-testid="bot-detail-pin"
               disabled={!bot || Boolean(busyAction)}
               onClick={() => void togglePin()}
@@ -223,6 +232,41 @@ function DetailRow({ label, value, mono }: { label: string; value: string; mono?
   );
 }
 
+const MEMORY_SECTIONS = ['用户偏好', '品牌语气', '历史教训', '关键事实'] as const;
+
+function appendSectionEntryInMarkdown(doc: string, section: string, entry: string, botID: string): string {
+  const cleanEntry = entry.trim().replace(/^-\s*/, '');
+  if (!cleanEntry) return doc;
+  const base = doc.trim()
+    ? doc.trim().replace(/\r\n/g, '\n')
+    : `# Bot 记忆：${botID}\n\n## 用户偏好\n- （暂无）\n\n## 品牌语气\n- （暂无）\n\n## 历史教训\n- （暂无）\n\n## 关键事实\n- （暂无）`;
+  const heading = `## ${section}`;
+  const lines = base.split('\n');
+  let start = lines.findIndex((line) => line.trim() === heading);
+  if (start < 0) {
+    lines.push('', heading, `- ${cleanEntry}`);
+    return `${lines.join('\n')}\n`;
+  }
+  let end = lines.length;
+  for (let i = start + 1; i < lines.length; i += 1) {
+    if (lines[i].trim().startsWith('## ')) {
+      end = i;
+      break;
+    }
+  }
+  const body = lines
+    .slice(start + 1, end)
+    .filter((line) => line.trim() !== '- （暂无）' && line.trim() !== '');
+  body.push(`- ${cleanEntry}`);
+  const rebuilt = [
+    ...lines.slice(0, start + 1),
+    '',
+    ...body,
+    ...(end < lines.length ? ['', ...lines.slice(end)] : []),
+  ];
+  return `${rebuilt.join('\n')}\n`;
+}
+
 /** Editable Markdown memory for one persona. The file is the source of truth:
  *  the textarea is a draft until 保存 writes it back through the local API. */
 function BotMemorySection({ botID }: { botID: string }) {
@@ -234,7 +278,13 @@ function BotMemorySection({ botID }: { botID: string }) {
   const [draft, setDraft] = useState<string | null>(null);
   const [status, setStatus] = useState('');
   const [saving, setSaving] = useState(false);
+  const [quickSection, setQuickSection] = useState<(typeof MEMORY_SECTIONS)[number]>('关键事实');
+  const [quickEntry, setQuickEntry] = useState('');
   const value = draft ?? data ?? '';
+
+  const entryCount = value
+    .split('\n')
+    .filter((line) => line.trim().startsWith('- ') && line.trim() !== '- （暂无）').length;
 
   async function save() {
     setSaving(true);
@@ -252,12 +302,86 @@ function BotMemorySection({ botID }: { botID: string }) {
     }
   }
 
+  async function quickAppend() {
+    const clean = quickEntry.trim();
+    if (!clean || saving) return;
+    const nextValue = appendSectionEntryInMarkdown(value, quickSection, clean, botID);
+    setSaving(true);
+    setStatus('');
+    try {
+      const saved = await api.updateBotMemory(botID, nextValue);
+      setDraft(null);
+      setQuickEntry('');
+      await mutate(saved, false);
+      setStatus(`已记入「${quickSection}」`);
+    } catch {
+      setDraft(nextValue);
+      setStatus('保存失败');
+    } finally {
+      setSaving(false);
+    }
+  }
+
   return (
     <div className="rounded-lg bg-brand-surface-raised px-3 py-2" data-testid="bot-detail-memory">
       <div className="flex items-center justify-between">
-        <p className="text-[10px] text-brand-muted">Bot 记忆</p>
-        <span className="text-[10px] text-brand-muted">{status || (isLoading ? '读取中…' : '')}</span>
+        <p className="text-[10px] text-brand-muted">Bot 记忆（已沉淀 {entryCount} 条）</p>
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] text-brand-muted">{status || (isLoading ? '读取中…' : '')}</span>
+          <button
+            type="button"
+            data-testid="bot-memory-refresh"
+            onClick={() => void mutate()}
+            className="text-[10px] font-semibold text-brand-muted transition hover:text-brand-fg"
+          >
+            刷新
+          </button>
+        </div>
       </div>
+
+      <div className="mt-1.5 flex flex-wrap gap-1">
+        {MEMORY_SECTIONS.map((sec) => (
+          <button
+            key={sec}
+            type="button"
+            onClick={() => setQuickSection(sec)}
+            className={`rounded px-1.5 py-0.5 text-[10px] font-medium transition ${
+              quickSection === sec
+                ? 'bg-brand-fg text-brand-bg'
+                : 'bg-brand-fg/[0.06] text-brand-muted hover:text-brand-fg'
+            }`}
+          >
+            {sec}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-1.5 flex items-center gap-1.5">
+        <input
+          type="text"
+          data-testid="bot-memory-quick-input"
+          value={quickEntry}
+          onChange={(e) => setQuickEntry(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              void quickAppend();
+            }
+          }}
+          placeholder={`快速追加一条「${quickSection}」记忆…`}
+          className="h-7 flex-1 rounded-md border border-brand-border bg-brand-bg px-2 text-[10px] text-brand-fg outline-none focus:border-brand-fg/30"
+        />
+        <button
+          type="button"
+          data-testid="bot-memory-quick-add"
+          disabled={saving || !quickEntry.trim()}
+          onClick={() => void quickAppend()}
+          className="h-7 shrink-0 rounded-md bg-brand-fg/[0.08] px-2 text-[10px] font-semibold text-brand-fg transition hover:bg-brand-fg/[0.14] disabled:opacity-40"
+        >
+          + 记入
+        </button>
+      </div>
+
       <textarea
         data-testid="bot-memory-input"
         value={value}
@@ -267,7 +391,7 @@ function BotMemorySection({ botID }: { botID: string }) {
         }}
         spellCheck={false}
         placeholder={'# Bot 记忆\n\n## 用户偏好\n- …'}
-        className="mt-1 h-40 w-full resize-y rounded-md border border-brand-border bg-brand-bg px-2 py-1.5 font-mono text-[10px] leading-4 text-brand-fg outline-none focus:border-brand-fg/30"
+        className="mt-1.5 h-44 w-full resize-y rounded-md border border-brand-border bg-brand-bg px-2 py-1.5 font-mono text-[10px] leading-4 text-brand-fg outline-none focus:border-brand-fg/30"
       />
       <div className="mt-1 flex items-center gap-2">
         <button
