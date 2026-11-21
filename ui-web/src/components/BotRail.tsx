@@ -563,8 +563,8 @@ export function BotRail() {
     >
 
 
-      {!compact && bots.length > 0 ? (
-        <div className="relative px-1.5 pt-1.5">
+      {!compact && bots.length > 5 ? (
+        <div className="relative px-2.5 pt-2">
           <input
             data-testid="bot-rail-search"
             value={query}
@@ -594,32 +594,23 @@ export function BotRail() {
         </div>
       ) : null}
 
-      <div className={`border-b border-brand-border ${compact ? 'px-1 py-1.5' : 'px-1.5 py-1.5'}`}>
-        {/* 常驻新建入口：空列表时有推荐卡，但列表一旦非空就没有任何入口了。 */}
+      <div className={`border-b border-brand-border/70 ${compact ? 'px-1 py-2 space-y-1' : 'px-2.5 py-2.5 flex items-center gap-1.5'}`}>
         <button
           type="button"
           data-testid="bot-rail-create"
           title="新建 Bot（在设置里填写人格）"
           onClick={() => {
             if (typeof window !== 'undefined') {
-              window.history.pushState(null, '', '/SM/settings/personagent');
+              window.history.pushState(null, '', '/GTM/settings/personagent');
             }
             useUIStore.getState().setActiveTab('settings');
           }}
-          className={`bot-rail-card mb-1 flex w-full items-center text-left transition-colors hover:bg-brand-fg/[0.04] ${
-            compact ? 'justify-center py-1.5' : 'gap-3 px-1 py-2'
+          className={`flex items-center rounded-lg border border-brand-border/80 bg-brand-surface text-left text-brand-fg transition-colors hover:bg-brand-fg/[0.04] ${
+            compact ? 'w-full justify-center py-1.5' : 'flex-1 justify-center gap-1.5 px-2 py-1.5'
           }`}
         >
-          {compact ? (
-            <Plus className="h-4 w-4 shrink-0" aria-hidden="true" />
-          ) : (
-            <>
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-surface-raised">
-                <Plus className="h-4 w-4" aria-hidden="true" />
-              </span>
-              <span className="flex-1 truncate text-[13px] font-semibold text-brand-fg">新建 Bot</span>
-            </>
-          )}
+          <Plus className="h-3.5 w-3.5 shrink-0 text-brand-muted" aria-hidden="true" />
+          {!compact && <span className="truncate text-[12px] font-medium">新建</span>}
         </button>
         <button
           type="button"
@@ -627,17 +618,11 @@ export function BotRail() {
           aria-pressed={botInboxOpen}
           title={botInboxOpen ? '收起收件箱' : '收件箱（未读）'}
           onClick={() => setBotInboxOpen(!botInboxOpen)}
-          className={`bot-rail-card flex w-full items-center text-left transition-colors ${
-            compact ? 'justify-center py-1.5' : 'gap-3 px-1 py-2'
-          } ${botInboxOpen ? 'bg-brand-fg/[0.05] text-brand-fg' : 'text-brand-fg hover:bg-brand-fg/[0.04]'}`}
+          className={`flex items-center rounded-lg border border-brand-border/80 text-left transition-colors ${
+            compact ? 'w-full justify-center py-1.5' : 'flex-1 justify-center gap-1.5 px-2 py-1.5'
+          } ${botInboxOpen ? 'bg-brand-fg/[0.07] text-brand-fg' : 'bg-brand-surface text-brand-fg hover:bg-brand-fg/[0.04]'}`}
         >
-          {compact ? (
-            <Inbox className="h-4 w-4 shrink-0" aria-hidden="true" />
-          ) : (
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-surface-raised">
-              <Inbox className="h-[18px] w-[18px]" aria-hidden="true" />
-            </span>
-          )}
+          <Inbox className="h-3.5 w-3.5 shrink-0 text-brand-muted" aria-hidden="true" />
           {compact ? (
             unreadTotal > 0 ? (
               <span
@@ -648,14 +633,14 @@ export function BotRail() {
             ) : null
           ) : (
             <>
-              <span className="flex-1 truncate text-[15px] font-semibold">收件箱</span>
+              <span className="truncate text-[12px] font-medium">收件箱</span>
               {renderInboxBadge(unreadTotal)}
             </>
           )}
         </button>
       </div>
 
-      <div className={`min-h-0 flex-1 space-y-0.5 overflow-y-auto overflow-x-hidden ui-thin-scrollbar ${compact ? 'p-1' : 'p-1.5'}`}>
+      <div className={`min-h-0 flex-1 space-y-1.5 overflow-y-auto overflow-x-hidden ui-thin-scrollbar ${compact ? 'p-1.5' : 'px-2.5 py-3'}`}>
         {isLoading ? (
           // Skeleton rows, not a spinner: the list shape stays stable while the
           // roster loads, so the rows do not jump when data arrives.
@@ -734,69 +719,77 @@ export function BotRail() {
           </p>
         ) : (
           <>
-            {/* 主 Agent 位：默认是 AlphaBot（品牌像素标）；也可以把任意 Bot
-                设为主 Agent（is_primary），它就顶到这个位置并带皇冠。 */}
+            {/* 主 Agent 位：极简横向卡片 */}
             <button
               type="button"
               data-testid="bot-rail-chief"
               aria-label={mainAgent.name}
               title={`${mainAgent.name}（主 Agent）`}
               onClick={() => {
-                // 主 Agent 只有一处入口：openMainAgent 内部决定历史会话 / 内置真实
-                // bot / 用户设为主 Agent 的那个 Bot，不再按 bot 是否存在分流。
                 void openMainAgent();
               }}
-              className="bot-rail-card mb-1 flex w-full flex-col items-center px-2 py-3 transition-colors hover:bg-brand-fg/[0.035]"
+              className={`bot-rail-card flex w-full items-center rounded-xl border border-brand-border/70 bg-brand-surface-raised/65 text-left transition-colors hover:bg-brand-fg/[0.045] ${
+                compact ? 'justify-center py-2' : 'gap-2.5 px-2.5 py-2.5'
+              }`}
             >
-              <span className="relative">
-                <span className="flex h-[68px] w-[68px] items-center justify-center rounded-[22%] bg-brand-surface-raised">
+              <span className="relative shrink-0">
+                <span className={`flex items-center justify-center rounded-xl bg-brand-surface ${compact ? 'h-8 w-8' : 'h-9 w-9'}`}>
                   {mainAgent.bot && !isBuiltinAlphaAgent(mainAgent.bot) ? (
                     mainAgent.role ? (
-                      <PixelAvatar role={mainAgent.role} size={48} className="rounded-[22%]" />
+                      <PixelAvatar role={mainAgent.role} size={28} className="rounded-lg" />
                     ) : (
-                      <BotAvatar bot={mainAgent.bot} size="md" />
+                      <BotAvatar bot={mainAgent.bot} size="sm" />
                     )
                   ) : (
-                    <AlphaPixelMark className="h-11 w-11" decorative />
+                    <AlphaPixelMark className="h-6 w-6" decorative />
                   )}
                 </span>
                 {mainAgent.unread > 0 ? (
                   <span
                     data-testid="bot-rail-agent-unread"
                     aria-label={`${mainAgent.unread} 条未读`}
-                    className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full ring-2 ring-brand-surface"
+                    className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full ring-2 ring-brand-surface"
                     style={{ background: UNREAD_DOT }}
                   />
                 ) : null}
-                {/* 皇冠 = 主 Agent 身份，独立 SVG，贴在头像右下角 */}
                 <span
                   data-testid="bot-rail-chief-crown"
                   role="img"
                   aria-label="主 Agent"
                   title="主 Agent"
-                  className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-brand-surface ring-1 ring-brand-border"
+                  className="absolute -bottom-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-brand-surface ring-1 ring-brand-border"
                 >
-                  <Crown className="h-3 w-3 text-[#c08a1e]" strokeWidth={2.2} />
+                  <Crown className="h-2.5 w-2.5 text-[#c08a1e]" strokeWidth={2.2} />
                 </span>
               </span>
-              <span className="mt-1.5 max-w-full truncate text-[15px] font-semibold text-brand-fg">{mainAgent.name}</span>
+              {compact ? null : (
+                <span className="min-w-0 flex-1">
+                  <span className="flex items-center justify-between gap-1.5">
+                    <span className="truncate text-[13px] font-semibold text-brand-fg">{mainAgent.name}</span>
+                    <span className="shrink-0 rounded bg-brand-fg/[0.06] px-1.5 py-0.5 text-[9px] font-medium text-brand-muted">总控</span>
+                  </span>
+                  <span className="mt-0.5 block truncate text-[11px] text-brand-muted">
+                    {mainAgent.bot?.role || '全域业务与内容调度'}
+                  </span>
+                </span>
+              )}
             </button>
             {sections.map((section) => (
             <div
               key={section.group}
               data-testid={`bot-rail-group-${section.group}`}
+              className="space-y-1 pt-2"
             >
               {compact ? null : (
                 <div
                   data-testid={`bot-rail-group-header-${section.group}`}
                   onContextMenu={(event) => {
-                    // 「置顶」是界面人造分区，改它的名字会真的改掉 Bot 的分组。
                     if (syntheticGroups.has(section.group)) return;
                     event.preventDefault();
                     event.stopPropagation();
                     setGroupMenu({ group: section.group, bots: section.bots, x: event.clientX, y: event.clientY });
                   }}
-                  className="flex items-center justify-between gap-2 px-1.5 pb-1.5 pt-4"
+                  className="flex items-center justify-between gap-2 px-2 pb-1 pt-1"
                 >
                   {renamingGroup === section.group ? (
                     <input
@@ -809,19 +802,21 @@ export function BotRail() {
                         if (event.key === 'Enter') void renameGroup(section.group, renameDraft);
                         if (event.key === 'Escape') setRenamingGroup('');
                       }}
-                      className="w-full rounded border border-brand-accent/40 bg-brand-surface px-1.5 py-0.5 text-[13px] text-brand-fg outline-none"
+                      className="w-full rounded border border-brand-accent/40 bg-brand-surface px-1.5 py-0.5 text-[12px] text-brand-fg outline-none"
                       aria-label="分组新名称"
                     />
                   ) : (
-                    <span className="truncate text-[13px] text-brand-muted">{section.group}</span>
+                    <span className="truncate text-[11px] font-medium text-brand-muted/85">{section.group}</span>
                   )}
-                  <span className="shrink-0 text-[13px] tabular-nums text-brand-muted">{section.bots.length}</span>
+                  {sections.length > 1 ? (
+                    <span className="shrink-0 text-[11px] tabular-nums text-brand-muted/70">{section.bots.length}</span>
+                  ) : null}
                 </div>
               )}
               {section.bots.map((bot) => {
                 const active = bot.id === activeBotID;
                 const unread = unreadOf(bot.id);
-                const preview = summaryByBotID.get(bot.id)?.last_message || bot.role || '还没有消息';
+                const preview = bot.role || summaryByBotID.get(bot.id)?.last_message || '点击开启对话';
                 return (
                   // 这一行原先是最外层 <button> 里再嵌免打扰 <button>（非法 HTML）。
                   // 改成 role="button" 的 div 后嵌套合法，点击、键盘与 testid 全部保留；
@@ -870,23 +865,19 @@ export function BotRail() {
                       setBotMenu({ bot, x: event.clientX, y: event.clientY });
                     }}
                     title={compact ? bot.name : `${bot.name}${bot.role ? ` · ${bot.role}` : ''}`}
-                    className={`bot-rail-card group relative flex w-full cursor-pointer items-center text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent/40 ${
+                    className={`bot-rail-card group relative flex w-full cursor-pointer items-center rounded-xl text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent/40 ${
                       openingBotID ? 'pointer-events-none opacity-60' : ''
                     } ${
-                      compact ? 'justify-center py-2.5' : 'gap-3 px-1.5 py-2.5'
+                      compact ? 'justify-center py-2' : 'gap-2.5 px-2.5 py-2.5'
                     } ${
                       active
-                        ? 'bg-brand-fg/[0.045] text-brand-fg'
-                        : bot.pinned
-                          ? 'bg-brand-surface-raised text-brand-fg hover:bg-brand-fg/[0.06]'
-                          : 'text-brand-fg hover:bg-brand-fg/[0.035]'
+                        ? 'bg-brand-fg/[0.06] text-brand-fg'
+                        : 'text-brand-fg hover:bg-brand-fg/[0.035]'
                     }`}
                   >
-                    {/* 当前会话的左侧强调条：只靠底色太弱，深色下几乎看不出。 */}
                     {active ? (
-                      <span aria-hidden="true" className="absolute left-0 top-1/2 h-6 w-0.5 -translate-y-1/2 rounded-full bg-brand-accent" />
+                      <span aria-hidden="true" className="absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-brand-accent" />
                     ) : null}
-                    {/* 皇冠贴在头像左上角，和参考图一致 */}
                     {!compact && bot.is_primary ? (
                       <span
                         data-testid={`bot-rail-primary-${bot.id}`}
@@ -899,49 +890,34 @@ export function BotRail() {
                       </span>
                     ) : null}
                     <span
-                      className={`flex shrink-0 items-center justify-center rounded-full bg-brand-surface-raised ${
-                        compact ? 'h-9 w-9' : 'h-11 w-11'
+                      className={`flex shrink-0 items-center justify-center rounded-lg bg-brand-surface-raised ${
+                        compact ? 'h-8 w-8' : 'h-8 w-8'
                       }`}
                     >
-                      <BotAvatar bot={bot} size={compact ? 'sm' : 'md'} />
+                      <BotAvatar bot={bot} size="sm" />
                     </span>
                     {compact ? null : (
                       <span className="min-w-0 flex-1">
                         <span className="flex items-center gap-1.5">
-                          <span className="min-w-0 truncate text-[15px] font-semibold leading-5">{bot.name}</span>
+                          <span className="min-w-0 truncate text-[13px] font-semibold leading-5">{bot.name}</span>
                           {unread > 0 ? (
                             <span
                               data-testid={`bot-rail-unread-${bot.id}`}
                               role="img"
                               aria-label={`${unread} 条未读`}
                               title={`${unread} 条未读`}
-                              className="h-2 w-2 shrink-0 rounded-full"
+                              className="h-1.5 w-1.5 shrink-0 rounded-full"
                               style={{ background: UNREAD_DOT }}
                             />
                           ) : null}
                         </span>
-                        <span
-                          className={`mt-0.5 block truncate text-[13px] leading-4 ${
-                            unread > 0 ? 'font-medium text-brand-muted' : 'text-brand-muted'
-                          }`}
-                        >
+                        <span className="mt-0.5 block truncate text-[11px] leading-4 text-brand-muted">
                           {preview}
                         </span>
                       </span>
                     )}
                     {compact ? null : (
-                      <span className="flex shrink-0 items-center gap-1.5">
-                        {bot.pinned ? (
-                          <span
-                            data-testid={`bot-rail-pin-${bot.id}`}
-                            role="img"
-                            aria-label="已置顶"
-                            title="已置顶"
-                            className="flex h-4 w-4 items-center justify-center text-[#c08a1e]"
-                          >
-                            <Pin className="h-4 w-4" strokeWidth={2.4} fill="currentColor" fillOpacity={0.3} />
-                          </span>
-                        ) : null}
+                      <span className="flex shrink-0 items-center gap-1">
                         {!compact ? (
                           <button
                             type="button"
@@ -952,15 +928,15 @@ export function BotRail() {
                               event.stopPropagation();
                               void toggleMute(bot);
                             }}
-                            className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-colors ${
-                              bot.muted ? 'text-brand-accent hover:bg-brand-fg/[0.06]' : 'text-brand-muted hover:bg-brand-fg/[0.04] hover:text-brand-fg'
+                            className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition ${
+                              bot.muted ? 'text-brand-accent opacity-100 hover:bg-brand-fg/[0.06]' : 'text-brand-muted opacity-0 group-hover:opacity-100 hover:bg-brand-fg/[0.04] hover:text-brand-fg'
                             }`}
                           >
-                            {bot.muted ? <BellOff className="h-4 w-4" /> : <Bell className="h-4 w-4" />}
+                            {bot.muted ? <BellOff className="h-3.5 w-3.5" /> : <Bell className="h-3.5 w-3.5" />}
                           </button>
                         ) : null}
                         {openingBotID === bot.id ? (
-                          <Loader2 className="h-4 w-4 shrink-0 animate-spin text-brand-accent" />
+                          <Loader2 className="h-3.5 w-3.5 shrink-0 animate-spin text-brand-accent" />
                         ) : null}
                       </span>
                     )}
@@ -1080,7 +1056,7 @@ export function BotRail() {
                   setBotMenu(null);
                   // 复用设置页的 Bot 团队分节：那里有完整的编辑表单。
                   if (typeof window !== 'undefined') {
-                    window.history.pushState(null, '', '/SM/settings/personagent');
+                    window.history.pushState(null, '', '/GTM/settings/personagent');
                   }
                   useUIStore.getState().setActiveTab('settings');
                   void target;

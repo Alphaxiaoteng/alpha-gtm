@@ -14,7 +14,7 @@ const SECTION_SEGMENT: Record<string, string> = {
   'social-media': '',
   contents: 'content',
   templates: 'templates',
-  studio: 'studio',
+  studio: 'seo',
   knowledge: 'knowledge',
   memory: 'memory',
   dashboard: 'trend',
@@ -41,12 +41,14 @@ const SEGMENT_TAB: Record<string, string> = Object.fromEntries(
     .map(([tab, segment]) => [segment, tab]),
 );
 SEGMENT_TAB.media = 'social-media';
+SEGMENT_TAB.studio = 'studio';
+SEGMENT_TAB.seo = 'studio';
 
 // 旧地址仍然可用，避免历史书签失效。
 const LEGACY_ROUTES: Record<string, string> = {
   // Media 首页已删：/ 与 /home 落到趋势雷达（新的默认工作区）。
-  '/': 'crawler',
-  '/home': 'crawler',
+  '/': 'dashboard',
+  '/home': 'dashboard',
   '/trend': 'dashboard',
   '/trend/keywords': 'dashboard',
   '/trend/videos': 'dashboard',
@@ -67,7 +69,7 @@ const LEGACY_ROUTES: Record<string, string> = {
   '/contents': 'contents',
   '/media/templates': 'templates',
   '/templates': 'templates',
-  '/knowledge': 'crawler',
+  '/knowledge': 'dashboard',
   '/analytics': 'xhs-data',
   '/xhs-data': 'xhs-data',
   '/metrics': 'metrics',
@@ -100,6 +102,7 @@ const LEGACY_ROUTES: Record<string, string> = {
   '/bot': 'bot',
   '/shop': 'shop',
   '/studio': 'studio',
+  '/seo': 'studio',
   '/publish': 'publish',
 };
 
@@ -119,16 +122,19 @@ export function routeForTab(tab: string, mode: ProductMode): string {
     const segment = SECTION_SEGMENT[tab];
     return segment ? `/shop/${segment}` : '/shop';
   }
-  if (tab === 'social-media') return '/SM';
+  if (tab === 'social-media') return '/GTM';
   const segment = SECTION_SEGMENT[tab];
-  return segment ? `/SM/${segment}` : '/';
+  return segment ? `/GTM/${segment}` : '/';
 }
 
 /** 地址栏路径 → tab（能带出模式就带出）。 */
 export function parseRoute(pathname: string): ParsedRoute | null {
   const raw = (pathname || '/').replace(/\/+$/, '') || '/';
-  // 旧 /media 前缀仍可打开，新地址统一写 /SM。
-  const path = raw.replace(/^\/media(?=\/|$)/i, '/SM').replace(/^\/sm(?=\/|$)/i, '/SM');
+  // 旧 /media 与 /SM 前缀仍可打开，新地址统一写 /GTM。
+  const path = raw
+    .replace(/^\/media(?=\/|$)/i, '/GTM')
+    .replace(/^\/sm(?=\/|$)/i, '/GTM')
+    .replace(/^\/gtm(?=\/|$)/i, '/GTM');
 
   if (path === '/bot') return { tab: 'bot' };
   if (path === '/agent') return { tab: 'bot' };
@@ -140,9 +146,9 @@ export function parseRoute(pathname: string): ParsedRoute | null {
     const tab = SEGMENT_TAB[segment] ?? (segment.startsWith('trend') ? 'dashboard' : undefined);
     return tab ? { tab, mode: 'shop' } : null;
   }
-  if (path === '/SM' || path.startsWith('/SM/')) {
-    if (path === '/SM') return { tab: 'social-media', mode: 'media' };
-    const segment = path.slice('/SM/'.length);
+  if (path === '/GTM' || path.startsWith('/GTM/')) {
+    if (path === '/GTM') return { tab: 'social-media', mode: 'media' };
+    const segment = path.slice('/GTM/'.length);
     if (segment === 'settings' || segment.startsWith('settings/')) return { tab: 'settings', mode: 'media' };
     const tab = SEGMENT_TAB[segment] ?? (segment.startsWith('trend') ? 'dashboard' : undefined);
     return tab ? { tab, mode: 'media' } : null;

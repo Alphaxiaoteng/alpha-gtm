@@ -67,10 +67,17 @@ export function Composer({
   useEffect(() => {
     const node = field.current;
     if (!node) return;
+    if (!value) {
+      node.style.height = "";
+      setMultiline(false);
+      return;
+    }
     node.style.height = "auto";
-    const next = Math.min(node.scrollHeight, MAX_FIELD_HEIGHT);
-    node.style.height = `${next}px`;
-    setMultiline(next > 40);
+    if (node.scrollHeight > 0) {
+      const next = Math.max(36, Math.min(node.scrollHeight, MAX_FIELD_HEIGHT));
+      node.style.height = `${next}px`;
+      setMultiline(next > 44);
+    }
   }, [value]);
 
   const send = () => {
@@ -115,7 +122,7 @@ export function Composer({
         aria-label={textareaAriaLabel}
         onChange={(event) => onChange(event.target.value)}
         onKeyDown={onKeyDown}
-        className="chat-text max-h-[200px] min-w-0 flex-1 resize-none bg-transparent px-1 py-[7px] text-[15px] leading-[22px] text-brand-fg outline-none placeholder:text-brand-fg/55"
+        className="chat-text min-h-[36px] max-h-[200px] min-w-0 flex-1 resize-none bg-transparent px-1 py-[7px] text-[15px] leading-[22px] text-brand-fg outline-none placeholder:text-brand-fg/55"
       />
       <button
         type="button"

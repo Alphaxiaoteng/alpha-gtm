@@ -96,6 +96,10 @@ const RADAR_PATH_VIEW: Record<string, RadarContentView> = {
   '/trend/keywords': 'keywords',
   '/trend/videos': 'videos',
   '/trend/creators': 'creators',
+  '/gtm/trend': 'keywords',
+  '/gtm/trend/keywords': 'keywords',
+  '/gtm/trend/videos': 'videos',
+  '/gtm/trend/creators': 'creators',
   '/SM/trend': 'keywords',
   '/SM/trend/keywords': 'keywords',
   '/SM/trend/videos': 'videos',
@@ -121,9 +125,9 @@ export function getRadarViewFromPathname(): RadarContentView | undefined {
 
 export function syncRadarViewURL(view: RadarContentView): void {
   if (typeof window === 'undefined') return;
-  const targetPath = `/SM/trend/${RADAR_VIEW_SEGMENT[view]}`;
+  const targetPath = `/GTM/trend/${RADAR_VIEW_SEGMENT[view]}`;
   const currentPath = window.location.pathname.toLowerCase().replace(/\/+$/, '') || '/';
-  if (currentPath !== targetPath) {
+  if (currentPath !== targetPath.toLowerCase()) {
     window.history.replaceState(null, '', targetPath + window.location.search);
   }
 }
@@ -137,11 +141,11 @@ export function syncURLToTab(tab: TabType, mode: ProductMode = getStoredProductM
   // 避免父级 tab 同步把子路由冲掉（尤其是刷新 /trend/creators/{platform}/{id} 时）。
   if (tab === 'dashboard') {
     if (RADAR_PATH_VIEW[currentPath] !== undefined) return;
-    if (/^\/(?:(?:sm|media)\/)?trend\//.test(currentPath)) return;
+    if (/^\/(?:(?:gtm|sm|media)\/)?trend\//.test(currentPath)) return;
     if (isCreatorPath(window.location.pathname)) return;
   }
-  // 设置子页（/SM/settings/logs）不能被父级同步冲回 /settings。
-  if (tab === 'settings' && /^\/(?:(?:sm|shop)\/)?settings\//.test(currentPath)) return;
+  // 设置子页（/GTM/settings/logs）不能被父级同步冲回 /settings。
+  if (tab === 'settings' && /^\/(?:(?:gtm|sm|shop)\/)?settings\//.test(currentPath)) return;
   window.history.replaceState(null, '', targetPath + window.location.search);
 }
 
@@ -358,8 +362,8 @@ export const useUIStore = create<UIStore>((set) => ({
   // URL 优先：直接访问 /trend/creators 等深链时必须落在该页面，
   // 只有 URL 无有效路由时才回退到 window.name 的恢复状态。
   activeTab: (!SHOP_MODE_ENABLED && initialRoute?.mode === 'shop')
-    ? 'crawler'
-    : (initialRoute?.tab as TabType) || recoveryState.activeTab || 'crawler',
+    ? 'dashboard'
+    : (initialRoute?.tab as TabType) || recoveryState.activeTab || 'dashboard',
   setActiveTab: (tab) => set((state) => {
     const requestedTab = tab === 'terminal' ? 'settings' : tab;
     const nextTab = isTabAvailableForMode(state.productMode, requestedTab)

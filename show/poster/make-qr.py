@@ -1,59 +1,14 @@
-"""生成易拉宝右下角二维码，指向 gtm.alphafde.cn。
-白底方卡 + 黑码，黑底易拉宝上才扫得出来。
+"""纯二维码，无文字无卡片留白。
+quiet zone 由 QR 规范决定（4 模块），以保证可扫。
 """
 import qrcode
 from qrcode.constants import ERROR_CORRECT_H
-from PIL import Image, ImageDraw
 
-URL = "https://gtm.alphafde.cn"
+URL = "https://alphagtm.pages.dev/"
 
-qr = qrcode.QRCode(
-    version=None,
-    error_correction=ERROR_CORRECT_H,
-    box_size=12,
-    border=2,
-)
+qr = qrcode.QRCode(error_correction=ERROR_CORRECT_H, box_size=30, border=4)
 qr.add_data(URL)
 qr.make(fit=True)
-code = qr.make_image(fill_color="#0A0A0A", back_color="#FFFFFF").convert("RGB")
-
-# 白底卡片：留白 + 下方一行说明
-pad = 46
-label_h = 108
-card = Image.new(
-    "RGB",
-    (code.width + pad * 2, code.height + pad * 2 + label_h),
-    "#FFFFFF",
-)
-card.paste(code, (pad, pad))
-d = ImageDraw.Draw(card)
-# 用本机真实存在的中文字体画提示（Hiragino Sans GB 在 macOS 上稳定可用）
-from PIL import ImageFont as _IF
-font = None
-# 依次尝试，取第一个能渲染「扫」字的字体
-for font_path in [
-    "/System/Library/Fonts/Hiragino Sans GB.ttc",
-    "/System/Library/Fonts/STHeiti Medium.ttc",
-    "/System/Library/Fonts/Supplemental/Songti.ttc",
-]:
-    try:
-        candidate = _IF.truetype(font_path, 30, index=0)
-        if candidate.getbbox("扫")[2] > 0:
-            font = candidate
-            break
-    except Exception:
-        continue
-if font is None:
-    raise RuntimeError("找不到可用的中文字体，二维码说明无法出图")
-
-text = "扫码查看 AlphaGTM"
-bbox = d.textbbox((0, 0), text, font=font)
-tw = bbox[2] - bbox[0]
-d.text(
-    ((card.width - tw) / 2, code.height + pad * 2 + 2),
-    text,
-    fill="#0A0A0A",
-    font=font,
-)
-card.save("alphagtm-qr.png")
-print("saved", card.size, "->", URL)
+img = qr.make_image(fill_color="#0A0A0A", back_color="#FFFFFF").convert("RGB")
+img.save("alphagtm-qr.png")
+print("saved", img.size, "->", URL)
