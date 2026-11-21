@@ -1,0 +1,78 @@
+/* alphagame.club 视觉系统覆盖层
+   取自 apps/alphagame-new/web/public/css/tokens-bone.css
+   严格套 alphagame 骨黑配色；字体阶梯用 its token；不改 skill 版式。 */
+html[data-theme="midnight-ink"] {
+  --paper: #050507;           /* bone-bg */
+  --paper-2: #0a0a0f;         /* bg-elevated */
+  --paper-rgb: 5,5,7;
+  --ink: #f7f6f2;             /* 象牙白主文字 */
+  --text-primary: #f7f6f2;
+  --text-body: #c9c7c0;
+  --text-secondary: #c9c7c0;
+  --text-helper: #8e8d9c;
+  --muted: #8e8d9c;
+  --ink-rgb: 247,246,242;
+  --accent: #D41432;          /* 品牌亮红 */
+  --accent-soft: rgba(212,20,50,0.12);
+  --accent-ink: #FF6B81;
+  --accent-display: #D41432;
+  --accent-rgb: 212,20,50;
+  --accent-on: #ffffff;
+  --accent-on-text: #ffffff;
+  --accent-on-text-rgb: 255,255,255;
+  --line: rgba(237,230,214,0.10);
+  --line-subtle: rgba(255,255,255,0.06);
+  --line-strong: rgba(212,20,50,0.32);
+}
+
+/* 字体：用 alphagame 的 Bodoni 展示 / Montserrat 无衬线 / JetBrains Mono。
+   放在末尾定义，覆盖渲染器早先的 --font-* 与 --ff-*。 */
+:root {
+  --font-display: "Bodoni 72", "Bodoni 72 OS", Didot, Georgia, serif !important;
+  --font-serif: "Bodoni 72", "Bodoni 72 OS", Didot, Georgia, serif !important;
+  --font-sans: "Montserrat", "PingFang SC", system-ui, sans-serif !important;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace !important;
+}
+
+html, body { background: #050507 !important; }
+
+/* 落地页首屏尺度：标题放大到 alphagame 旗舰 Hero 级别 */
+.article-header h1, .doc-header h1, header h1, h1 {
+  font-size: clamp(52px, 8vw, 110px) !important;
+  line-height: 1.05 !important;
+  letter-spacing: -0.02em !important;
+  font-weight: 500 !important;
+}
+.hero-subtitle {
+  font-size: clamp(20px, 2.4vw, 30px) !important;
+  color: #c9c7c0 !important;
+  line-height: 1.5 !important;
+}
+/* slug 用等宽 + 亮红，呼应 alphagame 的代码路径质感 */
+p code, code {
+  font-family: "JetBrains Mono", "SF Mono", ui-monospace, monospace !important;
+  color: #D41432 !important;
+  background: rgba(212,20,50,0.12) !important;
+  border: 1px solid rgba(212,20,50,0.32) !important;
+  border-radius: 3px !important;
+  padding: 4px 10px !important;
+  font-size: 0.95em !important;
+  letter-spacing: 0.06em !important;
+}
+/* 正文段落按 alphagame 字号阶梯 */
+.section p { font-size: 19px !important; line-height: 1.75 !important; color: #c9c7c0 !important; }
+
+/* 左上角 AlphaFDE 渐变 logo（取自 alphafde.cn 深色主题） */
+.brand-header {
+  display: flex;
+  align-items: center;
+  padding: 8px 0 26px;
+  margin-bottom: 12px;
+}
+.brand-header img {
+  height: 34px;
+  width: auto;
+  display: block;
+}
+/* 落地页首屏留白，避免 logo 和标题挤在一起 */
+.hero { margin-top: 24px !important; }

@@ -1,0 +1,26 @@
+# KOOYING — Zhejiang Kooying Autoparts Co., Ltd.
+
+> Commercial vehicle air disc brake pads, heavy-duty drum brake linings, and wind power friction blocks engineered in Huzhou, Zhejiang, China.
+
+## Verified Entity Profile
+- **Legal Entity:** Zhejiang Kooying Autoparts Co., Ltd. (浙江冠英汽车零部件有限公司)
+- **Primary Brand:** KOOYING (with domestic & sub-brands GUANLONG 冠隆, XINLAI 新莱, SHENGDIAO 圣雕, SANAN 三安, KANENG 卡能)
+- **Founded:** 2006 (Huzhou South Taihu Plant commissioned 2019; RMB 180M investment; 43,000 sqm; 116 automated equipment lines)
+- **Annual Capacity:** 15,000,000 sets/year
+- **Export Footprint:** 30+ countries across Middle East, Southeast Asia, South America, North America, and Europe
+- **Certifications:** IATF 16949:2016 (Quality Austria), ECE R90 (E-Mark), GB5763-2018, CCC (3C)
+
+## Laboratory & Formulation Evidence
+- **Compounds:** 3 major formulation series, 30+ asbestos-free friction materials (GY-HD400 carbon-ceramic, N91 nano-mineral eco, GY-CV360 balanced fleet)
+- **Testing Equipment:** 2× European Krauss machines, 1× North American Chase tester, 4× constant-speed machines, shear & compressibility rigs
+- **400°C Constant-Torque Thickness Wear:** 0.040 mm (vs. 0.085 mm industry reference)
+- **Friction Coefficient:** μ 0.35–0.38 across 200°C–400°C+
+- **Constant-Speed Mass Wear:** 0.580 g (vs. 0.650 g reference); Impact Strength: 0.340 J/cm²; Hardness: HRM 8.442
+
+## Key Product Cross-Reference Pages
+- [Homepage & BrakeFinder™ Cross-Reference](https://kooyingbrake.com/)
+- [Full 135-SKU Verified Studio Catalog](https://kooyingbrake.com/catalog.html)
+- [WVA 29087, 29162, 29030 & BPW 8201 Air Disc Brake Pads](https://kooyingbrake.com/seo/wva-29087-29162-air-disc-brake-pads.html)
+- [BPW, Meritor, Fuwa & Hande Axle Drum Brake Linings](https://kooyingbrake.com/seo/trailer-axle-brake-linings-bpw-meritor-fuwa.html)
+- [HINO, ISUZU, HYUNDAI, SCANIA & HOWO Drum Linings](https://kooyingbrake.com/seo/heavy-duty-drum-linings-hino-howo-scania.html)
+- [30+ Friction Compounds & Krauss 400°C Dyno Report](https://kooyingbrake.com/seo/friction-material-formulas-krauss-testing.html)

@@ -1,0 +1,4687 @@
+{
+  "company": {
+    "brand": "KOOYING",
+    "legal_name": "Zhejiang Kooying Autoparts Co., Ltd.",
+    "legal_name_zh": "浙江冠英汽车零部件有限公司",
+    "founded": 2006,
+    "huzhou_plant_year": 2019,
+    "investment": "RMB 180M",
+    "annual_capacity": "15,000,000 Sets/Year",
+    "export_countries": "30+",
+    "sub_brands": [
+      "KOOYING",
+      "GUANLONG 冠隆",
+      "XINLAI 新莱",
+      "SHENGDIAO 圣雕",
+      "SANAN 三安",
+      "KANENG 卡能"
+    ],
+    "certifications": [
+      "IATF 16949:2016",
+      "ECE R90 (E-Mark)",
+      "GB5763-2018",
+      "CCC 3C"
+    ],
+    "dyno_metrics": {
+      "friction_coefficient": "0.35–0.38",
+      "wear_400c_kooying_mm": 0.04,
+      "wear_400c_benchmark_mm": 0.085,
+      "constant_speed_weight_loss_g": 0.58,
+      "density_g_cm3": 2.04,
+      "hardness_hrm": 8.442,
+      "impact_strength_j_cm2": 0.34,
+      "noise_hz": "<= 1.6 Hz",
+      "formula_series": "3 Series / 30+ Asbestos-Free Formulas"
+    }
+  },
+  "stats": {
+    "total_models": 135,
+    "disc_models": 41,
+    "drum_models": 94,
+    "total_disc_photos": 126,
+    "total_drum_photos": 184
+  },
+  "brand_renders": [
+    {
+      "brand_folder": "三安常规型号渲染图",
+      "path": "assets/products/disc/brand-renders/三安常规型号渲染图/29162加长217长渲染图.JPG"
+    },
+    {
+      "brand_folder": "冠隆常规型号渲染图",
+      "path": "assets/products/disc/brand-renders/冠隆常规型号渲染图/29162加长217长渲染图.JPG"
+    },
+    {
+      "brand_folder": "卡能常规型号渲染图",
+      "path": "assets/products/disc/brand-renders/卡能常规型号渲染图/29162加长217长渲染图.JPG"
+    },
+    {
+      "brand_folder": "圣雕常规型号渲染图",
+      "path": "assets/products/disc/brand-renders/圣雕常规型号渲染图/29162加长217长渲染图.JPG"
+    },
+    {
+      "brand_folder": "新莱常规型号渲染图",
+      "path": "assets/products/disc/brand-renders/新莱常规型号渲染图/29162加长217长渲染图.JPG"
+    }
+  ],
+  "samples": [
+    "assets/products/disc/samples/IMG_6075.JPG",
+    "assets/products/disc/samples/IMG_6321.JPG",
+    "assets/products/disc/samples/IMG_6323.JPG",
+    "assets/products/disc/samples/1678f35bc93071ba216f1cb4e0893a9.jpg",
+    "assets/products/disc/samples/181ce1726ebab9ee76f7c23a819004f.jpg",
+    "assets/products/disc/samples/608f791d77c799174c64391125d44d1.jpg",
+    "assets/products/disc/samples/80a79e9553253e8191945926206403e.jpg",
+    "assets/products/disc/samples/9b327a220f88354d21560091d2b37ba.jpg",
+    "assets/products/disc/samples/9f6cf8788a8c8e8258db8b5652a09af.jpg",
+    "assets/products/disc/samples/a043ca626fd17280c193c07f0c642be.jpg",
+    "assets/products/disc/samples/a94be007beda60e250f72af37c557c0.jpg",
+    "assets/products/disc/samples/aa62b273a5b54a9cbe91ff37735b71b.jpg",
+    "assets/products/disc/samples/cc5e11ddd35525911e0f0a25ce34c6e.jpg",
+    "assets/products/disc/samples/d61cdef16dc5db5fb92b6f8f89e9ea8.jpg",
+    "assets/products/disc/samples/ec1cb394c31aa2d7c0270dff9f91836.jpg",
+    "assets/products/disc/samples/1691478865263.png",
+    "assets/products/disc/samples/9fba4788960d69aeb075f1f2160c77e.png",
+    "assets/products/disc/samples/cbc63f7afe960988a123787893b09ab.jpg",
+    "assets/products/disc/samples/最新样板.jpg"
+  ],
+  "videos": [
+    "assets/products/disc/5200、5300/5200.5300.mp4"
+  ],
+  "factory_assets": [
+    {
+      "file": "assets/factory/huzhou-plant-overview.jpg",
+      "caption": "Huzhou South Taihu R&D & Manufacturing Base (RMB 180M Investment)",
+      "width": "1350",
+      "height": "760"
+    },
+    {
+      "file": "assets/factory/auto-batching-mixing.jpg",
+      "caption": "Automated Raw Material Batching & Mixing System",
+      "width": "1350",
+      "height": "760"
+    },
+    {
+      "file": "assets/factory/automated-hot-press.jpg",
+      "caption": "Temperature-Controlled Multi-Cavity Hot Pressing Line",
+      "width": "1350",
+      "height": "760"
+    },
+    {
+      "file": "assets/factory/finishing-inspection-line.jpg",
+      "caption": "Automated Grinding, Slotting & Laser Marking Line",
+      "width": "1350",
+      "height": "760"
+    },
+    {
+      "file": "assets/factory/krauss-dyno-lab.jpg",
+      "caption": "2x European Krauss & 4x Constant-Speed Testing Machines",
+      "width": "1350",
+      "height": "760"
+    },
+    {
+      "file": "assets/factory/chase-shear-compress-lab.jpg",
+      "caption": "North American Chase, Shear & Compressibility Lab Equipment",
+      "width": "1350",
+      "height": "760"
+    },
+    {
+      "file": "assets/factory/iatf16949-3c-honors.jpg",
+      "caption": "IATF 16949:2016, 3C & National High-Tech Enterprise Certifications",
+      "width": "1350",
+      "height": "760"
+    },
+    {
+      "file": "assets/factory/university-mineral-fiber-rd.jpg",
+      "caption": "Joint R&D with NUDT & China University of Geosciences on Nano-Mineral Fibers",
+      "width": "1350",
+      "height": "760"
+    },
+    {
+      "file": "assets/factory/dyno-wear-400c-comparison.jpg",
+      "caption": "200C / 300C / 400C+ Constant-Torque Wear Comparison (0.040mm vs 0.085mm)",
+      "width": "1350",
+      "height": "760"
+    },
+    {
+      "file": "assets/factory/dyno-constant-speed-table.jpg",
+      "caption": "Constant-Speed Friction & Impact Strength Benchmark Table",
+      "width": "1350",
+      "height": "760"
+    }
+  ],
+  "factory_clean": [
+    {
+      "file": "assets/factory/raw/plant-aerial.jpeg",
+      "caption": "Huzhou South Taihu Plant Aerial Render (41 Acres / 43,000 sqm)",
+      "width": "2806",
+      "height": "2104"
+    },
+    {
+      "file": "assets/factory/raw/rd-center-building.jpeg",
+      "caption": "KOOYING Friction Materials R&D Center",
+      "width": "2253",
+      "height": "1072"
+    },
+    {
+      "file": "assets/factory/raw/auto-batching-line.jpeg",
+      "caption": "Automated Raw Material Batching & Dosing Line",
+      "width": "3567",
+      "height": "2675"
+    },
+    {
+      "file": "assets/factory/raw/hot-pressing-workshop.jpeg",
+      "caption": "Automated Temperature-Controlled Hot-Pressing Workshop",
+      "width": "1932",
+      "height": "812"
+    },
+    {
+      "file": "assets/factory/raw/finishing-grinding-line.jpeg",
+      "caption": "Automated Grinding, Slotting & Finishing Line",
+      "width": "869",
+      "height": "652"
+    },
+    {
+      "file": "assets/factory/raw/krauss-machines-clean.jpeg",
+      "caption": "European Krauss Testing Machines (24/7 Batch Quality Control)",
+      "width": "1680",
+      "height": "857"
+    },
+    {
+      "file": "assets/factory/raw/iatf-16949-certificate.jpeg",
+      "caption": "IATF 16949:2016 Quality Management Certificate",
+      "width": "1293",
+      "height": "914"
+    },
+    {
+      "file": "assets/factory/raw/ccc-certificate.jpeg",
+      "caption": "China Compulsory Certification (3C)",
+      "width": "922",
+      "height": "1280"
+    },
+    {
+      "file": "assets/factory/raw/nudt-cug-research.jpeg",
+      "caption": "Joint Nano-Mineral Fiber & High-Carbon Friction Research",
+      "width": "1620",
+      "height": "1080"
+    }
+  ],
+  "drawing_assets": [
+    {
+      "file": "assets/catalog-drawings/kooying-european-bpw-steyr-p6.jpg",
+      "caption": "Kooying European & Axle Catalog (GYS-001~030, BPW, Steyr, Volvo, Mercedes)",
+      "width": "2432",
+      "height": "1662"
+    },
+    {
+      "file": "assets/catalog-drawings/kooying-asian-truck-bus-p10.jpg",
+      "caption": "Kooying Japanese, Korean & Chinese Truck Catalog (GYS-119~146, HINO, HYUNDAI, 307AF)",
+      "width": "2432",
+      "height": "1662"
+    },
+    {
+      "file": "assets/catalog-drawings/kooying-jiefang-series-p15.jpg",
+      "caption": "Kooying JIEFANG Heavy Truck Drilling Drawings (Aowei, Hanwei, Tianwei)",
+      "width": "2432",
+      "height": "1662"
+    },
+    {
+      "file": "assets/catalog-drawings/kooying-scania-19553-sany-p25.jpg",
+      "caption": "Kooying 19553, 19932 SCANIA, SANY & Dongfeng Drilling Drawings",
+      "width": "2432",
+      "height": "1662"
+    },
+    {
+      "file": "assets/catalog-drawings/guanlong-bus-meritor-axle-p15.jpg",
+      "caption": "Guanlong Bus & Meritor Axle Specification Table",
+      "width": "2397",
+      "height": "1626"
+    },
+    {
+      "file": "assets/catalog-drawings/guanlong-hande-weichai-axle-p19.jpg",
+      "caption": "Guanlong Hande 35T & Weichai Mining Axle Specifications",
+      "width": "2397",
+      "height": "1626"
+    },
+    {
+      "file": "assets/catalog-drawings/guanlong-disc-wva-29030-29087-p21.jpg",
+      "caption": "Disc Brake Pad Engineering Drawings (WVA 29030, 29087, DA05, DA06, AD02, AD03)",
+      "width": "2397",
+      "height": "1626"
+    },
+    {
+      "file": "assets/catalog-drawings/guanlong-disc-wva-29090-29162-p22.jpg",
+      "caption": "Disc Brake Pad Engineering Drawings (WVA 29090~29162)",
+      "width": "2397",
+      "height": "1626"
+    }
+  ],
+  "items": [
+    {
+      "id": "disc-gyd-25k-25k",
+      "folder": "25K专用",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "25K Special Heavy",
+      "gys": "GYD-25K",
+      "size": "247.6 × 109.7 × 31.0",
+      "length_mm": 247.6,
+      "width_mm": 109.7,
+      "thickness_mm": 31.0,
+      "holes": 0,
+      "axle": "25K Heavy Disc Axle",
+      "caliper": "25K Heavy Trailer Caliper",
+      "vehicles": "25K Heavy-Load Trailer Disc Axle & Long-Downhill Fleets",
+      "markets": [
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/25K专用/25K专用-反.JPG",
+        "back": "assets/products/disc/25K专用/25K专用-正.JPG",
+        "side": "assets/products/disc/25K专用/25K专用-侧.JPG",
+        "all": [
+          "assets/products/disc/25K专用/25K专用-侧.JPG",
+          "assets/products/disc/25K专用/25K专用-反.JPG",
+          "assets/products/disc/25K专用/25K专用-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29030-29030",
+      "folder": "29030",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29030",
+      "gys": "GYD-29030",
+      "size": "249.5 × 118.2 × 30.0",
+      "length_mm": 249.5,
+      "width_mm": 118.2,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "Meritor / MAN Front & Rear",
+      "caliper": "Meritor Elsa / Knorr",
+      "vehicles": "MAN Lion's Coach, Setra Kassbohrer, Foton Auman, Ankai-10 Bus",
+      "markets": [
+        "Europe",
+        "Middle East"
+      ],
+      "formula": "GY-CV360 (Low-Noise Fleet Formula)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29030/29030-反.JPG",
+        "back": "assets/products/disc/29030/29030-正.JPG",
+        "side": "assets/products/disc/29030/29030-侧.JPG",
+        "all": [
+          "assets/products/disc/29030/29030-侧.JPG",
+          "assets/products/disc/29030/29030-反.JPG",
+          "assets/products/disc/29030/29030-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29087-29087",
+      "folder": "29087",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29087",
+      "gys": "GYD-29087",
+      "size": "247.6 × 109.7 × 30.0",
+      "length_mm": 247.6,
+      "width_mm": 109.7,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "ZF / Knorr 22.5\"",
+      "caliper": "Knorr SB7 / SN7",
+      "vehicles": "SCANIA, MAN, Mercedes-Benz, ZF Axle, Shacman, Yutong 22.5\", Steyr Front",
+      "markets": [
+        "Europe",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29087/29087-反.JPG",
+        "back": "assets/products/disc/29087/29087-正.JPG",
+        "side": "assets/products/disc/29087/29087-侧.JPG",
+        "all": [
+          "assets/products/disc/29087/29087-侧.JPG",
+          "assets/products/disc/29087/29087-反.JPG",
+          "assets/products/disc/29087/29087-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29087l-29087",
+      "folder": "29087加长",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29087 Extended (24.5K)",
+      "gys": "GYD-29087L",
+      "size": "247.6 × 109.7 × 30.0",
+      "length_mm": 247.6,
+      "width_mm": 109.7,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "24.5K Heavy Axle",
+      "caliper": "Knorr 24.5K Heavy Caliper",
+      "vehicles": "Heavy-Duty 24.5K Extended Axle Trucks & Mining Trailers",
+      "markets": [
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29087加长/29087加长 24.5K-反.JPG",
+        "back": "assets/products/disc/29087加长/29087加长 24.5K-正.JPG",
+        "side": "assets/products/disc/29087加长/29087加长 24.5K-侧.JPG",
+        "all": [
+          "assets/products/disc/29087加长/29087加长 24.5K-侧.JPG",
+          "assets/products/disc/29087加长/29087加长 24.5K-反.JPG",
+          "assets/products/disc/29087加长/29087加长 24.5K-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29093-29093",
+      "folder": "29093",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29093 / WG9093",
+      "gys": "GYD-29093",
+      "size": "210.5 × 92.5 × 30.0",
+      "length_mm": 210.5,
+      "width_mm": 92.5,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "19.5\" Air Disc Axle",
+      "caliper": "Knorr SB6 / 19.5\"",
+      "vehicles": "Neoplan 19.5\", MAN TGL/TGM, European Medium Truck",
+      "markets": [
+        "Europe",
+        "Middle East",
+        "Southeast Asia"
+      ],
+      "formula": "GY-CV360 (Low-Noise Fleet Formula)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29093/29093-反.JPG",
+        "back": "assets/products/disc/29093/29093-正.JPG",
+        "side": "assets/products/disc/29093/29093-侧.JPG",
+        "all": [
+          "assets/products/disc/29093/29093-侧.JPG",
+          "assets/products/disc/29093/29093-反.JPG",
+          "assets/products/disc/29093/29093-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29115-29115-29148",
+      "folder": "29115，29148",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29115 / 29148",
+      "gys": "GYD-29115",
+      "size": "247.5 × 109.5 × 30.0",
+      "length_mm": 247.5,
+      "width_mm": 109.5,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "Meritor / Volvo 22.5\"",
+      "caliper": "Meritor ELSA 225",
+      "vehicles": "Renault Magnum/Premium, Volvo FH/FM, DAF XF",
+      "markets": [
+        "Europe",
+        "South America",
+        "Middle East"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29115，29148/72fa6e58a092908245273befc184961.png",
+        "back": "assets/products/disc/29115，29148/IMG_4170.JPG",
+        "side": "assets/products/disc/29115，29148/IMG_4170.JPG",
+        "all": [
+          "assets/products/disc/29115，29148/72fa6e58a092908245273befc184961.png",
+          "assets/products/disc/29115，29148/IMG_4170.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29125-29125",
+      "folder": "29125",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29125",
+      "gys": "GYD-29125",
+      "size": "249.5 × 111.0 × 29.5",
+      "length_mm": 249.5,
+      "width_mm": 111.0,
+      "thickness_mm": 29.5,
+      "holes": 0,
+      "axle": "Volvo / Sunwin Coach Axle",
+      "caliper": "Meritor DX195 / Volvo",
+      "vehicles": "Sunwin Volvo Bus (Euro II/III), Volvo B7R/B12B",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-CV360 (Low-Noise Fleet Formula)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29125/29125-反.JPG",
+        "back": "assets/products/disc/29125/29125-正.JPG",
+        "side": "assets/products/disc/29125/29125-侧.JPG",
+        "all": [
+          "assets/products/disc/29125/29125-侧.JPG",
+          "assets/products/disc/29125/29125-反.JPG",
+          "assets/products/disc/29125/29125-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29126v-29126vie19-5",
+      "folder": "29126VIE19.5",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29126 / VIE 19.5",
+      "gys": "GYD-29126V",
+      "size": "210.6 × 92.5 × 30.0",
+      "length_mm": 210.6,
+      "width_mm": 92.5,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "VIE 19.5\" / Volvo VM",
+      "caliper": "VIE 19.5\" / Meritor",
+      "vehicles": "Volvo VM17/VM23, Neoplan 8m Coach, VIE 19.5\" Axle",
+      "markets": [
+        "South America",
+        "Southeast Asia"
+      ],
+      "formula": "GY-CV360 (Low-Noise Fleet Formula)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29126VIE19.5/29126VIE19.5-反面.JPG",
+        "back": "assets/products/disc/29126VIE19.5/29126VIE19.5-正面.JPG",
+        "side": "assets/products/disc/29126VIE19.5/29126VIE19.5-侧面.JPG",
+        "all": [
+          "assets/products/disc/29126VIE19.5/29126VIE19.5-侧面.JPG",
+          "assets/products/disc/29126VIE19.5/29126VIE19.5-反面.JPG",
+          "assets/products/disc/29126VIE19.5/29126VIE19.5-正面.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29131-29131",
+      "folder": "29131",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29131",
+      "gys": "GYD-29131",
+      "size": "249.6 × 118.1 × 30.0",
+      "length_mm": 249.6,
+      "width_mm": 118.1,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "Meritor Classic",
+      "caliper": "Meritor Classic / Knorr",
+      "vehicles": "Meritor Classic Axle, Yutong ZK6126, Ankai K147, Neoplan Rear",
+      "markets": [
+        "Middle East",
+        "South America",
+        "Southeast Asia"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29131/29131-反.JPG",
+        "back": "assets/products/disc/29131/29131-正.JPG",
+        "side": "assets/products/disc/29131/29131-侧.JPG",
+        "all": [
+          "assets/products/disc/29131/29131-侧.JPG",
+          "assets/products/disc/29131/29131-反.JPG",
+          "assets/products/disc/29131/29131-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29143-29143",
+      "folder": "29143",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29143",
+      "gys": "GYD-29143",
+      "size": "247.6 × 104.9 × 30.0",
+      "length_mm": 247.6,
+      "width_mm": 104.9,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "Dana Axle",
+      "caliper": "Dana / Knorr 22.5\"",
+      "vehicles": "KingLong 6122 Coach, Dana Axle",
+      "markets": [
+        "Middle East",
+        "Southeast Asia"
+      ],
+      "formula": "GY-CV360 (Low-Noise Fleet Formula)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29143/29143-反.JPG",
+        "back": "assets/products/disc/29143/29143-正.JPG",
+        "side": "assets/products/disc/29143/29143-侧.JPG",
+        "all": [
+          "assets/products/disc/29143/29143-侧.JPG",
+          "assets/products/disc/29143/29143-反.JPG",
+          "assets/products/disc/29143/29143-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29162-29162",
+      "folder": "29162",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29162",
+      "gys": "GYD-29162",
+      "size": "210.5 × 109.5 × 30.0",
+      "length_mm": 210.5,
+      "width_mm": 109.5,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "BPW / Wabco PAN19",
+      "caliper": "Wabco PAN19 / BPW",
+      "vehicles": "BPW Trailer Axle, SAF, European 19.5\"–22.5\" Disc Trailers",
+      "markets": [
+        "Europe",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29162/29162-反.JPG",
+        "back": "assets/products/disc/29162/29162-正.JPG",
+        "side": "assets/products/disc/29162/29162-侧.JPG",
+        "all": [
+          "assets/products/disc/29162/29162-侧.JPG",
+          "assets/products/disc/29162/29162-反.JPG",
+          "assets/products/disc/29162/29162-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29162l-29162",
+      "folder": "29162加长",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29162 Extended (217.5mm)",
+      "gys": "GYD-29162L",
+      "size": "217.5 × 107.7 × 30.0",
+      "length_mm": 217.5,
+      "width_mm": 107.7,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "BPW / Heavy Trailer 217.5mm",
+      "caliper": "Wabco PAN22 / BPW Heavy",
+      "vehicles": "Extended 217.5mm Heavy Trailer Disc Axle (Kooying / Guanlong Flagship)",
+      "markets": [
+        "Middle East",
+        "South America",
+        "Southeast Asia"
+      ],
+      "formula": "PGB P37 Ceramic / GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29162加长/29162加长217长 -反.JPG",
+        "back": "assets/products/disc/29162加长/29162加长217长 -正.JPG",
+        "side": "assets/products/disc/29162加长/29162加长217长 -侧.JPG",
+        "all": [
+          "assets/products/disc/29162加长/29162加长217长 -侧.JPG",
+          "assets/products/disc/29162加长/29162加长217长 -侧2.JPG",
+          "assets/products/disc/29162加长/29162加长217长 -反.JPG",
+          "assets/products/disc/29162加长/29162加长217长 -正.JPG",
+          "assets/products/disc/29162加长/29162加长217长 -正1.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29174-29174",
+      "folder": "29174",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29174",
+      "gys": "GYD-29174",
+      "size": "247.5 × 109.5 × 30.0",
+      "length_mm": 247.5,
+      "width_mm": 109.5,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "Volvo / Knorr SK7",
+      "caliper": "Knorr SK7 / Volvo FH",
+      "vehicles": "Volvo FH/FM12, Renault Magnum, Heavy Long-Haul Tractors",
+      "markets": [
+        "Europe",
+        "North America",
+        "South America"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29174/29174-反.JPG",
+        "back": "assets/products/disc/29174/29174-正.JPG",
+        "side": "assets/products/disc/29174/29174-侧.JPG",
+        "all": [
+          "assets/products/disc/29174/29174-侧.JPG",
+          "assets/products/disc/29174/29174-反.JPG",
+          "assets/products/disc/29174/29174-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29181-29181",
+      "folder": "29181",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29181",
+      "gys": "GYD-29181",
+      "size": "210.5 × 99.6 × 30.0",
+      "length_mm": 210.5,
+      "width_mm": 99.6,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "SAF / Wabco PAN19",
+      "caliper": "Wabco PAN 19-1 Plus",
+      "vehicles": "SAF / Schmitz Cargobull / MAN TGM Trailers",
+      "markets": [
+        "Europe",
+        "Middle East"
+      ],
+      "formula": "GY-CV360 (Low-Noise Fleet Formula)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29181/29181-反面.JPG",
+        "back": "assets/products/disc/29181/29181-正面.JPG",
+        "side": "assets/products/disc/29181/29181-侧面.JPG",
+        "all": [
+          "assets/products/disc/29181/29181-侧面.JPG",
+          "assets/products/disc/29181/29181-反面.JPG",
+          "assets/products/disc/29181/29181-正面.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29187-29187",
+      "folder": "29187",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29187",
+      "gys": "GYD-29187",
+      "size": "249.6 × 118.2 × 30.0",
+      "length_mm": 249.6,
+      "width_mm": 118.2,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "MAN / DAF Heavy Axle",
+      "caliper": "Meritor Elsa 2",
+      "vehicles": "MAN TGA / TGX / DAF CF & XF Heavy Tractors",
+      "markets": [
+        "Europe",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29187/29187-反.JPG",
+        "back": "assets/products/disc/29187/29187-正.JPG",
+        "side": "assets/products/disc/29187/29187-侧.JPG",
+        "all": [
+          "assets/products/disc/29187/29187-侧.JPG",
+          "assets/products/disc/29187/29187-反.JPG",
+          "assets/products/disc/29187/29187-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29228-29228",
+      "folder": "29228",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29228 (BPW TSB)",
+      "gys": "GYD-29228",
+      "size": "210.4 × 109.8 × 30.0",
+      "length_mm": 210.4,
+      "width_mm": 109.8,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "BPW ECO Disc",
+      "caliper": "BPW TSB 3709 / 4309",
+      "vehicles": "BPW Disc Trailer Axles (ECO Disc TSB Series)",
+      "markets": [
+        "Europe",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29228/29228 BPW-反.JPG",
+        "back": "assets/products/disc/29228/29228 BPW-正.JPG",
+        "side": "assets/products/disc/29228/29228 BPW-侧.JPG",
+        "all": [
+          "assets/products/disc/29228/29228 BPW-侧.JPG",
+          "assets/products/disc/29228/29228 BPW-反.JPG",
+          "assets/products/disc/29228/29228 BPW-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29253-29253",
+      "folder": "29253",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29253 / 29254",
+      "gys": "GYD-29253",
+      "size": "250.0 × 100.3 × 30.0",
+      "length_mm": 250.0,
+      "width_mm": 100.3,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "HOWO / Delong Disc Axle",
+      "caliper": "Wabco / Knorr Heavy",
+      "vehicles": "SINOTRUK HOWO A7, Shacman Delong F3000/X3000",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29253/29253-反.JPG",
+        "back": "assets/products/disc/29253/29253-正.JPG",
+        "side": "assets/products/disc/29253/29253-侧.JPG",
+        "all": [
+          "assets/products/disc/29253/29253-侧.JPG",
+          "assets/products/disc/29253/29253-反.JPG",
+          "assets/products/disc/29253/29253-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29267-29267",
+      "folder": "29267",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29267 (8301)",
+      "gys": "GYD-29267",
+      "size": "210.4 × 108.0 × 30.0",
+      "length_mm": 210.4,
+      "width_mm": 108.0,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "BPW 8301",
+      "caliper": "BPW ECO Disc 8301",
+      "vehicles": "BPW 8301 Disc Caliper Trailer Axles",
+      "markets": [
+        "Europe",
+        "Middle East"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29267/29267 8301-反.JPG",
+        "back": "assets/products/disc/29267/29267 8301-正.JPG",
+        "side": "assets/products/disc/29267/29267 8301-侧.JPG",
+        "all": [
+          "assets/products/disc/29267/29267 8301-侧.JPG",
+          "assets/products/disc/29267/29267 8301-反.JPG",
+          "assets/products/disc/29267/29267 8301-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29279-29279",
+      "folder": "29279",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29279",
+      "gys": "GYD-29279",
+      "size": "244.5 × 114.6 × 30.0",
+      "length_mm": 244.5,
+      "width_mm": 114.6,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "Actros MP4 / Iveco",
+      "caliper": "Brembo / Knorr Next-Gen",
+      "vehicles": "Mercedes Actros MP4, Iveco Stralis, European Tractors",
+      "markets": [
+        "Europe",
+        "Middle East"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29279/29279-反.JPG",
+        "back": "assets/products/disc/29279/29279-正.JPG",
+        "side": "assets/products/disc/29279/29279-侧.JPG",
+        "all": [
+          "assets/products/disc/29279/29279-侧.JPG",
+          "assets/products/disc/29279/29279-反.JPG",
+          "assets/products/disc/29279/29279-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29289-29289",
+      "folder": "29289",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29289",
+      "gys": "GYD-29289",
+      "size": "210.5 × 109.5 × 30.0",
+      "length_mm": 210.5,
+      "width_mm": 109.5,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "SAF SBS 2220",
+      "caliper": "Wabco PAN22-1 / SAF",
+      "vehicles": "SAF SBS 2220 / Krone / Schmitz Trailer Axles",
+      "markets": [
+        "Europe",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29289/29289-反.JPG",
+        "back": "assets/products/disc/29289/29289-正.JPG",
+        "side": "assets/products/disc/29289/29289-侧.JPG",
+        "all": [
+          "assets/products/disc/29289/29289-侧.JPG",
+          "assets/products/disc/29289/29289-反.JPG",
+          "assets/products/disc/29289/29289-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-29320-29320",
+      "folder": "29320",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WVA 29320",
+      "gys": "GYD-29320",
+      "size": "247.5 × 109.5 × 30.0",
+      "length_mm": 247.5,
+      "width_mm": 109.5,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "Knorr ST7",
+      "caliper": "Knorr ST7 / SCANIA Next-Gen",
+      "vehicles": "SCANIA R/S Next-Gen, MAN TGX Euro 6 Heavy Line",
+      "markets": [
+        "Europe",
+        "South America",
+        "Middle East"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/29320/29320-反.JPG",
+        "back": "assets/products/disc/29320/29320-正.JPG",
+        "side": "assets/products/disc/29320/29320-侧.JPG",
+        "all": [
+          "assets/products/disc/29320/29320-侧.JPG",
+          "assets/products/disc/29320/29320-反.JPG",
+          "assets/products/disc/29320/29320-正.JPG",
+          "assets/products/disc/29320/29320-正1.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-5200-5200-5300",
+      "folder": "5200、5300",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "5200 / 5300 Series (TYX-028)",
+      "gys": "GYD-5200",
+      "size": "217.0 × 108.0 × 31.0",
+      "length_mm": 217.0,
+      "width_mm": 108.0,
+      "thickness_mm": 31.0,
+      "holes": 0,
+      "axle": "Fuwa / Knorr 20\" Disc",
+      "caliper": "Fuwa Trailer / Knorr 20\" Disc",
+      "vehicles": "Fuwa Trailer Disc Axle & Knorr 20\" Heavy Commercial Assembly",
+      "markets": [
+        "Middle East",
+        "South America",
+        "Southeast Asia"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/5200、5300/反面.png",
+        "back": "assets/products/disc/5200、5300/正面图.png",
+        "side": "assets/products/disc/5200、5300/侧面.png",
+        "all": [
+          "assets/products/disc/5200、5300/侧面.png",
+          "assets/products/disc/5200、5300/反面.png",
+          "assets/products/disc/5200、5300/正面图.png"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-ad01-ad01",
+      "folder": "AD01",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "AD01",
+      "gys": "GYD-AD01",
+      "size": "239.5 × 111.2 × 30.0",
+      "length_mm": 239.5,
+      "width_mm": 111.2,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "Coach 22.5\" Front",
+      "caliper": "22.5\" Coach & Truck",
+      "vehicles": "KingLong / Higer 22.5\" Heavy Coach & Tractor Front",
+      "markets": [
+        "Southeast Asia",
+        "Middle East"
+      ],
+      "formula": "GY-CV360 (Low-Noise Fleet Formula)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/AD01/AD01-040-反.JPG",
+        "back": "assets/products/disc/AD01/AD01-040-正.JPG",
+        "side": "assets/products/disc/AD01/AD01-040-侧.JPG",
+        "all": [
+          "assets/products/disc/AD01/AD01-040-侧.JPG",
+          "assets/products/disc/AD01/AD01-040-反.JPG",
+          "assets/products/disc/AD01/AD01-040-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-ad02-ad02",
+      "folder": "AD02",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "AD02",
+      "gys": "GYD-AD02",
+      "size": "209.5 × 89.5 × 29.0",
+      "length_mm": 209.5,
+      "width_mm": 89.5,
+      "thickness_mm": 29.0,
+      "holes": 0,
+      "axle": "19.5\" City Bus",
+      "caliper": "19.5\" City Bus Caliper",
+      "vehicles": "KingLong 6820, Higer 19.5\" City Bus & Transit Fleets",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-CV360 (Low-Noise Fleet Formula)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/AD02/AD02-040-反.JPG",
+        "back": "assets/products/disc/AD02/AD02-040-正.JPG",
+        "side": "assets/products/disc/AD02/AD02-040-侧.JPG",
+        "all": [
+          "assets/products/disc/AD02/AD02-040-侧.JPG",
+          "assets/products/disc/AD02/AD02-040-反.JPG",
+          "assets/products/disc/AD02/AD02-040-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-ad03-ad03",
+      "folder": "AD03",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "AD03",
+      "gys": "GYD-AD03",
+      "size": "239.5 × 111.2 × 30.0",
+      "length_mm": 239.5,
+      "width_mm": 111.2,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "Dongfeng / Coach 22.5\"",
+      "caliper": "22.5\" Bus & Dongfeng",
+      "vehicles": "KingLong Large Coach, Dongfeng 22.5\" Disc Truck",
+      "markets": [
+        "Southeast Asia",
+        "Middle East"
+      ],
+      "formula": "GY-CV360 (Low-Noise Fleet Formula)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/AD03/AD03-040-反.JPG",
+        "back": "assets/products/disc/AD03/AD03-040-正.JPG",
+        "side": "assets/products/disc/AD03/AD03-040-侧.JPG",
+        "all": [
+          "assets/products/disc/AD03/AD03-040-侧.JPG",
+          "assets/products/disc/AD03/AD03-040-反.JPG",
+          "assets/products/disc/AD03/AD03-040-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-ad04-ad04",
+      "folder": "AD04",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "AD04",
+      "gys": "GYD-AD04",
+      "size": "220.0 × 99.5 × 29.0",
+      "length_mm": 220.0,
+      "width_mm": 99.5,
+      "thickness_mm": 29.0,
+      "holes": 0,
+      "axle": "Transit Disc Axle",
+      "caliper": "19.5\" / 20\" Commercial",
+      "vehicles": "Yutong / KingLong Transit & Medium Truck Disc Axle",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-CV360 (Low-Noise Fleet Formula)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/AD04/AD04-040-反.JPG",
+        "back": "assets/products/disc/AD04/AD04-040-正.JPG",
+        "side": "assets/products/disc/AD04/AD04-040-侧.JPG",
+        "all": [
+          "assets/products/disc/AD04/AD04-040-侧.JPG",
+          "assets/products/disc/AD04/AD04-040-反.JPG",
+          "assets/products/disc/AD04/AD04-040-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-8201-bpw8201",
+      "folder": "BPW8201",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "BPW 8201 / WVA 29228 Alt",
+      "gys": "GYD-8201",
+      "size": "210.4 × 109.8 × 30.0",
+      "length_mm": 210.4,
+      "width_mm": 109.8,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "BPW 8201",
+      "caliper": "BPW 8201 ECO Disc",
+      "vehicles": "BPW 8201 Semi-Trailer & Tanker Axles",
+      "markets": [
+        "Europe",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/BPW8201/BPW8201-反.JPG",
+        "back": "assets/products/disc/BPW8201/BPW8201-正.JPG",
+        "side": "assets/products/disc/BPW8201/BPW8201-侧.JPG",
+        "all": [
+          "assets/products/disc/BPW8201/BPW8201-侧.JPG",
+          "assets/products/disc/BPW8201/BPW8201-反.JPG",
+          "assets/products/disc/BPW8201/BPW8201-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-da06-da06",
+      "folder": "DA06",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "DA06",
+      "gys": "GYD-DA06",
+      "size": "223.9 × 103.2 × 29.0",
+      "length_mm": 223.9,
+      "width_mm": 103.2,
+      "thickness_mm": 29.0,
+      "holes": 0,
+      "axle": "Dongfeng Front Disc",
+      "caliper": "Dongfeng Tianjin Caliper",
+      "vehicles": "Dongfeng Tianjin (DFH) Medium-Heavy Trucks",
+      "markets": [
+        "Southeast Asia",
+        "South America",
+        "Middle East"
+      ],
+      "formula": "GY-CV360 (Low-Noise Fleet Formula)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/DA06/DA06-040-反.JPG",
+        "back": "assets/products/disc/DA06/DA06-040-正.JPG",
+        "side": "assets/products/disc/DA06/DA06-040-侧.JPG",
+        "all": [
+          "assets/products/disc/DA06/DA06-040-侧.JPG",
+          "assets/products/disc/DA06/DA06-040-反.JPG",
+          "assets/products/disc/DA06/DA06-040-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-da20-da20",
+      "folder": "DA20",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "DA20",
+      "gys": "GYD-DA20",
+      "size": "247.5 × 109.5 × 30.0",
+      "length_mm": 247.5,
+      "width_mm": 109.5,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "Dongfeng Heavy 22.5\"",
+      "caliper": "Dongfeng Heavy 22.5\"",
+      "vehicles": "Dongfeng Kinland / Heavy Tractor 22.5\" Disc Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/DA20/DA20-反.JPG",
+        "back": "assets/products/disc/DA20/DA20-正.JPG",
+        "side": "assets/products/disc/DA20/DA20-侧.JPG",
+        "all": [
+          "assets/products/disc/DA20/DA20-侧.JPG",
+          "assets/products/disc/DA20/DA20-反.JPG",
+          "assets/products/disc/DA20/DA20-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-hl3501-hl3501ga",
+      "folder": "HL3501GA",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "HL3501GA-06-01",
+      "gys": "GYD-HL3501",
+      "size": "210.5 × 99.5 × 29.0",
+      "length_mm": 210.5,
+      "width_mm": 99.5,
+      "thickness_mm": 29.0,
+      "holes": 0,
+      "axle": "Hande Disc",
+      "caliper": "Hande Disc Axle",
+      "vehicles": "Shacman / Hande Disc Axle Light-Heavy Duty",
+      "markets": [
+        "Southeast Asia",
+        "Middle East"
+      ],
+      "formula": "GY-CV360 (Low-Noise Fleet Formula)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/HL3501GA/HL3501GA-06-01 反.JPG",
+        "back": "assets/products/disc/HL3501GA/HL3501GA-06-01 正.JPG",
+        "side": "assets/products/disc/HL3501GA/HL3501GA-06-01 侧.JPG",
+        "all": [
+          "assets/products/disc/HL3501GA/HL3501GA-06-01 侧.JPG",
+          "assets/products/disc/HL3501GA/HL3501GA-06-01 反.JPG",
+          "assets/products/disc/HL3501GA/HL3501GA-06-01 正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-lxgc-lxgc",
+      "folder": "LXGC锣响",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "LXGC Trailer Disc",
+      "gys": "GYD-LXGC",
+      "size": "210.5 × 109.5 × 30.0",
+      "length_mm": 210.5,
+      "width_mm": 109.5,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "LXGC Disc Axle",
+      "caliper": "LXGC Disc Trailer",
+      "vehicles": "Lightweight High-Strength Semi-Trailers",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "N91 (Mineral-Carbon Eco)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/LXGC锣响/LXGC 锣响 -反.JPG",
+        "back": "assets/products/disc/LXGC锣响/LXGC 锣响-正.JPG",
+        "side": "assets/products/disc/LXGC锣响/LXGC 锣响 -侧.JPG",
+        "all": [
+          "assets/products/disc/LXGC锣响/LXGC 锣响 -侧.JPG",
+          "assets/products/disc/LXGC锣响/LXGC 锣响 -反.JPG",
+          "assets/products/disc/LXGC锣响/LXGC 锣响-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-lz195-lz19-5",
+      "folder": "LZ19.5",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "LZ 19.5K",
+      "gys": "GYD-LZ195",
+      "size": "210.5 × 92.5 × 30.0",
+      "length_mm": 210.5,
+      "width_mm": 92.5,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "LZ 19.5K",
+      "caliper": "LZ 19.5K Trailer",
+      "vehicles": "19.5\" Heavy Logistics Trailer Axles",
+      "markets": [
+        "Southeast Asia",
+        "Middle East"
+      ],
+      "formula": "GY-CV360 (Low-Noise Fleet Formula)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/LZ19.5/LZ19.5K-反.JPG",
+        "back": "assets/products/disc/LZ19.5/LZ19.5K-正.JPG",
+        "side": "assets/products/disc/LZ19.5/LZ19.5K-侧.JPG",
+        "all": [
+          "assets/products/disc/LZ19.5/LZ19.5K-侧.JPG",
+          "assets/products/disc/LZ19.5/LZ19.5K-反.JPG",
+          "assets/products/disc/LZ19.5/LZ19.5K-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-vie195-vie19-5",
+      "folder": "VIE19.5",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "VIE 19.5\"",
+      "gys": "GYD-VIE195",
+      "size": "210.5 × 92.5 × 29.5",
+      "length_mm": 210.5,
+      "width_mm": 92.5,
+      "thickness_mm": 29.5,
+      "holes": 0,
+      "axle": "VIE 19.5\"",
+      "caliper": "VIE WanAn 19.5\"",
+      "vehicles": "VIE 19.5\" City Bus & Express Trailer Caliper",
+      "markets": [
+        "Southeast Asia",
+        "Middle East"
+      ],
+      "formula": "GY-CV360 (Low-Noise Fleet Formula)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/VIE19.5/VIE19.5-反-修改.JPG",
+        "back": "assets/products/disc/VIE19.5/VIE19.5-正.JPG",
+        "side": "assets/products/disc/VIE19.5/VIE19.5-侧.JPG",
+        "all": [
+          "assets/products/disc/VIE19.5/VIE19.5-侧.JPG",
+          "assets/products/disc/VIE19.5/VIE19.5-反-修改.JPG",
+          "assets/products/disc/VIE19.5/VIE19.5-反.JPG",
+          "assets/products/disc/VIE19.5/VIE19.5-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-vie20k-vie20k",
+      "folder": "VIE20K",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "VIE 20K",
+      "gys": "GYD-VIE20K",
+      "size": "224.0 × 104.0 × 30.0",
+      "length_mm": 224.0,
+      "width_mm": 104.0,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "VIE 20K",
+      "caliper": "VIE WanAn 20K",
+      "vehicles": "VIE 20K Heavy Trailer & Transit Bus Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/VIE20K/VIE20k-反.JPG",
+        "back": "assets/products/disc/VIE20K/VIE20k-正.JPG",
+        "side": "assets/products/disc/VIE20K/VIE20k-侧.JPG",
+        "all": [
+          "assets/products/disc/VIE20K/VIE20k-侧.JPG",
+          "assets/products/disc/VIE20K/VIE20k-反.JPG",
+          "assets/products/disc/VIE20K/VIE20k-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-wg443-wg443050",
+      "folder": "WG443050",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WG443050",
+      "gys": "GYD-WG443",
+      "size": "247.6 × 109.7 × 30.0",
+      "length_mm": 247.6,
+      "width_mm": 109.7,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "HOWO / SITRAK",
+      "caliper": "SINOTRUK / Shacman",
+      "vehicles": "SINOTRUK HOWO T7H / SITRAK Disc Front Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/WG443050/WG443050-反.JPG",
+        "back": "assets/products/disc/WG443050/WG443050-正.JPG",
+        "side": "assets/products/disc/WG443050/WG443050-侧.JPG",
+        "all": [
+          "assets/products/disc/WG443050/WG443050-侧.JPG",
+          "assets/products/disc/WG443050/WG443050-反.JPG",
+          "assets/products/disc/WG443050/WG443050-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-wg443p-wg443050",
+      "folder": "WG443050冲钉",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WG443050 Riveted Pin",
+      "gys": "GYD-WG443P",
+      "size": "247.6 × 109.7 × 30.0",
+      "length_mm": 247.6,
+      "width_mm": 109.7,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "SITRAK Heavy Front",
+      "caliper": "SINOTRUK / Reinforced Pin",
+      "vehicles": "SINOTRUK SITRAK Heavy-Duty Mining & Overloaded Fleets",
+      "markets": [
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/WG443050冲钉/WG443050 冲钉-反面.JPG",
+        "back": "assets/products/disc/WG443050冲钉/WG443050 冲钉-正面.JPG",
+        "side": "assets/products/disc/WG443050冲钉/WG443050 冲钉-侧面.JPG",
+        "all": [
+          "assets/products/disc/WG443050冲钉/WG443050 冲钉-侧面.JPG",
+          "assets/products/disc/WG443050冲钉/WG443050 冲钉-反面.JPG",
+          "assets/products/disc/WG443050冲钉/WG443050 冲钉-正面.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-wg444-wg444150",
+      "folder": "WG444150",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WG444150",
+      "gys": "GYD-WG444",
+      "size": "249.5 × 114.5 × 30.0",
+      "length_mm": 249.5,
+      "width_mm": 114.5,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "SINOTRUK Export",
+      "caliper": "SINOTRUK / Shacman Heavy",
+      "vehicles": "SINOTRUK Heavy Export Tractor & Dump Truck",
+      "markets": [
+        "Middle East",
+        "South America",
+        "Southeast Asia"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/WG444150/WG444150-反.JPG",
+        "back": "assets/products/disc/WG444150/WG444150-正.JPG",
+        "side": "assets/products/disc/WG444150/WG444150-侧.JPG",
+        "all": [
+          "assets/products/disc/WG444150/WG444150-侧.JPG",
+          "assets/products/disc/WG444150/WG444150-反.JPG",
+          "assets/products/disc/WG444150/WG444150-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-wg544-wg5449050",
+      "folder": "WG5449050",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "WG5449050",
+      "gys": "GYD-WG544",
+      "size": "250.0 × 100.3 × 30.0",
+      "length_mm": 250.0,
+      "width_mm": 100.3,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "SINOTRUK Heavy",
+      "caliper": "SINOTRUK / Heavy Dump",
+      "vehicles": "SINOTRUK HOWO Mining & Long-Haul Tractors",
+      "markets": [
+        "Southeast Asia",
+        "South America",
+        "Middle East"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/WG5449050/WG5449050-反.JPG",
+        "back": "assets/products/disc/WG5449050/WG5449050-正.JPG",
+        "side": "assets/products/disc/WG5449050/WG5449050-侧.JPG",
+        "all": [
+          "assets/products/disc/WG5449050/WG5449050-侧.JPG",
+          "assets/products/disc/WG5449050/WG5449050-反.JPG",
+          "assets/products/disc/WG5449050/WG5449050-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-heli20-20",
+      "folder": "合力20寸",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "Heli 20\"",
+      "gys": "GYD-HELI20",
+      "size": "220.0 × 105.0 × 30.0",
+      "length_mm": 220.0,
+      "width_mm": 105.0,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "20\" Heavy Industrial",
+      "caliper": "20\" Heavy Port & Forklift",
+      "vehicles": "Heavy Container Handler & Port Terminal Trucks",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "North America"
+      ],
+      "formula": "GY-HD400 (High-Temp Carbon Ceramic)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/合力20寸/合力20寸-反.JPG",
+        "back": "assets/products/disc/合力20寸/合力20寸-正.JPG",
+        "side": "assets/products/disc/合力20寸/合力20寸-侧.JPG",
+        "all": [
+          "assets/products/disc/合力20寸/合力20寸-侧.JPG",
+          "assets/products/disc/合力20寸/合力20寸-反.JPG",
+          "assets/products/disc/合力20寸/合力20寸-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-yt01-01",
+      "folder": "宇通01",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "Yutong-01 (WVA 29087 Alt)",
+      "gys": "GYD-YT01",
+      "size": "247.6 × 109.7 × 30.0",
+      "length_mm": 247.6,
+      "width_mm": 109.7,
+      "thickness_mm": 30.0,
+      "holes": 0,
+      "axle": "Yutong Coach 22.5\"",
+      "caliper": "Yutong 22.5\" Front/Rear",
+      "vehicles": "Yutong ZK6122 / Intercity & Export Transit Buses",
+      "markets": [
+        "Middle East",
+        "South America",
+        "Southeast Asia"
+      ],
+      "formula": "GY-CV360 (Low-Noise Fleet Formula)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/宇通01/宇通-01-反.JPG",
+        "back": "assets/products/disc/宇通01/宇通-01-正.JPG",
+        "side": "assets/products/disc/宇通01/宇通-01-侧.JPG",
+        "all": [
+          "assets/products/disc/宇通01/宇通-01-侧.JPG",
+          "assets/products/disc/宇通01/宇通-01-反.JPG",
+          "assets/products/disc/宇通01/宇通-01-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "disc-gyd-yt02-02",
+      "folder": "宇通02",
+      "category": "disc",
+      "category_label": "Air Disc Brake Pad",
+      "wva": "Yutong-02",
+      "gys": "GYD-YT02",
+      "size": "210.5 × 99.6 × 29.0",
+      "length_mm": 210.5,
+      "width_mm": 99.6,
+      "thickness_mm": 29.0,
+      "holes": 0,
+      "axle": "Yutong 19.5\"",
+      "caliper": "Yutong 19.5\" Transit",
+      "vehicles": "Yutong ZK6907 / ZK6107 City Transit Fleet",
+      "markets": [
+        "Middle East",
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-CV360 (Low-Noise Fleet Formula)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · ECE R90",
+      "views": {
+        "front": "assets/products/disc/宇通02/宇通-02 反.JPG",
+        "back": "assets/products/disc/宇通02/宇通-02-正.JPG",
+        "side": "assets/products/disc/宇通02/宇通-02-侧.JPG",
+        "all": [
+          "assets/products/disc/宇通02/宇通-02 反.JPG",
+          "assets/products/disc/宇通02/宇通-02-侧.JPG",
+          "assets/products/disc/宇通02/宇通-02-正.JPG"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-4707q-42",
+      "folder": "19369",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "WVA 19369 / 4707Q",
+      "gys": "GYS-4707Q",
+      "size": "215 × 178 × 19.0/12.5",
+      "length_mm": 215.0,
+      "width_mm": 178.0,
+      "thickness_mm": 19.0,
+      "holes": 8,
+      "axle": "Meritor Q-Plus 16.5×7\"",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "North American Class 8 Trucks & Freightliner/Kenworth Trailers",
+      "markets": [
+        "North America",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/19369/MOT_2531.jpg",
+        "back": "assets/products/drum/19369/MOT_2532.jpg",
+        "side": "assets/products/drum/19369/MOT_2532.jpg",
+        "all": [
+          "assets/products/drum/19369/MOT_2531.jpg",
+          "assets/products/drum/19369/MOT_2532.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-4515q-43",
+      "folder": "19370",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "WVA 19370 / 4515Q",
+      "gys": "GYS-4515Q",
+      "size": "212 × 178 × 18.8/12.0",
+      "length_mm": 212.0,
+      "width_mm": 178.0,
+      "thickness_mm": 18.8,
+      "holes": 8,
+      "axle": "Meritor Q-Series 16.5×7\"",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "North American Semi-Trailers & Heavy Tractors",
+      "markets": [
+        "North America",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/19370/MOT_2533.jpg",
+        "back": "assets/products/drum/19370/MOT_2534.jpg",
+        "side": "assets/products/drum/19370/MOT_2534.jpg",
+        "all": [
+          "assets/products/drum/19370/MOT_2533.jpg",
+          "assets/products/drum/19370/MOT_2534.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-19553-44",
+      "folder": "19553",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "WVA 19553",
+      "gys": "GYS-19553",
+      "size": "203.2 × 200 × 22.0/14.0",
+      "length_mm": 203.2,
+      "width_mm": 200.0,
+      "thickness_mm": 22.0,
+      "holes": 12,
+      "axle": "Meritor / Heavy Drive 8\"",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "North & South American Heavy-Duty 8\" Trailer Axles",
+      "markets": [
+        "North America",
+        "South America",
+        "Middle East"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/19553/MOT_2560.jpg",
+        "back": "assets/products/drum/19553/MOT_2561.jpg",
+        "side": "assets/products/drum/19553/MOT_2561.jpg",
+        "all": [
+          "assets/products/drum/19553/MOT_2560.jpg",
+          "assets/products/drum/19553/MOT_2561.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-19932-45",
+      "folder": "19932斯堪尼亚",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "WVA 19932",
+      "gys": "GYS-19932",
+      "size": "260 × 204 × 19.0",
+      "length_mm": 260.0,
+      "width_mm": 204.0,
+      "thickness_mm": 19.0,
+      "holes": 16,
+      "axle": "SCANIA P/G/R Heavy Drum",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "SCANIA 113 / 114 / P360 / R420 Heavy Trucks & Buses",
+      "markets": [
+        "South America",
+        "Middle East",
+        "Europe"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/19932斯堪尼亚/MOT_2552.jpg",
+        "back": "assets/products/drum/19932斯堪尼亚/MOT_2553.jpg",
+        "side": "assets/products/drum/19932斯堪尼亚/MOT_2553.jpg",
+        "all": [
+          "assets/products/drum/19932斯堪尼亚/MOT_2552.jpg",
+          "assets/products/drum/19932斯堪尼亚/MOT_2553.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-143s-46",
+      "folder": "307AF",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "WVA 307AF",
+      "gys": "GYS-143S",
+      "size": "323 × 85 × 10.0",
+      "length_mm": 323.0,
+      "width_mm": 85.0,
+      "thickness_mm": 10.0,
+      "holes": 10,
+      "axle": "Existing Models 307AF",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Export Light-Medium Commercial Vehicles",
+      "markets": [
+        "Southeast Asia",
+        "South America",
+        "Middle East"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/307AF/MOT_2614.jpg",
+        "back": "assets/products/drum/307AF/MOT_2615.jpg",
+        "side": "assets/products/drum/307AF/MOT_2615.jpg",
+        "all": [
+          "assets/products/drum/307AF/MOT_2614.jpg",
+          "assets/products/drum/307AF/MOT_2615.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-143-47",
+      "folder": "307AF-1",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "WVA 307AF-1",
+      "gys": "GYS-143",
+      "size": "323 × 85 × 10.0",
+      "length_mm": 323.0,
+      "width_mm": 85.0,
+      "thickness_mm": 10.0,
+      "holes": 10,
+      "axle": "Existing Models 307AF",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Commercial Bus & Light-Medium Export Drum",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/307AF-1/MOT_2636.jpg",
+        "back": "assets/products/drum/307AF-1/MOT_2636.jpg",
+        "side": "assets/products/drum/307AF-1/MOT_2636.jpg",
+        "all": [
+          "assets/products/drum/307AF-1/MOT_2636.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-144-48",
+      "folder": "307AF-2",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "WVA 307AF-2",
+      "gys": "GYS-144",
+      "size": "323 × 85 × 10.0",
+      "length_mm": 323.0,
+      "width_mm": 85.0,
+      "thickness_mm": 10.0,
+      "holes": 12,
+      "axle": "Existing Models 307AF",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Commercial Bus & Export Drum (12-Hole Spec)",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/307AF-2/MOT_2637.jpg",
+        "back": "assets/products/drum/307AF-2/MOT_2637.jpg",
+        "side": "assets/products/drum/307AF-2/MOT_2637.jpg",
+        "all": [
+          "assets/products/drum/307AF-2/MOT_2637.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-145-49",
+      "folder": "311AF",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "WVA 311AF",
+      "gys": "GYS-145",
+      "size": "341 × 100 × 12.0",
+      "length_mm": 341.0,
+      "width_mm": 100.0,
+      "thickness_mm": 12.0,
+      "holes": 12,
+      "axle": "Existing Models 311AF",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Medium Commercial Truck & Transit Bus",
+      "markets": [
+        "Southeast Asia",
+        "South America",
+        "Middle East"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/311AF/MOT_2616.jpg",
+        "back": "assets/products/drum/311AF/MOT_2617.jpg",
+        "side": "assets/products/drum/311AF/MOT_2617.jpg",
+        "all": [
+          "assets/products/drum/311AF/MOT_2616.jpg",
+          "assets/products/drum/311AF/MOT_2617.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-018-50",
+      "folder": "37-1",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "WVA 19094 / BC/37/1",
+      "gys": "GYS-018",
+      "size": "220 × 200 × 17.5/10.5",
+      "length_mm": 220.0,
+      "width_mm": 200.0,
+      "thickness_mm": 17.5,
+      "holes": 10,
+      "axle": "BPW BC/37/1 Trailer Axle",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "BPW German Trailer Axles 12T–14T Series",
+      "markets": [
+        "Europe",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/37-1/MOT_2638.jpg",
+        "back": "assets/products/drum/37-1/MOT_2638.jpg",
+        "side": "assets/products/drum/37-1/MOT_2638.jpg",
+        "all": [
+          "assets/products/drum/37-1/MOT_2638.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-485-51",
+      "folder": "CA485后",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "FAW CA485 Rear",
+      "gys": "GYS-485",
+      "size": "204 × 200 × 16.5",
+      "length_mm": 204.0,
+      "width_mm": 200.0,
+      "thickness_mm": 16.5,
+      "holes": 14,
+      "axle": "FAW 485 Drive Axle",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW Heavy Dump & Construction Trucks",
+      "markets": [
+        "Southeast Asia",
+        "Middle East"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/CA485后/MOT_2605.jpg",
+        "back": "assets/products/drum/CA485后/MOT_2606.jpg",
+        "side": "assets/products/drum/CA485后/MOT_2606.jpg",
+        "all": [
+          "assets/products/drum/CA485后/MOT_2605.jpg",
+          "assets/products/drum/CA485后/MOT_2606.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-isz-f-52",
+      "folder": "CVR146五十铃前",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "ISUZU CVR146 F",
+      "gys": "GYS-ISZ-F",
+      "size": "205 × 130 × 15.0",
+      "length_mm": 205.0,
+      "width_mm": 130.0,
+      "thickness_mm": 15.0,
+      "holes": 8,
+      "axle": "ISUZU CVR/CXZ Front",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "ISUZU CVR146 / Giga / FVR Front Axle",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/CVR146五十铃前/MOT_2546.jpg",
+        "back": "assets/products/drum/CVR146五十铃前/MOT_2547.jpg",
+        "side": "assets/products/drum/CVR146五十铃前/MOT_2547.jpg",
+        "all": [
+          "assets/products/drum/CVR146五十铃前/MOT_2546.jpg",
+          "assets/products/drum/CVR146五十铃前/MOT_2547.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-isz-r-53",
+      "folder": "CVR146五十铃后",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "ISUZU CVR146 R",
+      "gys": "GYS-ISZ-R",
+      "size": "215 × 220 × 15.0",
+      "length_mm": 215.0,
+      "width_mm": 220.0,
+      "thickness_mm": 15.0,
+      "holes": 14,
+      "axle": "ISUZU CVR/CXZ Rear",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "ISUZU CVR146 / Giga / CXZ Rear Axle",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/CVR146五十铃后/MOT_2548.jpg",
+        "back": "assets/products/drum/CVR146五十铃后/MOT_2549.jpg",
+        "side": "assets/products/drum/CVR146五十铃后/MOT_2549.jpg",
+        "all": [
+          "assets/products/drum/CVR146五十铃后/MOT_2548.jpg",
+          "assets/products/drum/CVR146五十铃后/MOT_2549.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-127-54",
+      "folder": "EQ153前",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "EQ153 F",
+      "gys": "GYS-127",
+      "size": "200 × 130 × 14.5",
+      "length_mm": 200.0,
+      "width_mm": 130.0,
+      "thickness_mm": 14.5,
+      "holes": 6,
+      "axle": "Dongfeng EQ153 Front",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Dongfeng EQ153 / Yutong / KingLong Medium",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/EQ153前/MOT_2568.jpg",
+        "back": "assets/products/drum/EQ153前/MOT_2569.jpg",
+        "side": "assets/products/drum/EQ153前/MOT_2569.jpg",
+        "all": [
+          "assets/products/drum/EQ153前/MOT_2568.jpg",
+          "assets/products/drum/EQ153前/MOT_2569.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-128-55",
+      "folder": "EQ153后",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "EQ153 R",
+      "gys": "GYS-128",
+      "size": "213 × 180 × 17.0",
+      "length_mm": 213.0,
+      "width_mm": 180.0,
+      "thickness_mm": 17.0,
+      "holes": 9,
+      "axle": "Dongfeng EQ153 Rear",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Dongfeng EQ153 Rear Drum Axle",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/EQ153后/MOT_2570.jpg",
+        "back": "assets/products/drum/EQ153后/MOT_2571.jpg",
+        "side": "assets/products/drum/EQ153后/MOT_2571.jpg",
+        "all": [
+          "assets/products/drum/EQ153后/MOT_2570.jpg",
+          "assets/products/drum/EQ153后/MOT_2571.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-htc4f-56",
+      "folder": "HTC-4F A",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "HTC-4F (HTC-4F A)",
+      "gys": "GYS-HTC4F",
+      "size": "206 × 180 × 15.5",
+      "length_mm": 206.0,
+      "width_mm": 180.0,
+      "thickness_mm": 15.5,
+      "holes": 10,
+      "axle": "Export Commercial Axle",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Heavy Commercial Export Fleet Spec",
+      "markets": [
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/HTC-4F A/MOT_2603.jpg",
+        "back": "assets/products/drum/HTC-4F A/MOT_2604.jpg",
+        "side": "assets/products/drum/HTC-4F A/MOT_2604.jpg",
+        "all": [
+          "assets/products/drum/HTC-4F A/MOT_2603.jpg",
+          "assets/products/drum/HTC-4F A/MOT_2604.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-htc4f-57",
+      "folder": "HTC-4F B",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "HTC-4F (HTC-4F B)",
+      "gys": "GYS-HTC4F",
+      "size": "206 × 180 × 15.5",
+      "length_mm": 206.0,
+      "width_mm": 180.0,
+      "thickness_mm": 15.5,
+      "holes": 10,
+      "axle": "Export Commercial Axle",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Heavy Commercial Export Fleet Spec",
+      "markets": [
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/HTC-4F B/MOT_2601.jpg",
+        "back": "assets/products/drum/HTC-4F B/MOT_2602.jpg",
+        "side": "assets/products/drum/HTC-4F B/MOT_2602.jpg",
+        "all": [
+          "assets/products/drum/HTC-4F B/MOT_2601.jpg",
+          "assets/products/drum/HTC-4F B/MOT_2602.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-t850-58",
+      "folder": "T850前",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "T850 Heavy",
+      "gys": "GYS-T850",
+      "size": "210 × 200 × 16.5",
+      "length_mm": 210.0,
+      "width_mm": 200.0,
+      "thickness_mm": 16.5,
+      "holes": 12,
+      "axle": "Heavy Mining T850",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Heavy Export Dump & Engineering Chassis",
+      "markets": [
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/T850前/MOT_2476.jpg",
+        "back": "assets/products/drum/T850前/MOT_2477.jpg",
+        "side": "assets/products/drum/T850前/MOT_2477.jpg",
+        "all": [
+          "assets/products/drum/T850前/MOT_2476.jpg",
+          "assets/products/drum/T850前/MOT_2477.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-t850-59",
+      "folder": "T850后",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "T850 Heavy",
+      "gys": "GYS-T850",
+      "size": "210 × 200 × 16.5",
+      "length_mm": 210.0,
+      "width_mm": 200.0,
+      "thickness_mm": 16.5,
+      "holes": 12,
+      "axle": "Heavy Mining T850",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Heavy Export Dump & Engineering Chassis",
+      "markets": [
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/T850后/MOT_2478.jpg",
+        "back": "assets/products/drum/T850后/MOT_2479.jpg",
+        "side": "assets/products/drum/T850后/MOT_2479.jpg",
+        "all": [
+          "assets/products/drum/T850后/MOT_2478.jpg",
+          "assets/products/drum/T850后/MOT_2479.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-isz-hf-60",
+      "folder": "五十铃前",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "ISUZU Heavy F",
+      "gys": "GYS-ISZ-HF",
+      "size": "210 × 160 × 16.0",
+      "length_mm": 210.0,
+      "width_mm": 160.0,
+      "thickness_mm": 16.0,
+      "holes": 10,
+      "axle": "ISUZU Giga Front",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "ISUZU Heavy Truck Front Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/五十铃前/MOT_2627.jpg",
+        "back": "assets/products/drum/五十铃前/MOT_2628.jpg",
+        "side": "assets/products/drum/五十铃前/MOT_2628.jpg",
+        "all": [
+          "assets/products/drum/五十铃前/MOT_2627.jpg",
+          "assets/products/drum/五十铃前/MOT_2628.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-isz-hr-61",
+      "folder": "五十铃后",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "ISUZU Heavy R",
+      "gys": "GYS-ISZ-HR",
+      "size": "215 × 220 × 14.5",
+      "length_mm": 215.0,
+      "width_mm": 220.0,
+      "thickness_mm": 14.5,
+      "holes": 17,
+      "axle": "ISUZU Giga Rear",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "ISUZU Heavy Truck Rear Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/五十铃后/MOT_2635.jpg",
+        "back": "assets/products/drum/五十铃后/MOT_2635.jpg",
+        "side": "assets/products/drum/五十铃后/MOT_2635.jpg",
+        "all": [
+          "assets/products/drum/五十铃后/MOT_2635.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-kraz-62",
+      "folder": "克拉斯",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "KrAZ Mining Heavy",
+      "gys": "GYS-KRAZ",
+      "size": "225 × 140 × 18.0",
+      "length_mm": 225.0,
+      "width_mm": 140.0,
+      "thickness_mm": 18.0,
+      "holes": 10,
+      "axle": "KrAZ Off-Road Mining",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "KrAZ Heavy Timber, Mining & Oilfield Trucks",
+      "markets": [
+        "South America",
+        "Middle East"
+      ],
+      "formula": "GY-HD400 (Extreme Mining)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/克拉斯/MOT_2610.jpg",
+        "back": "assets/products/drum/克拉斯/MOT_2611.jpg",
+        "side": "assets/products/drum/克拉斯/MOT_2611.jpg",
+        "all": [
+          "assets/products/drum/克拉斯/MOT_2610.jpg",
+          "assets/products/drum/克拉斯/MOT_2611.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-belaz-63",
+      "folder": "别拉斯",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "BELAZ Mining Heavy",
+      "gys": "GYS-BELAZ",
+      "size": "245 × 180 × 20.0",
+      "length_mm": 245.0,
+      "width_mm": 180.0,
+      "thickness_mm": 20.0,
+      "holes": 14,
+      "axle": "BELAZ Dump Mining",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "BELAZ Heavy Quarry & Open-Pit Mining Dumpers",
+      "markets": [
+        "South America",
+        "Middle East",
+        "North America"
+      ],
+      "formula": "GY-HD400 (Extreme Mining)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/别拉斯/MOT_2607.jpg",
+        "back": "assets/products/drum/别拉斯/MOT_2608.jpg",
+        "side": "assets/products/drum/别拉斯/MOT_2608.jpg",
+        "all": [
+          "assets/products/drum/别拉斯/MOT_2607.jpg",
+          "assets/products/drum/别拉斯/MOT_2608.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-bb01-64",
+      "folder": "北方奔驰",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "BEIBEN Heavy",
+      "gys": "GYS-BB01",
+      "size": "206 × 180 × 15.5",
+      "length_mm": 206.0,
+      "width_mm": 180.0,
+      "thickness_mm": 15.5,
+      "holes": 10,
+      "axle": "Beiben / Benz Heavy",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Beiben / Mercedes Heavy Export Fleet",
+      "markets": [
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/北方奔驰/MOT_2484.jpg",
+        "back": "assets/products/drum/北方奔驰/MOT_2485.jpg",
+        "side": "assets/products/drum/北方奔驰/MOT_2485.jpg",
+        "all": [
+          "assets/products/drum/北方奔驰/MOT_2484.jpg",
+          "assets/products/drum/北方奔驰/MOT_2485.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-001-65",
+      "folder": "北方奔驰1622前",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "BEIBEN 1622 F",
+      "gys": "GYS-001",
+      "size": "198 × 140 × 15.0",
+      "length_mm": 198.0,
+      "width_mm": 140.0,
+      "thickness_mm": 15.0,
+      "holes": 8,
+      "axle": "Mercedes / Beiben Front",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Beiben NG80 / Mercedes-Benz 1622 Front",
+      "markets": [
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/北方奔驰1622前/MOT_2511.jpg",
+        "back": "assets/products/drum/北方奔驰1622前/MOT_2512.jpg",
+        "side": "assets/products/drum/北方奔驰1622前/MOT_2512.jpg",
+        "all": [
+          "assets/products/drum/北方奔驰1622前/MOT_2511.jpg",
+          "assets/products/drum/北方奔驰1622前/MOT_2512.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-bb1622r-66",
+      "folder": "北方奔驰1622后",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "BEIBEN 1622 R",
+      "gys": "GYS-BB1622R",
+      "size": "205 × 170 × 15.0",
+      "length_mm": 205.0,
+      "width_mm": 170.0,
+      "thickness_mm": 15.0,
+      "holes": 8,
+      "axle": "Mercedes / Beiben Rear",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Beiben NG80 / Mercedes-Benz 1622 Rear",
+      "markets": [
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/北方奔驰1622后/MOT_2500.jpg",
+        "back": "assets/products/drum/北方奔驰1622后/MOT_2501.jpg",
+        "side": "assets/products/drum/北方奔驰1622后/MOT_2501.jpg",
+        "all": [
+          "assets/products/drum/北方奔驰1622后/MOT_2500.jpg",
+          "assets/products/drum/北方奔驰1622后/MOT_2501.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-bb180-67",
+      "folder": "北方奔驰180宽",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "BEIBEN 180mm Wide",
+      "gys": "GYS-BB180",
+      "size": "206 × 180 × 16.0",
+      "length_mm": 206.0,
+      "width_mm": 180.0,
+      "thickness_mm": 16.0,
+      "holes": 10,
+      "axle": "Beiben Heavy 180mm",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Beiben Heavy Mining & Desert Haulage",
+      "markets": [
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/北方奔驰180宽/MOT_2625.jpg",
+        "back": "assets/products/drum/北方奔驰180宽/MOT_2626.jpg",
+        "side": "assets/products/drum/北方奔驰180宽/MOT_2626.jpg",
+        "all": [
+          "assets/products/drum/北方奔驰180宽/MOT_2625.jpg",
+          "assets/products/drum/北方奔驰180宽/MOT_2626.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-df-kxr-68",
+      "folder": "天龙旗舰后A",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "Dongfeng KX Flagship R (天龙旗舰后A)",
+      "gys": "GYS-DF-KXR",
+      "size": "215 × 220 × 16.0/19.0",
+      "length_mm": 215.0,
+      "width_mm": 220.0,
+      "thickness_mm": 19.0,
+      "holes": 16,
+      "axle": "Dana / Dongfeng 465",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Dongfeng KX / Tianlong Flagship Long-Haul",
+      "markets": [
+        "Southeast Asia",
+        "Middle East"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/天龙旗舰后A/MOT_2554.jpg",
+        "back": "assets/products/drum/天龙旗舰后A/MOT_2555.jpg",
+        "side": "assets/products/drum/天龙旗舰后A/MOT_2555.jpg",
+        "all": [
+          "assets/products/drum/天龙旗舰后A/MOT_2554.jpg",
+          "assets/products/drum/天龙旗舰后A/MOT_2555.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-df-kxr-69",
+      "folder": "天龙旗舰后B",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "Dongfeng KX Flagship R (天龙旗舰后B)",
+      "gys": "GYS-DF-KXR",
+      "size": "215 × 220 × 16.0/19.0",
+      "length_mm": 215.0,
+      "width_mm": 220.0,
+      "thickness_mm": 19.0,
+      "holes": 16,
+      "axle": "Dana / Dongfeng 465",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Dongfeng KX / Tianlong Flagship Long-Haul",
+      "markets": [
+        "Southeast Asia",
+        "Middle East"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/天龙旗舰后B/MOT_2556.jpg",
+        "back": "assets/products/drum/天龙旗舰后B/MOT_2557.jpg",
+        "side": "assets/products/drum/天龙旗舰后B/MOT_2557.jpg",
+        "all": [
+          "assets/products/drum/天龙旗舰后B/MOT_2556.jpg",
+          "assets/products/drum/天龙旗舰后B/MOT_2557.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-awa-70",
+      "folder": "奥威后A",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "JIEFANG Aowei R-A (奥威后A)",
+      "gys": "GYS-FAW-AWA",
+      "size": "165 × 220 × 16.5/18.0",
+      "length_mm": 165.0,
+      "width_mm": 220.0,
+      "thickness_mm": 18.0,
+      "holes": 12,
+      "axle": "FAW Aowei 457/485",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG Aowei Rear Axle (ABS)",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/奥威后A/MOT_2572.jpg",
+        "back": "assets/products/drum/奥威后A/MOT_2573.jpg",
+        "side": "assets/products/drum/奥威后A/MOT_2573.jpg",
+        "all": [
+          "assets/products/drum/奥威后A/MOT_2572.jpg",
+          "assets/products/drum/奥威后A/MOT_2573.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-awb-71",
+      "folder": "奥威后B",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "JIEFANG Aowei R-B (奥威后B)",
+      "gys": "GYS-FAW-AWB",
+      "size": "228 × 220 × 11.0/18.0",
+      "length_mm": 228.0,
+      "width_mm": 220.0,
+      "thickness_mm": 18.0,
+      "holes": 16,
+      "axle": "FAW Aowei 457/485",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG Aowei Rear Axle",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/奥威后B/MOT_2574.jpg",
+        "back": "assets/products/drum/奥威后B/MOT_2575.jpg",
+        "side": "assets/products/drum/奥威后B/MOT_2575.jpg",
+        "all": [
+          "assets/products/drum/奥威后B/MOT_2574.jpg",
+          "assets/products/drum/奥威后B/MOT_2575.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-fw115a-72",
+      "folder": "富华桥11.5TA",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "Fuwa 11.5T-A (富华桥11.5TA)",
+      "gys": "GYS-FW115A",
+      "size": "165 × 200 × 12.5/16.8",
+      "length_mm": 165.0,
+      "width_mm": 200.0,
+      "thickness_mm": 16.8,
+      "holes": 8,
+      "axle": "Fuwa 11.5T Trailer",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Fuwa 11.5T Heavy Trailer Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/富华桥11.5TA/MOT_2632.jpg",
+        "back": "assets/products/drum/富华桥11.5TA/MOT_2632.jpg",
+        "side": "assets/products/drum/富华桥11.5TA/MOT_2632.jpg",
+        "all": [
+          "assets/products/drum/富华桥11.5TA/MOT_2632.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-fw115b-73",
+      "folder": "富华桥11.5TB",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "Fuwa 11.5T-B (富华桥11.5TB)",
+      "gys": "GYS-FW115B",
+      "size": "214 × 200 × 11.0/16.8",
+      "length_mm": 214.0,
+      "width_mm": 200.0,
+      "thickness_mm": 16.8,
+      "holes": 10,
+      "axle": "Fuwa 11.5T Trailer",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Fuwa 11.5T Heavy Trailer Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/富华桥11.5TB/MOT_2633.jpg",
+        "back": "assets/products/drum/富华桥11.5TB/MOT_2633.jpg",
+        "side": "assets/products/drum/富华桥11.5TB/MOT_2633.jpg",
+        "all": [
+          "assets/products/drum/富华桥11.5TB/MOT_2633.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-fw12a-74",
+      "folder": "富华桥12TA",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "Fuwa 12T-A (富华桥12TA)",
+      "gys": "GYS-FW12A",
+      "size": "210 × 180 × 16.0/12.0",
+      "length_mm": 210.0,
+      "width_mm": 180.0,
+      "thickness_mm": 16.0,
+      "holes": 8,
+      "axle": "Fuwa 12T Trailer",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Fuwa 12T Semi-Trailer Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/富华桥12TA/MOT_2502.jpg",
+        "back": "assets/products/drum/富华桥12TA/MOT_2503.jpg",
+        "side": "assets/products/drum/富华桥12TA/MOT_2503.jpg",
+        "all": [
+          "assets/products/drum/富华桥12TA/MOT_2502.jpg",
+          "assets/products/drum/富华桥12TA/MOT_2503.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-fw12b-75",
+      "folder": "富华桥12TB",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "Fuwa 12T-B (富华桥12TB)",
+      "gys": "GYS-FW12B",
+      "size": "210 × 180 × 16.0/12.0",
+      "length_mm": 210.0,
+      "width_mm": 180.0,
+      "thickness_mm": 16.0,
+      "holes": 8,
+      "axle": "Fuwa 12T Trailer",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Fuwa 12T Semi-Trailer Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/富华桥12TB/MOT_2504.jpg",
+        "back": "assets/products/drum/富华桥12TB/MOT_2505.jpg",
+        "side": "assets/products/drum/富华桥12TB/MOT_2505.jpg",
+        "all": [
+          "assets/products/drum/富华桥12TB/MOT_2504.jpg",
+          "assets/products/drum/富华桥12TB/MOT_2505.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-fw16a-76",
+      "folder": "富华桥16TA",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "Fuwa 16T-A (富华桥16TA)",
+      "gys": "GYS-FW16A",
+      "size": "215 × 200 × 18.0/12.0",
+      "length_mm": 215.0,
+      "width_mm": 200.0,
+      "thickness_mm": 18.0,
+      "holes": 10,
+      "axle": "Fuwa 16T Trailer",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Fuwa 16T Semi-Trailer Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/富华桥16TA/MOT_2525.jpg",
+        "back": "assets/products/drum/富华桥16TA/MOT_2526.jpg",
+        "side": "assets/products/drum/富华桥16TA/MOT_2526.jpg",
+        "all": [
+          "assets/products/drum/富华桥16TA/MOT_2525.jpg",
+          "assets/products/drum/富华桥16TA/MOT_2526.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-fw16a3-77",
+      "folder": "富华桥16TA-302",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "Fuwa 16T-302",
+      "gys": "GYS-FW16A3",
+      "size": "215 × 200 × 18.0/13.0",
+      "length_mm": 215.0,
+      "width_mm": 200.0,
+      "thickness_mm": 18.0,
+      "holes": 10,
+      "axle": "Fuwa 16T Heavy",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Fuwa 16T Heavy Logging & Mining Trailers",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/富华桥16TA-302/MOT_2529.jpg",
+        "back": "assets/products/drum/富华桥16TA-302/MOT_2530.jpg",
+        "side": "assets/products/drum/富华桥16TA-302/MOT_2530.jpg",
+        "all": [
+          "assets/products/drum/富华桥16TA-302/MOT_2529.jpg",
+          "assets/products/drum/富华桥16TA-302/MOT_2530.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-fw16b-78",
+      "folder": "富华桥16TB",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "Fuwa 16T-B (富华桥16TB)",
+      "gys": "GYS-FW16B",
+      "size": "215 × 200 × 18.0/12.0",
+      "length_mm": 215.0,
+      "width_mm": 200.0,
+      "thickness_mm": 18.0,
+      "holes": 10,
+      "axle": "Fuwa 16T Trailer",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Fuwa 16T Semi-Trailer Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/富华桥16TB/MOT_2527.jpg",
+        "back": "assets/products/drum/富华桥16TB/MOT_2528.jpg",
+        "side": "assets/products/drum/富华桥16TB/MOT_2528.jpg",
+        "all": [
+          "assets/products/drum/富华桥16TB/MOT_2527.jpg",
+          "assets/products/drum/富华桥16TB/MOT_2528.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-fw200-79",
+      "folder": "富华桥200宽",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "Fuwa 200mm Wide",
+      "gys": "GYS-FW200",
+      "size": "215 × 200 × 17.5",
+      "length_mm": 215.0,
+      "width_mm": 200.0,
+      "thickness_mm": 17.5,
+      "holes": 10,
+      "axle": "Fuwa 200mm Wide",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Fuwa 200mm Wide Trailer Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/富华桥200宽/MOT_2631.jpg",
+        "back": "assets/products/drum/富华桥200宽/MOT_2631.jpg",
+        "side": "assets/products/drum/富华桥200宽/MOT_2631.jpg",
+        "all": [
+          "assets/products/drum/富华桥200宽/MOT_2631.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-fw200-80",
+      "folder": "富华桥200宽A",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "Fuwa 200mm Wide (富华桥200宽A)",
+      "gys": "GYS-FW200",
+      "size": "215 × 200 × 17.5",
+      "length_mm": 215.0,
+      "width_mm": 200.0,
+      "thickness_mm": 17.5,
+      "holes": 10,
+      "axle": "Fuwa 200mm Wide",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Fuwa 200mm Wide Trailer Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/富华桥200宽A/MOT_2629.jpg",
+        "back": "assets/products/drum/富华桥200宽A/MOT_2630.jpg",
+        "side": "assets/products/drum/富华桥200宽A/MOT_2630.jpg",
+        "all": [
+          "assets/products/drum/富华桥200宽A/MOT_2629.jpg",
+          "assets/products/drum/富华桥200宽A/MOT_2630.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-hwf-81",
+      "folder": "小悍威前A",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "JIEFANG Hanwei Front (小悍威前A)",
+      "gys": "GYS-FAW-HWF",
+      "size": "218 × 135 × 16.0/19.5",
+      "length_mm": 218.0,
+      "width_mm": 135.0,
+      "thickness_mm": 19.5,
+      "holes": 8,
+      "axle": "FAW Hanwei Front",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG Hanwei Front Axle",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/小悍威前A/MOT_2576.jpg",
+        "back": "assets/products/drum/小悍威前A/MOT_2577.jpg",
+        "side": "assets/products/drum/小悍威前A/MOT_2577.jpg",
+        "all": [
+          "assets/products/drum/小悍威前A/MOT_2576.jpg",
+          "assets/products/drum/小悍威前A/MOT_2577.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-hwf-82",
+      "folder": "小悍威前B",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "JIEFANG Hanwei Front (小悍威前B)",
+      "gys": "GYS-FAW-HWF",
+      "size": "218 × 135 × 16.0/19.5",
+      "length_mm": 218.0,
+      "width_mm": 135.0,
+      "thickness_mm": 19.5,
+      "holes": 8,
+      "axle": "FAW Hanwei Front",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG Hanwei Front Axle",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/小悍威前B/MOT_2578.jpg",
+        "back": "assets/products/drum/小悍威前B/MOT_2579.jpg",
+        "side": "assets/products/drum/小悍威前B/MOT_2579.jpg",
+        "all": [
+          "assets/products/drum/小悍威前B/MOT_2578.jpg",
+          "assets/products/drum/小悍威前B/MOT_2579.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-gz-tr-83",
+      "folder": "广州托架",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "Guangzhou Trailer Axle",
+      "gys": "GYS-GZ-TR",
+      "size": "212 × 180 × 16.0",
+      "length_mm": 212.0,
+      "width_mm": 180.0,
+      "thickness_mm": 16.0,
+      "holes": 8,
+      "axle": "Port & Logistics Trailer",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Heavy Container Semi-Trailers (Port Spec)",
+      "markets": [
+        "Southeast Asia",
+        "Middle East"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/广州托架/MOT_2562.jpg",
+        "back": "assets/products/drum/广州托架/MOT_2563.jpg",
+        "side": "assets/products/drum/广州托架/MOT_2563.jpg",
+        "all": [
+          "assets/products/drum/广州托架/MOT_2562.jpg",
+          "assets/products/drum/广州托架/MOT_2563.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-dl-m3k-84",
+      "folder": "德龙新M3000",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "SHACMAN M3000",
+      "gys": "GYS-DL-M3K",
+      "size": "214 × 220 × 14.5/18.5",
+      "length_mm": 214.0,
+      "width_mm": 220.0,
+      "thickness_mm": 18.5,
+      "holes": 16,
+      "axle": "Hande M3000 Axle",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "SHACMAN New M3000 Tractor & Dump Truck",
+      "markets": [
+        "Middle East",
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/德龙新M3000/MOT_2618.jpg",
+        "back": "assets/products/drum/德龙新M3000/MOT_2619.jpg",
+        "side": "assets/products/drum/德龙新M3000/MOT_2619.jpg",
+        "all": [
+          "assets/products/drum/德龙新M3000/MOT_2618.jpg",
+          "assets/products/drum/德龙新M3000/MOT_2619.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-dl-mf-85",
+      "folder": "德龙曼前A",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "SHACMAN Delong MAN F (德龙曼前A)",
+      "gys": "GYS-DL-MF",
+      "size": "195 × 180 × 12.5/16.0",
+      "length_mm": 195.0,
+      "width_mm": 180.0,
+      "thickness_mm": 16.0,
+      "holes": 8,
+      "axle": "Hande MAN Front",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "SHACMAN Delong X3000/F3000 MAN Front Axle",
+      "markets": [
+        "Middle East",
+        "South America",
+        "Southeast Asia"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/德龙曼前A/MOT_2621.jpg",
+        "back": "assets/products/drum/德龙曼前A/MOT_2622.jpg",
+        "side": "assets/products/drum/德龙曼前A/MOT_2622.jpg",
+        "all": [
+          "assets/products/drum/德龙曼前A/MOT_2621.jpg",
+          "assets/products/drum/德龙曼前A/MOT_2622.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-dl-mf-86",
+      "folder": "德龙曼前B",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "SHACMAN Delong MAN F (德龙曼前B)",
+      "gys": "GYS-DL-MF",
+      "size": "195 × 180 × 12.5/16.0",
+      "length_mm": 195.0,
+      "width_mm": 180.0,
+      "thickness_mm": 16.0,
+      "holes": 8,
+      "axle": "Hande MAN Front",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "SHACMAN Delong X3000/F3000 MAN Front Axle",
+      "markets": [
+        "Middle East",
+        "South America",
+        "Southeast Asia"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/德龙曼前B/MOT_2623.jpg",
+        "back": "assets/products/drum/德龙曼前B/MOT_2624.jpg",
+        "side": "assets/products/drum/德龙曼前B/MOT_2624.jpg",
+        "all": [
+          "assets/products/drum/德龙曼前B/MOT_2623.jpg",
+          "assets/products/drum/德龙曼前B/MOT_2624.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-dl-mr-87",
+      "folder": "德龙曼后A",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "SHACMAN Delong MAN R (德龙曼后A)",
+      "gys": "GYS-DL-MR",
+      "size": "214 × 220 × 14.5/18.5",
+      "length_mm": 214.0,
+      "width_mm": 220.0,
+      "thickness_mm": 18.5,
+      "holes": 16,
+      "axle": "Hande MAN 16T Rear",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "SHACMAN Delong X3000/M3000 Hande MAN Rear Axle",
+      "markets": [
+        "Middle East",
+        "South America",
+        "Southeast Asia"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/德龙曼后A/MOT_2488.jpg",
+        "back": "assets/products/drum/德龙曼后A/MOT_2489.jpg",
+        "side": "assets/products/drum/德龙曼后A/MOT_2489.jpg",
+        "all": [
+          "assets/products/drum/德龙曼后A/MOT_2488.jpg",
+          "assets/products/drum/德龙曼后A/MOT_2489.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-dl-mr-88",
+      "folder": "德龙曼后B",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "SHACMAN Delong MAN R (德龙曼后B)",
+      "gys": "GYS-DL-MR",
+      "size": "214 × 220 × 14.5/18.5",
+      "length_mm": 214.0,
+      "width_mm": 220.0,
+      "thickness_mm": 18.5,
+      "holes": 16,
+      "axle": "Hande MAN 16T Rear",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "SHACMAN Delong X3000/M3000 Hande MAN Rear Axle",
+      "markets": [
+        "Middle East",
+        "South America",
+        "Southeast Asia"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/德龙曼后B/MOT_2490.jpg",
+        "back": "assets/products/drum/德龙曼后B/MOT_2491.jpg",
+        "side": "assets/products/drum/德龙曼后B/MOT_2491.jpg",
+        "all": [
+          "assets/products/drum/德龙曼后B/MOT_2490.jpg",
+          "assets/products/drum/德龙曼后B/MOT_2491.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-023-89",
+      "folder": "斯太尔前A",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "WVA 19245 / SY/23/1 (斯太尔前A)",
+      "gys": "GYS-023",
+      "size": "200 × 160 × 14.5",
+      "length_mm": 200.0,
+      "width_mm": 160.0,
+      "thickness_mm": 14.5,
+      "holes": 8,
+      "axle": "STEYR Front A",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "STEYR / SINOTRUK / Shacman Front Drum Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/斯太尔前A/MOT_2506.jpg",
+        "back": "assets/products/drum/斯太尔前A/MOT_2507.jpg",
+        "side": "assets/products/drum/斯太尔前A/MOT_2507.jpg",
+        "all": [
+          "assets/products/drum/斯太尔前A/MOT_2506.jpg",
+          "assets/products/drum/斯太尔前A/MOT_2507.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-123-90",
+      "folder": "斯太尔前B",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "WVA 19245 / SY/23/2 (斯太尔前B)",
+      "gys": "GYS-123",
+      "size": "200 × 160 × 14.5",
+      "length_mm": 200.0,
+      "width_mm": 160.0,
+      "thickness_mm": 14.5,
+      "holes": 8,
+      "axle": "STEYR Front B",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "STEYR / SINOTRUK / Shacman Front Drum Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/斯太尔前B/MOT_2508.jpg",
+        "back": "assets/products/drum/斯太尔前B/MOT_2510.jpg",
+        "side": "assets/products/drum/斯太尔前B/MOT_2510.jpg",
+        "all": [
+          "assets/products/drum/斯太尔前B/MOT_2508.jpg",
+          "assets/products/drum/斯太尔前B/MOT_2510.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-024-91",
+      "folder": "斯太尔后",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "WVA 19246 / SY/24/1",
+      "gys": "GYS-024",
+      "size": "201 × 185 × 14.5",
+      "length_mm": 201.0,
+      "width_mm": 185.0,
+      "thickness_mm": 14.5,
+      "holes": 8,
+      "axle": "STEYR Rear",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "STEYR / SINOTRUK Heavy Rear Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/斯太尔后/MOT_2480.jpg",
+        "back": "assets/products/drum/斯太尔后/MOT_2481.jpg",
+        "side": "assets/products/drum/斯太尔后/MOT_2481.jpg",
+        "all": [
+          "assets/products/drum/斯太尔后/MOT_2480.jpg",
+          "assets/products/drum/斯太尔后/MOT_2481.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-129-92",
+      "folder": "新153前",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "NEW EQ153 F",
+      "gys": "GYS-129",
+      "size": "208 × 150 × 15.0",
+      "length_mm": 208.0,
+      "width_mm": 150.0,
+      "thickness_mm": 15.0,
+      "holes": 10,
+      "axle": "New EQ153 Front",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "New EQ153, Yutong, KingLong, Higer",
+      "markets": [
+        "Southeast Asia",
+        "Middle East"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/新153前/MOT_2498.jpg",
+        "back": "assets/products/drum/新153前/MOT_2499.jpg",
+        "side": "assets/products/drum/新153前/MOT_2499.jpg",
+        "all": [
+          "assets/products/drum/新153前/MOT_2498.jpg",
+          "assets/products/drum/新153前/MOT_2499.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-130-93",
+      "folder": "新153后",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "NEW EQ153 R",
+      "gys": "GYS-130",
+      "size": "208 × 220 × 15.0",
+      "length_mm": 208.0,
+      "width_mm": 220.0,
+      "thickness_mm": 15.0,
+      "holes": 15,
+      "axle": "New EQ153 Rear",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "New EQ153, Yutong, KingLong, Higer",
+      "markets": [
+        "Southeast Asia",
+        "Middle East"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/新153后/MOT_2482.jpg",
+        "back": "assets/products/drum/新153后/MOT_2483.jpg",
+        "side": "assets/products/drum/新153后/MOT_2483.jpg",
+        "all": [
+          "assets/products/drum/新153后/MOT_2482.jpg",
+          "assets/products/drum/新153后/MOT_2483.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-130-n91-94",
+      "folder": "新153后-N91配方",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "NEW EQ153 R (N91)",
+      "gys": "GYS-130-N91",
+      "size": "208 × 220 × 15.0",
+      "length_mm": 208.0,
+      "width_mm": 220.0,
+      "thickness_mm": 15.0,
+      "holes": 15,
+      "axle": "New EQ153 / Yutong Rear",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "New EQ153, Yutong, KingLong, Higer (N91 Mineral-Carbon Formula)",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "N91 (Mineral-Carbon Eco)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/新153后-N91配方/MOT_2496.jpg",
+        "back": "assets/products/drum/新153后-N91配方/MOT_2497.jpg",
+        "side": "assets/products/drum/新153后-N91配方/MOT_2497.jpg",
+        "all": [
+          "assets/products/drum/新153后-N91配方/MOT_2496.jpg",
+          "assets/products/drum/新153后-N91配方/MOT_2497.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-nj6fa-95",
+      "folder": "新J6前A",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "NEW J6 Front-A (新J6前A)",
+      "gys": "GYS-FAW-NJ6FA",
+      "size": "209 × 150 × 16.0/18.0",
+      "length_mm": 209.0,
+      "width_mm": 150.0,
+      "thickness_mm": 18.0,
+      "holes": 8,
+      "axle": "FAW New J6 Front",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG New J6 Front Axle",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/新J6前A/MOT_2588.jpg",
+        "back": "assets/products/drum/新J6前A/MOT_2589.jpg",
+        "side": "assets/products/drum/新J6前A/MOT_2589.jpg",
+        "all": [
+          "assets/products/drum/新J6前A/MOT_2588.jpg",
+          "assets/products/drum/新J6前A/MOT_2589.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-nj6fb-96",
+      "folder": "新J6前B",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "NEW J6 Front-B (新J6前B)",
+      "gys": "GYS-FAW-NJ6FB",
+      "size": "202 × 150 × 10.0/18.0",
+      "length_mm": 202.0,
+      "width_mm": 150.0,
+      "thickness_mm": 18.0,
+      "holes": 8,
+      "axle": "FAW New J6 Front",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG New J6 Front Axle",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/新J6前B/MOT_2590.jpg",
+        "back": "assets/products/drum/新J6前B/MOT_2591.jpg",
+        "side": "assets/products/drum/新J6前B/MOT_2591.jpg",
+        "all": [
+          "assets/products/drum/新J6前B/MOT_2590.jpg",
+          "assets/products/drum/新J6前B/MOT_2591.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-t850-97",
+      "folder": "新T850前",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "T850 Heavy",
+      "gys": "GYS-T850",
+      "size": "210 × 200 × 16.5",
+      "length_mm": 210.0,
+      "width_mm": 200.0,
+      "thickness_mm": 16.5,
+      "holes": 12,
+      "axle": "Heavy Mining T850",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Heavy Export Dump & Engineering Chassis",
+      "markets": [
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/新T850前/MOT_2472.jpg",
+        "back": "assets/products/drum/新T850前/MOT_2473.jpg",
+        "side": "assets/products/drum/新T850前/MOT_2473.jpg",
+        "all": [
+          "assets/products/drum/新T850前/MOT_2472.jpg",
+          "assets/products/drum/新T850前/MOT_2473.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-t850-98",
+      "folder": "新T850后",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "T850 Heavy",
+      "gys": "GYS-T850",
+      "size": "210 × 200 × 16.5",
+      "length_mm": 210.0,
+      "width_mm": 200.0,
+      "thickness_mm": 16.5,
+      "holes": 12,
+      "axle": "Heavy Mining T850",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Heavy Export Dump & Engineering Chassis",
+      "markets": [
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/新T850后/MOT_2474.jpg",
+        "back": "assets/products/drum/新T850后/MOT_2475.jpg",
+        "side": "assets/products/drum/新T850后/MOT_2475.jpg",
+        "all": [
+          "assets/products/drum/新T850后/MOT_2474.jpg",
+          "assets/products/drum/新T850后/MOT_2475.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-nafa-99",
+      "folder": "新奥威前A",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "NEW Aowei F-A (新奥威前A)",
+      "gys": "GYS-FAW-NAFA",
+      "size": "208 × 150 × 16.0/20.0",
+      "length_mm": 208.0,
+      "width_mm": 150.0,
+      "thickness_mm": 20.0,
+      "holes": 8,
+      "axle": "FAW New Aowei Front",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG New Aowei Front Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/新奥威前A/MOT_2564.jpg",
+        "back": "assets/products/drum/新奥威前A/MOT_2565.jpg",
+        "side": "assets/products/drum/新奥威前A/MOT_2565.jpg",
+        "all": [
+          "assets/products/drum/新奥威前A/MOT_2564.jpg",
+          "assets/products/drum/新奥威前A/MOT_2565.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-nafb-100",
+      "folder": "新奥威前B",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "NEW Aowei F-B (新奥威前B)",
+      "gys": "GYS-FAW-NAFB",
+      "size": "202 × 150 × 9.0/20.0",
+      "length_mm": 202.0,
+      "width_mm": 150.0,
+      "thickness_mm": 20.0,
+      "holes": 8,
+      "axle": "FAW New Aowei Front",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG New Aowei Front Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/新奥威前B/MOT_2566.jpg",
+        "back": "assets/products/drum/新奥威前B/MOT_2567.jpg",
+        "side": "assets/products/drum/新奥威前B/MOT_2567.jpg",
+        "all": [
+          "assets/products/drum/新奥威前B/MOT_2566.jpg",
+          "assets/products/drum/新奥威前B/MOT_2567.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-awa-101",
+      "folder": "新奥威后A",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "JIEFANG Aowei R-A (新奥威后A)",
+      "gys": "GYS-FAW-AWA",
+      "size": "165 × 220 × 16.5/18.0",
+      "length_mm": 165.0,
+      "width_mm": 220.0,
+      "thickness_mm": 18.0,
+      "holes": 12,
+      "axle": "FAW Aowei 457/485",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG Aowei Rear Axle (ABS)",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/新奥威后A/MOT_2492.jpg",
+        "back": "assets/products/drum/新奥威后A/MOT_2493.jpg",
+        "side": "assets/products/drum/新奥威后A/MOT_2493.jpg",
+        "all": [
+          "assets/products/drum/新奥威后A/MOT_2492.jpg",
+          "assets/products/drum/新奥威后A/MOT_2493.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-awb-102",
+      "folder": "新奥威后B",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "JIEFANG Aowei R-B (新奥威后B)",
+      "gys": "GYS-FAW-AWB",
+      "size": "228 × 220 × 11.0/18.0",
+      "length_mm": 228.0,
+      "width_mm": 220.0,
+      "thickness_mm": 18.0,
+      "holes": 16,
+      "axle": "FAW Aowei 457/485",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG Aowei Rear Axle",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/新奥威后B/MOT_2494.jpg",
+        "back": "assets/products/drum/新奥威后B/MOT_2495.jpg",
+        "side": "assets/products/drum/新奥威后B/MOT_2495.jpg",
+        "all": [
+          "assets/products/drum/新奥威后B/MOT_2494.jpg",
+          "assets/products/drum/新奥威后B/MOT_2495.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-125-103",
+      "folder": "新豪沃A7",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "HOWO A7 / WVA 19247 (新豪沃A7)",
+      "gys": "GYS-125",
+      "size": "204 × 220 × 15.0",
+      "length_mm": 204.0,
+      "width_mm": 220.0,
+      "thickness_mm": 15.0,
+      "holes": 14,
+      "axle": "SINOTRUK HOWO A7",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "SINOTRUK HOWO A7 / T5G Heavy Tractor",
+      "markets": [
+        "Southeast Asia",
+        "South America",
+        "Middle East"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/新豪沃A7/MOT_2634.jpg",
+        "back": "assets/products/drum/新豪沃A7/MOT_2634.jpg",
+        "side": "assets/products/drum/新豪沃A7/MOT_2634.jpg",
+        "all": [
+          "assets/products/drum/新豪沃A7/MOT_2634.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-126-104",
+      "folder": "新重汽后",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "SINOTRUK Heavy R",
+      "gys": "GYS-126",
+      "size": "204 × 220 × 15.0",
+      "length_mm": 204.0,
+      "width_mm": 220.0,
+      "thickness_mm": 15.0,
+      "holes": 14,
+      "axle": "SINOTRUK AC16/MCY13",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "SINOTRUK HOWO / Shacman Heavy Dump Truck",
+      "markets": [
+        "Southeast Asia",
+        "South America",
+        "Middle East"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/新重汽后/MOT_2535.jpg",
+        "back": "assets/products/drum/新重汽后/MOT_2536.jpg",
+        "side": "assets/products/drum/新重汽后/MOT_2536.jpg",
+        "all": [
+          "assets/products/drum/新重汽后/MOT_2535.jpg",
+          "assets/products/drum/新重汽后/MOT_2536.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-119-105",
+      "folder": "日野前",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "HINO ZY F",
+      "gys": "GYS-119",
+      "size": "230 × 126 × 15.5",
+      "length_mm": 230.0,
+      "width_mm": 126.0,
+      "thickness_mm": 15.5,
+      "holes": 8,
+      "axle": "HINO 700 / ZY Front",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "HINO 700 / Profia / ZY Front Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/日野前/日野前-1.jpg",
+        "back": "assets/products/drum/日野前/日野前-2.jpg",
+        "side": "assets/products/drum/日野前/日野前-4.jpg",
+        "all": [
+          "assets/products/drum/日野前/日野前-1.jpg",
+          "assets/products/drum/日野前/日野前-2.jpg",
+          "assets/products/drum/日野前/日野前-3.jpg",
+          "assets/products/drum/日野前/日野前-4.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-120-106",
+      "folder": "日野后",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "HINO ZY R",
+      "gys": "GYS-120",
+      "size": "230 × 202 × 15.5",
+      "length_mm": 230.0,
+      "width_mm": 202.0,
+      "thickness_mm": 15.5,
+      "holes": 12,
+      "axle": "HINO 700 / ZY Rear",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "HINO 700 / Profia / ZY Rear Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/日野后/日野后-1.jpg",
+        "back": "assets/products/drum/日野后/日野后-2.jpg",
+        "side": "assets/products/drum/日野后/日野后.jpg",
+        "all": [
+          "assets/products/drum/日野后/日野后-1.jpg",
+          "assets/products/drum/日野后/日野后-2.jpg",
+          "assets/products/drum/日野后/日野后.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-015-107",
+      "folder": "沃尔沃后",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "WVA 19071 / VI88",
+      "gys": "GYS-015",
+      "size": "195 × 198 × 18.0/13.0",
+      "length_mm": 195.0,
+      "width_mm": 198.0,
+      "thickness_mm": 18.0,
+      "holes": 14,
+      "axle": "VOLVO Rear Drum",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "VOLVO FL / FM / F12 Rear Drum Axle",
+      "markets": [
+        "Europe",
+        "South America",
+        "Middle East"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/沃尔沃后/MOT_2550.jpg",
+        "back": "assets/products/drum/沃尔沃后/MOT_2551.jpg",
+        "side": "assets/products/drum/沃尔沃后/MOT_2551.jpg",
+        "all": [
+          "assets/products/drum/沃尔沃后/MOT_2550.jpg",
+          "assets/products/drum/沃尔沃后/MOT_2551.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-141-108",
+      "folder": "现代HYUNDAI",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "HYUNDAI R1/R2 (现代HYUNDAI)",
+      "gys": "GYS-141",
+      "size": "200 × 220 × 18.0/15.0",
+      "length_mm": 200.0,
+      "width_mm": 220.0,
+      "thickness_mm": 18.0,
+      "holes": 16,
+      "axle": "HYUNDAI Heavy Rear",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "HYUNDAI Heavy Dump & Tractor Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/现代HYUNDAI/MOT_2612.jpg",
+        "back": "assets/products/drum/现代HYUNDAI/MOT_2613.jpg",
+        "side": "assets/products/drum/现代HYUNDAI/MOT_2613.jpg",
+        "all": [
+          "assets/products/drum/现代HYUNDAI/MOT_2612.jpg",
+          "assets/products/drum/现代HYUNDAI/MOT_2613.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-133-109",
+      "folder": "现代前A（HYUNDAI FA）",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "HYUNDAI BUS F1 (现代前A（HYUNDAI FA）)",
+      "gys": "GYS-133",
+      "size": "205 × 155 × 18.0/10.0",
+      "length_mm": 205.0,
+      "width_mm": 155.0,
+      "thickness_mm": 18.0,
+      "holes": 10,
+      "axle": "HYUNDAI Front A",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "HYUNDAI Universe / Aero City / HD1000 Front",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/现代前A（HYUNDAI FA）/MOT_2580.jpg",
+        "back": "assets/products/drum/现代前A（HYUNDAI FA）/MOT_2581.jpg",
+        "side": "assets/products/drum/现代前A（HYUNDAI FA）/MOT_2581.jpg",
+        "all": [
+          "assets/products/drum/现代前A（HYUNDAI FA）/MOT_2580.jpg",
+          "assets/products/drum/现代前A（HYUNDAI FA）/MOT_2581.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-134-110",
+      "folder": "现代前B（HYUNDAI FB）",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "HYUNDAI BUS F2 (现代前B（HYUNDAI FB）)",
+      "gys": "GYS-134",
+      "size": "202 × 155 × 18.0/16.0",
+      "length_mm": 202.0,
+      "width_mm": 155.0,
+      "thickness_mm": 18.0,
+      "holes": 10,
+      "axle": "HYUNDAI Front B",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "HYUNDAI Universe / Heavy Front",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/现代前B（HYUNDAI FB）/MOT_2582.jpg",
+        "back": "assets/products/drum/现代前B（HYUNDAI FB）/MOT_2583.jpg",
+        "side": "assets/products/drum/现代前B（HYUNDAI FB）/MOT_2583.jpg",
+        "all": [
+          "assets/products/drum/现代前B（HYUNDAI FB）/MOT_2582.jpg",
+          "assets/products/drum/现代前B（HYUNDAI FB）/MOT_2583.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-135-111",
+      "folder": "现代后A（HYUNDAI RA）",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "HYUNDAI BUS R1 (现代后A（HYUNDAI RA）)",
+      "gys": "GYS-135",
+      "size": "200 × 220 × 18.0/16.0",
+      "length_mm": 200.0,
+      "width_mm": 220.0,
+      "thickness_mm": 18.0,
+      "holes": 13,
+      "axle": "HYUNDAI Rear A",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "HYUNDAI Trago / Xcient / Bus Rear Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/现代后A（HYUNDAI RA）/MOT_2584.jpg",
+        "back": "assets/products/drum/现代后A（HYUNDAI RA）/MOT_2585.jpg",
+        "side": "assets/products/drum/现代后A（HYUNDAI RA）/MOT_2585.jpg",
+        "all": [
+          "assets/products/drum/现代后A（HYUNDAI RA）/MOT_2584.jpg",
+          "assets/products/drum/现代后A（HYUNDAI RA）/MOT_2585.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-136-112",
+      "folder": "现代后B（HYUNDAI RB）",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "HYUNDAI BUS R2 (现代后B（HYUNDAI RB）)",
+      "gys": "GYS-136",
+      "size": "195 × 220 × 18.0/10.5",
+      "length_mm": 195.0,
+      "width_mm": 220.0,
+      "thickness_mm": 18.0,
+      "holes": 13,
+      "axle": "HYUNDAI Rear B",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "HYUNDAI Trago / Xcient / Bus Rear Axle",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/现代后B（HYUNDAI RB）/MOT_2586.jpg",
+        "back": "assets/products/drum/现代后B（HYUNDAI RB）/MOT_2587.jpg",
+        "side": "assets/products/drum/现代后B（HYUNDAI RB）/MOT_2587.jpg",
+        "all": [
+          "assets/products/drum/现代后B（HYUNDAI RB）/MOT_2586.jpg",
+          "assets/products/drum/现代后B（HYUNDAI RB）/MOT_2587.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-ft-ol-113",
+      "folder": "福田奥铃前",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "FOTON Aumark/Ollin",
+      "gys": "GYS-FT-OL",
+      "size": "148 × 100 × 13.0",
+      "length_mm": 148.0,
+      "width_mm": 100.0,
+      "thickness_mm": 13.0,
+      "holes": 6,
+      "axle": "Foton Light-Medium",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FOTON Ollin / Aumark Urban & Regional Delivery",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "N91 (Mineral-Carbon Eco)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/福田奥铃前/MOT_2595.jpg",
+        "back": "assets/products/drum/福田奥铃前/MOT_2596.jpg",
+        "side": "assets/products/drum/福田奥铃前/MOT_2596.jpg",
+        "all": [
+          "assets/products/drum/福田奥铃前/MOT_2595.jpg",
+          "assets/products/drum/福田奥铃前/MOT_2596.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-ft-ol-114",
+      "folder": "福田奥铃后",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "FOTON Aumark/Ollin",
+      "gys": "GYS-FT-OL",
+      "size": "148 × 100 × 13.0",
+      "length_mm": 148.0,
+      "width_mm": 100.0,
+      "thickness_mm": 13.0,
+      "holes": 6,
+      "axle": "Foton Light-Medium",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FOTON Ollin / Aumark Urban & Regional Delivery",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "N91 (Mineral-Carbon Eco)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/福田奥铃后/MOT_2592.jpg",
+        "back": "assets/products/drum/福田奥铃后/MOT_2594.jpg",
+        "side": "assets/products/drum/福田奥铃后/MOT_2594.jpg",
+        "all": [
+          "assets/products/drum/福田奥铃后/MOT_2592.jpg",
+          "assets/products/drum/福田奥铃后/MOT_2594.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-us12a-115",
+      "folder": "美国托架12TA",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "US Axle 12T-A (美国托架12TA)",
+      "gys": "GYS-US12A",
+      "size": "210 × 178 × 18.0/12.0",
+      "length_mm": 210.0,
+      "width_mm": 178.0,
+      "thickness_mm": 18.0,
+      "holes": 8,
+      "axle": "American Trailer 12T-A",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "American 12T Semi-Trailer Axle (16.5×7\")",
+      "markets": [
+        "North America",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/美国托架12TA/MOT_2537.jpg",
+        "back": "assets/products/drum/美国托架12TA/MOT_2538.jpg",
+        "side": "assets/products/drum/美国托架12TA/MOT_2538.jpg",
+        "all": [
+          "assets/products/drum/美国托架12TA/MOT_2537.jpg",
+          "assets/products/drum/美国托架12TA/MOT_2538.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-us12b-116",
+      "folder": "美国托架12TB",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "US Axle 12T-B (美国托架12TB)",
+      "gys": "GYS-US12B",
+      "size": "210 × 178 × 18.0/12.0",
+      "length_mm": 210.0,
+      "width_mm": 178.0,
+      "thickness_mm": 18.0,
+      "holes": 8,
+      "axle": "American Trailer 12T-B",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "American 12T Semi-Trailer Axle (16.5×7\")",
+      "markets": [
+        "North America",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/美国托架12TB/MOT_2539.jpg",
+        "back": "assets/products/drum/美国托架12TB/MOT_2540.jpg",
+        "side": "assets/products/drum/美国托架12TB/MOT_2540.jpg",
+        "all": [
+          "assets/products/drum/美国托架12TB/MOT_2539.jpg",
+          "assets/products/drum/美国托架12TB/MOT_2540.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-mr-a-117",
+      "folder": "美驰桥A",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "Meritor A (美驰桥A)",
+      "gys": "GYS-MR-A",
+      "size": "212 × 178 × 14.5/18.5",
+      "length_mm": 212.0,
+      "width_mm": 178.0,
+      "thickness_mm": 18.5,
+      "holes": 14,
+      "axle": "Meritor Axle A",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Meritor Heavy Drive Axle / SINOTRUK Huanghe Prince",
+      "markets": [
+        "North America",
+        "South America",
+        "Middle East"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/美驰桥A/MOT_2541.jpg",
+        "back": "assets/products/drum/美驰桥A/MOT_2542.jpg",
+        "side": "assets/products/drum/美驰桥A/MOT_2542.jpg",
+        "all": [
+          "assets/products/drum/美驰桥A/MOT_2541.jpg",
+          "assets/products/drum/美驰桥A/MOT_2542.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-mr-b-118",
+      "folder": "美驰桥B",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "Meritor B (美驰桥B)",
+      "gys": "GYS-MR-B",
+      "size": "212 × 178 × 10.5/18.5",
+      "length_mm": 212.0,
+      "width_mm": 178.0,
+      "thickness_mm": 18.5,
+      "holes": 14,
+      "axle": "Meritor Axle B",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "Meritor Heavy Drive Axle / SINOTRUK Huanghe Prince",
+      "markets": [
+        "North America",
+        "South America",
+        "Middle East"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/美驰桥B/MOT_2543.jpg",
+        "back": "assets/products/drum/美驰桥B/MOT_2544.jpg",
+        "side": "assets/products/drum/美驰桥B/MOT_2544.jpg",
+        "all": [
+          "assets/products/drum/美驰桥B/MOT_2543.jpg",
+          "assets/products/drum/美驰桥B/MOT_2544.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-cc-r-119",
+      "folder": "联合重卡",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "C&C Heavy Truck",
+      "gys": "GYS-CC-R",
+      "size": "190 × 220 × 12.0/16.0",
+      "length_mm": 190.0,
+      "width_mm": 220.0,
+      "thickness_mm": 16.0,
+      "holes": 14,
+      "axle": "C&C 460 Rear",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "C&C Heavy Duty LNG & Diesel Tractors",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/联合重卡/MOT_2558.jpg",
+        "back": "assets/products/drum/联合重卡/MOT_2559.jpg",
+        "side": "assets/products/drum/联合重卡/MOT_2559.jpg",
+        "all": [
+          "assets/products/drum/联合重卡/MOT_2558.jpg",
+          "assets/products/drum/联合重卡/MOT_2559.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-007-120",
+      "folder": "西德拖架BC36-1",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "WVA 19032 / BC/36/1",
+      "gys": "GYS-007",
+      "size": "220 × 180 × 17.5/10.5",
+      "length_mm": 220.0,
+      "width_mm": 180.0,
+      "thickness_mm": 17.5,
+      "holes": 10,
+      "axle": "BPW BC/36/1 (180mm)",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "BPW European Semi-Trailer Axle 10–12T",
+      "markets": [
+        "Europe",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/西德拖架BC36-1/MOT_2523.jpg",
+        "back": "assets/products/drum/西德拖架BC36-1/MOT_2524.jpg",
+        "side": "assets/products/drum/西德拖架BC36-1/MOT_2524.jpg",
+        "all": [
+          "assets/products/drum/西德拖架BC36-1/MOT_2523.jpg",
+          "assets/products/drum/西德拖架BC36-1/MOT_2524.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-018-121",
+      "folder": "西德拖架BC37-1",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "WVA 19094 / BC/37/1",
+      "gys": "GYS-018",
+      "size": "220 × 200 × 17.5/10.5",
+      "length_mm": 220.0,
+      "width_mm": 200.0,
+      "thickness_mm": 17.5,
+      "holes": 10,
+      "axle": "BPW BC/37/1 Trailer Axle",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "BPW German Trailer Axles 12T–14T Series",
+      "markets": [
+        "Europe",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/西德拖架BC37-1/MOT_2486.jpg",
+        "back": "assets/products/drum/西德拖架BC37-1/MOT_2487.jpg",
+        "side": "assets/products/drum/西德拖架BC37-1/MOT_2487.jpg",
+        "all": [
+          "assets/products/drum/西德拖架BC37-1/MOT_2486.jpg",
+          "assets/products/drum/西德拖架BC37-1/MOT_2487.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-018-122",
+      "folder": "西德拖架BC37-1-2",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "WVA 19094 / BC/37/1",
+      "gys": "GYS-018",
+      "size": "220 × 200 × 17.5/10.5",
+      "length_mm": 220.0,
+      "width_mm": 200.0,
+      "thickness_mm": 17.5,
+      "holes": 10,
+      "axle": "BPW BC/37/1 Trailer Axle",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "BPW German Trailer Axles 12T–14T Series",
+      "markets": [
+        "Europe",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/西德拖架BC37-1-2/MOT_2513.jpg",
+        "back": "assets/products/drum/西德拖架BC37-1-2/MOT_2514.jpg",
+        "side": "assets/products/drum/西德拖架BC37-1-2/MOT_2514.jpg",
+        "all": [
+          "assets/products/drum/西德拖架BC37-1-2/MOT_2513.jpg",
+          "assets/products/drum/西德拖架BC37-1-2/MOT_2514.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-bc38-123",
+      "folder": "西德拖架BC38-1",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "BPW BC/38/1",
+      "gys": "GYS-BC38",
+      "size": "220 × 200 × 18.0/11.0",
+      "length_mm": 220.0,
+      "width_mm": 200.0,
+      "thickness_mm": 18.0,
+      "holes": 10,
+      "axle": "BPW BC/38/1",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "BPW 14T–16T Heavy European Trailer",
+      "markets": [
+        "Europe",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/西德拖架BC38-1/MOT_2519.jpg",
+        "back": "assets/products/drum/西德拖架BC38-1/MOT_2520.jpg",
+        "side": "assets/products/drum/西德拖架BC38-1/MOT_2520.jpg",
+        "all": [
+          "assets/products/drum/西德拖架BC38-1/MOT_2519.jpg",
+          "assets/products/drum/西德拖架BC38-1/MOT_2520.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-bc39-124",
+      "folder": "西德拖架BC39-1（BPW11.5T)",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "BPW BC/39/1 (11.5T)",
+      "gys": "GYS-BC39",
+      "size": "214 × 200 × 17.5/11.0",
+      "length_mm": 214.0,
+      "width_mm": 200.0,
+      "thickness_mm": 17.5,
+      "holes": 10,
+      "axle": "BPW 11.5T Heavy Trailer",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "BPW 11.5T Trailer Axle (Middle East / South America Spec)",
+      "markets": [
+        "Middle East",
+        "South America",
+        "Europe"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/西德拖架BC39-1（BPW11.5T)/MOT_2521.jpg",
+        "back": "assets/products/drum/西德拖架BC39-1（BPW11.5T)/MOT_2522.jpg",
+        "side": "assets/products/drum/西德拖架BC39-1（BPW11.5T)/MOT_2522.jpg",
+        "all": [
+          "assets/products/drum/西德拖架BC39-1（BPW11.5T)/MOT_2521.jpg",
+          "assets/products/drum/西德拖架BC39-1（BPW11.5T)/MOT_2522.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-j5f-125",
+      "folder": "解放J5前A",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "JIEFANG J5 Front (解放J5前A)",
+      "gys": "GYS-FAW-J5F",
+      "size": "205 × 135 × 15.0",
+      "length_mm": 205.0,
+      "width_mm": 135.0,
+      "thickness_mm": 15.0,
+      "holes": 8,
+      "axle": "FAW J5 Front",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG J5M/J5P Front Axle",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/解放J5前A/MOT_2599.jpg",
+        "back": "assets/products/drum/解放J5前A/MOT_2600.jpg",
+        "side": "assets/products/drum/解放J5前A/MOT_2600.jpg",
+        "all": [
+          "assets/products/drum/解放J5前A/MOT_2599.jpg",
+          "assets/products/drum/解放J5前A/MOT_2600.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-j5f-126",
+      "folder": "解放J5前B",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "JIEFANG J5 Front (解放J5前B)",
+      "gys": "GYS-FAW-J5F",
+      "size": "205 × 135 × 15.0",
+      "length_mm": 205.0,
+      "width_mm": 135.0,
+      "thickness_mm": 15.0,
+      "holes": 8,
+      "axle": "FAW J5 Front",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG J5M/J5P Front Axle",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-CV360",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/解放J5前B/MOT_2597.jpg",
+        "back": "assets/products/drum/解放J5前B/MOT_2598.jpg",
+        "side": "assets/products/drum/解放J5前B/MOT_2598.jpg",
+        "all": [
+          "assets/products/drum/解放J5前B/MOT_2597.jpg",
+          "assets/products/drum/解放J5前B/MOT_2598.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-j6a-127",
+      "folder": "解放J6后A",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "JIEFANG J6 R-A (解放J6后A)",
+      "gys": "GYS-FAW-J6A",
+      "size": "200 × 200 × 17.0/20.0",
+      "length_mm": 200.0,
+      "width_mm": 200.0,
+      "thickness_mm": 20.0,
+      "holes": 16,
+      "axle": "FAW J6 457 Axle",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG J6P / J6L Rear Axle",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/解放J6后A/MOT_2515.jpg",
+        "back": "assets/products/drum/解放J6后A/MOT_2516.jpg",
+        "side": "assets/products/drum/解放J6后A/MOT_2516.jpg",
+        "all": [
+          "assets/products/drum/解放J6后A/MOT_2515.jpg",
+          "assets/products/drum/解放J6后A/MOT_2516.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-j6a-128",
+      "folder": "解放J6后A-320",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "JIEFANG J6 R-A (解放J6后A-320)",
+      "gys": "GYS-FAW-J6A",
+      "size": "200 × 200 × 17.0/20.0",
+      "length_mm": 200.0,
+      "width_mm": 200.0,
+      "thickness_mm": 20.0,
+      "holes": 16,
+      "axle": "FAW J6 457 Axle",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG J6P / J6L Rear Axle",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/解放J6后A-320/解放J6后A-1-320.jpg",
+        "back": "assets/products/drum/解放J6后A-320/解放J6后A-320.jpg",
+        "side": "assets/products/drum/解放J6后A-320/解放J6后A-320.jpg",
+        "all": [
+          "assets/products/drum/解放J6后A-320/解放J6后A-1-320.jpg",
+          "assets/products/drum/解放J6后A-320/解放J6后A-320.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-j6b-129",
+      "folder": "解放J6后B",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "JIEFANG J6 R-B (解放J6后B)",
+      "gys": "GYS-FAW-J6B",
+      "size": "200 × 200 × 12.0/20.0",
+      "length_mm": 200.0,
+      "width_mm": 200.0,
+      "thickness_mm": 20.0,
+      "holes": 16,
+      "axle": "FAW J6 457 Axle",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG J6P / J6L Rear Axle",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/解放J6后B/MOT_2517.jpg",
+        "back": "assets/products/drum/解放J6后B/MOT_2518.jpg",
+        "side": "assets/products/drum/解放J6后B/MOT_2518.jpg",
+        "all": [
+          "assets/products/drum/解放J6后B/MOT_2517.jpg",
+          "assets/products/drum/解放J6后B/MOT_2518.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-j6b-130",
+      "folder": "解放J6后B-320",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "JIEFANG J6 R-B (解放J6后B-320)",
+      "gys": "GYS-FAW-J6B",
+      "size": "200 × 200 × 12.0/20.0",
+      "length_mm": 200.0,
+      "width_mm": 200.0,
+      "thickness_mm": 20.0,
+      "holes": 16,
+      "axle": "FAW J6 457 Axle",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG J6P / J6L Rear Axle",
+      "markets": [
+        "Southeast Asia",
+        "South America"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/解放J6后B-320/解放J6后B-1-320.jpg",
+        "back": "assets/products/drum/解放J6后B-320/解放J6后B-320.jpg",
+        "side": "assets/products/drum/解放J6后B-320/解放J6后B-320.jpg",
+        "all": [
+          "assets/products/drum/解放J6后B-320/解放J6后B-1-320.jpg",
+          "assets/products/drum/解放J6后B-320/解放J6后B-320.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-twa-131",
+      "folder": "解放途威后A-N61",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "JIEFANG Tuwei R-A",
+      "gys": "GYS-FAW-TWA",
+      "size": "197 × 200 × 17.0/20.0",
+      "length_mm": 197.0,
+      "width_mm": 200.0,
+      "thickness_mm": 20.0,
+      "holes": 16,
+      "axle": "FAW Tuwei / Kooying Star",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG Tuwei / JH6 Heavy Rear",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400 (Kooying Star)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/解放途威后A-N61/解放途威后A-1.jpg",
+        "back": "assets/products/drum/解放途威后A-N61/解放途威后A.jpg",
+        "side": "assets/products/drum/解放途威后A-N61/解放途威后A.jpg",
+        "all": [
+          "assets/products/drum/解放途威后A-N61/解放途威后A-1.jpg",
+          "assets/products/drum/解放途威后A-N61/解放途威后A.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-twa-132",
+      "folder": "解放途威后A-冠英之星",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "JIEFANG Tuwei R-A (解放途威后A-冠英之星)",
+      "gys": "GYS-FAW-TWA",
+      "size": "197 × 200 × 17.0/20.0",
+      "length_mm": 197.0,
+      "width_mm": 200.0,
+      "thickness_mm": 20.0,
+      "holes": 16,
+      "axle": "FAW Tuwei / Kooying Star",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG Tuwei / JH6 Heavy Rear",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400 (Kooying Star)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/解放途威后A-冠英之星/解放途威后A-1-冠英之星.jpg",
+        "back": "assets/products/drum/解放途威后A-冠英之星/解放途威后A-冠英之星.jpg",
+        "side": "assets/products/drum/解放途威后A-冠英之星/解放途威后A-冠英之星.jpg",
+        "all": [
+          "assets/products/drum/解放途威后A-冠英之星/解放途威后A-1-冠英之星.jpg",
+          "assets/products/drum/解放途威后A-冠英之星/解放途威后A-冠英之星.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-twb-133",
+      "folder": "解放途威后B",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "JIEFANG Tuwei R-B (解放途威后B)",
+      "gys": "GYS-FAW-TWB",
+      "size": "201 × 200 × 11.5/20.0",
+      "length_mm": 201.0,
+      "width_mm": 200.0,
+      "thickness_mm": 20.0,
+      "holes": 16,
+      "axle": "FAW Tuwei / Kooying Star",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG Tuwei / JH6 Heavy Rear",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400 (Kooying Star)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/解放途威后B/解放途威后B-1.jpg",
+        "back": "assets/products/drum/解放途威后B/解放途威后B.jpg",
+        "side": "assets/products/drum/解放途威后B/解放途威后B.jpg",
+        "all": [
+          "assets/products/drum/解放途威后B/解放途威后B-1.jpg",
+          "assets/products/drum/解放途威后B/解放途威后B.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-faw-twb-134",
+      "folder": "解放途威后B-冠英之星",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "JIEFANG Tuwei R-B (解放途威后B-冠英之星)",
+      "gys": "GYS-FAW-TWB",
+      "size": "201 × 200 × 11.5/20.0",
+      "length_mm": 201.0,
+      "width_mm": 200.0,
+      "thickness_mm": 20.0,
+      "holes": 16,
+      "axle": "FAW Tuwei / Kooying Star",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "FAW JIEFANG Tuwei / JH6 Heavy Rear",
+      "markets": [
+        "Southeast Asia",
+        "Middle East",
+        "South America"
+      ],
+      "formula": "GY-HD400 (Kooying Star)",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/解放途威后B-冠英之星/3db5b5a13fe12c0634cd5a2dcbbe3ba.png",
+        "back": "assets/products/drum/解放途威后B-冠英之星/解放途威后B-1-冠英之星.jpg",
+        "side": "assets/products/drum/解放途威后B-冠英之星/解放途威后B-冠英之星.jpg",
+        "all": [
+          "assets/products/drum/解放途威后B-冠英之星/3db5b5a13fe12c0634cd5a2dcbbe3ba.png",
+          "assets/products/drum/解放途威后B-冠英之星/解放途威后B-1-冠英之星.jpg",
+          "assets/products/drum/解放途威后B-冠英之星/解放途威后B-冠英之星.jpg"
+        ]
+      }
+    },
+    {
+      "id": "drum-gys-mcy13-135",
+      "folder": "重汽汕德卡后",
+      "category": "drum",
+      "category_label": "Heavy-Duty Drum Lining",
+      "wva": "SITRAK C7H Rear",
+      "gys": "GYS-MCY13",
+      "size": "208 × 220 × 16.5",
+      "length_mm": 208.0,
+      "width_mm": 220.0,
+      "thickness_mm": 16.5,
+      "holes": 16,
+      "axle": "MAN MCY13 Axle",
+      "caliper": "S-Cam Drum Brake",
+      "vehicles": "SINOTRUK SITRAK C7H / C9H Heavy Tractor",
+      "markets": [
+        "Middle East",
+        "South America",
+        "Southeast Asia"
+      ],
+      "formula": "GY-HD400",
+      "friction_mu": "0.35–0.38",
+      "certification": "IATF 16949:2016 · GB5763-2018",
+      "views": {
+        "front": "assets/products/drum/重汽汕德卡后/重汽汕德卡后-1.png",
+        "back": "assets/products/drum/重汽汕德卡后/重汽汕德卡后.png",
+        "side": "assets/products/drum/重汽汕德卡后/重汽汕德卡后.png",
+        "all": [
+          "assets/products/drum/重汽汕德卡后/重汽汕德卡后-1.png",
+          "assets/products/drum/重汽汕德卡后/重汽汕德卡后.png"
+        ]
+      }
+    }
+  ]
+}

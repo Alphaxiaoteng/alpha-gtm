@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://kooyingbrake.com/</loc>
+    <lastmod>2026-11-21T12:28:08+08:00</lastmod>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://kooyingbrake.com/assets/products/disc/29087/29087-%E5%8F%8D.JPG</image:loc>
+      <image:title>KOOYING WVA 29087 Air Disc Brake Pad Friction Face</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://kooyingbrake.com/assets/factory/raw/plant-aerial.jpeg</image:loc>
+      <image:title>Zhejiang Kooying Huzhou South Taihu Manufacturing Base</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://kooyingbrake.com/assets/factory/raw/krauss-machines-clean.jpeg</image:loc>
+      <image:title>European Krauss Brake Friction Testing Machines</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://kooyingbrake.com/catalog.html</loc>
+    <lastmod>2026-11-21T12:28:10+08:00</lastmod>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://kooyingbrake.com/assets/products/disc/29162%E5%8A%A0%E9%95%BF/29162%E5%8A%A0%E9%95%BF217%E9%95%BF%20-%E5%8F%8D.JPG</image:loc>
+      <image:title>KOOYING WVA 29162 Extended 217.5mm Air Disc Pad</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://kooyingbrake.com/assets/products/drum/19932%E6%96%AF%E5%A0%AA%E5%B0%BC%E4%BA%9A/MOT_2552.jpg</image:loc>
+      <image:title>KOOYING SCANIA 19932 Heavy Truck Drum Lining</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://kooyingbrake.com/seo/wva-29087-29162-air-disc-brake-pads.html</loc>
+    <lastmod>2026-11-21T13:13:06+08:00</lastmod>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://kooyingbrake.com/assets/products/disc/BPW8201/BPW8201-%E5%8F%8D.JPG</image:loc>
+      <image:title>KOOYING BPW 8201 ECO Disc Brake Pad</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://kooyingbrake.com/assets/products/disc/29087/29087-%E6%AD%A3.JPG</image:loc>
+      <image:title>KOOYING WVA 29087 Stamped Steel Backing Plate</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://kooyingbrake.com/seo/trailer-axle-brake-linings-bpw-meritor-fuwa.html</loc>
+    <lastmod>2026-11-21T13:13:09+08:00</lastmod>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://kooyingbrake.com/assets/products/drum/%E8%A5%BF%E5%BE%B7%E6%8B%96%E6%9E%B6BC39-1%EF%BC%88BPW11.5T%29/MOT_2521.jpg</image:loc>
+      <image:title>KOOYING BPW 11.5T BC39-1 Trailer Brake Lining</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://kooyingbrake.com/assets/products/drum/19369/MOT_2531.jpg</image:loc>
+      <image:title>KOOYING WVA 19369 4707Q Meritor Q-Plus Lining</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://kooyingbrake.com/assets/products/drum/%E5%AF%8C%E5%8D%8E%E6%A1%A516TA-302/MOT_2529.jpg</image:loc>
+      <image:title>KOOYING Fuwa 16T-302 Heavy Trailer Drum Lining</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://kooyingbrake.com/seo/heavy-duty-drum-linings-hino-howo-scania.html</loc>
+    <lastmod>2026-11-21T13:14:05+08:00</lastmod>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://kooyingbrake.com/assets/products/drum/%E6%97%A5%E9%87%8E%E5%89%8D/%E6%97%A5%E9%87%8E%E5%89%8D-1.jpg</image:loc>
+      <image:title>KOOYING HINO ZY Commercial Front Drum Lining</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://kooyingbrake.com/assets/products/drum/%E6%96%B0%E8%B1%AA%E6%B2%83A7/MOT_2634.jpg</image:loc>
+      <image:title>KOOYING SINOTRUK HOWO A7 Drum Lining</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://kooyingbrake.com/seo/friction-material-formulas-krauss-testing.html</loc>
+    <lastmod>2026-11-21T13:14:08+08:00</lastmod>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://kooyingbrake.com/assets/factory/raw/krauss-machines-clean.jpeg</image:loc>
+      <image:title>European Krauss Dynamometer Test Rigs</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://kooyingbrake.com/assets/factory/raw/iatf-16949-certificate.jpeg</image:loc>
+      <image:title>IATF 16949:2016 Quality Management Certificate</image:title>
+    </image:image>
+  </url>
+</urlset>

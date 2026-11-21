@@ -194,6 +194,9 @@ func EnsureSchemaAndSeed(ctx context.Context, database *db.DB, dataDir string) e
 	if err := seedLeads(ctx, sqlDB); err != nil {
 		return err
 	}
+	if err := seedQuotes(ctx, sqlDB); err != nil {
+		return err
+	}
 	if err := seedSEOPages(ctx, sqlDB); err != nil {
 		return err
 	}
@@ -312,6 +315,55 @@ func seedLeads(ctx context.Context, sqlDB *sql.DB) error {
 		)
 		if err != nil {
 			return fmt.Errorf("seed guanying lead %s: %w", l.ID, err)
+		}
+	}
+	return nil
+}
+
+func seedQuotes(ctx context.Context, sqlDB *sql.DB) error {
+	var count int
+	if err := sqlDB.QueryRowContext(ctx, `SELECT COUNT(1) FROM guanying_quotes`).Scan(&count); err == nil && count > 0 {
+		return nil
+	}
+	now := time.Now().UTC()
+	quotes := []Quote{
+		{
+			ID: "qt_demo_01", LeadID: "lead_sa_fleet_01", CustomerQuery: "HOWO 14-hole 220mm desert quarry",
+			ProductID: "gy_p_015", ProductCode: "GYS-126 (HOWO2)", ProductName: "中国重汽 HOWO2 刹车片 (GYS-126)",
+			Dimensions: "204.0 × 220.0 × 15 mm (14孔, 铆钉 10*18)", FormulaCode: "GY-CF-400",
+			UnitPriceUSD: "$5.10 - $5.85 / 片", UnitPriceCNY: "¥37 - ¥42 / 片", MOQ: "300 片",
+			SwapAdvice: "HOWO1 为 8 孔，HOWO2 为 14 孔，宽度同为 220mm，已锁定 14 孔重载规格。",
+			BilingualText: "【浙江冠英 Kooying 闪电报价单】GYS-126 (HOWO2) 204×220×15mm 14孔 · 配方 GY-CF-400 (400℃ 磨损 0.040mm) · FOB $5.10-$5.85/片",
+			CreatedAt: now.Add(-40 * time.Minute).Format(time.RFC3339),
+		},
+		{
+			ID: "qt_demo_02", LeadID: "lead_cl_parts_02", CustomerQuery: "BPW 19032 180mm 10 holes",
+			ProductID: "gy_p_002", ProductCode: "GYS-007 (WVA 19032 / BFMC BC/36/1)", ProductName: "BPW 车桥鼓式刹车片 19032",
+			Dimensions: "220.0 × 180.0 × 17.5/10.5 mm (10孔, 铆钉 8*15)", FormulaCode: "GY-NAO-38",
+			UnitPriceUSD: "$4.60 - $5.30 / 片", UnitPriceCNY: "¥33 - ¥38 / 片", MOQ: "200 片",
+			SwapAdvice: "BPW 常见 180mm (19032) 与 200mm (19094) 两种宽度，已按 180mm 核对确认。",
+			BilingualText: "【浙江冠英 Kooying 闪电报价单】GYS-007 (WVA 19032) 220×180×17.5/10.5mm 10孔 · E-Mark GY-NAO-38 · FOB $4.60-$5.30/片",
+			CreatedAt: now.Add(-90 * time.Minute).Format(time.RFC3339),
+		},
+		{
+			ID: "qt_demo_03", LeadID: "lead_ru_mining_04", CustomerQuery: "Hande 35T 240x220 20 holes",
+			ProductID: "gy_p_034", ProductCode: "GL-HD35T-F (汉德桥35T前)", ProductName: "汉德桥 35T 前轮刹车片",
+			Dimensions: "240.0 × 220.0 × 18.5 mm (20孔, 铆钉 8)", FormulaCode: "GY-CF-400",
+			UnitPriceUSD: "$6.80 - $7.80 / 片", UnitPriceCNY: "¥48 - ¥56 / 片", MOQ: "100 片",
+			SwapAdvice: "20 孔超宽矿用片！前桥宽 220mm，后桥宽 240mm，两者外弧均为 240mm。",
+			BilingualText: "【浙江冠英 GOOLE 闪电报价单】汉德35T前 (240×220×18.5mm 20孔) · 配方 GY-CF-400 · FOB $6.80-$7.80/片",
+			CreatedAt: now.Add(-3 * time.Hour).Format(time.RFC3339),
+		},
+	}
+	for _, q := range quotes {
+		if _, err := sqlDB.ExecContext(ctx, `INSERT INTO guanying_quotes(
+			id,lead_id,customer_query,product_id,product_code,product_name,dimensions,
+			formula_code,unit_price_usd,unit_price_cny,moq,swap_advice,bilingual_text,created_at
+		) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+			q.ID, q.LeadID, q.CustomerQuery, q.ProductID, q.ProductCode, q.ProductName,
+			q.Dimensions, q.FormulaCode, q.UnitPriceUSD, q.UnitPriceCNY, q.MOQ, q.SwapAdvice, q.BilingualText, q.CreatedAt,
+		); err != nil {
+			return fmt.Errorf("seed guanying quote %s: %w", q.ID, err)
 		}
 	}
 	return nil
