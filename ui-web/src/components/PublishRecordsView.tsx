@@ -23,6 +23,7 @@ import {
 import { canVerifyXHSCreatorBackend } from '../publishPlanReadiness';
 import { describePublishIntent, type PublishIntent } from '../publishOutcome';
 import { useUIStore } from '../store';
+import { DEMO_BADGE, demoPublishContentRecords, isDemoModeEnabled, isDemoRecordID } from '../lib/demoData';
 import { PlatformIcon } from './PlatformIcon';
 
 const attentionStatuses = new Set([
@@ -116,6 +117,8 @@ function planStatusLabel(status: string) {
 const scheduledDeletePlatforms = new Set(['douyin', 'youtube', 'tiktok', 'kuaishou', 'wechat_video', 'facebook']);
 
 function canDeleteRemoteContent(item: PublishContentRecord) {
+  // 演示行没有真实远端记录，删除只会 404。
+  if (isDemoRecordID(item.id)) return false;
   if (item.remote_state === 'scheduled') {
     return scheduledDeletePlatforms.has(item.platform_code);
   }
@@ -301,7 +304,11 @@ export function PublishRecordsView() {
   );
   const { data: manualJobs, mutate: mutateManual } = useSWR('api/publish-jobs/manual', api.getManualPublishJobs);
   const { data: records, error: recordsError, mutate: mutateRecords } = useSWR('api/publish-records', api.getPublishRecords);
-  const { data: contentRecords, error: contentRecordsError, mutate: mutateContentRecords } = useSWR('api/publish-content-records', api.getPublishContentRecords);
+  const { data: contentRecordsRaw, error: contentRecordsError, mutate: mutateContentRecords } = useSWR('api/publish-content-records', api.getPublishContentRecords);
+  // 后端还没有发布记录时补演示数据；有真实记录就完全让位。
+  // 与账号页同一开关：演示数据需要 ?demo=1 显式开启，默认如实显示空。
+  const usingDemoRecords = isDemoModeEnabled() && contentRecordsRaw !== undefined && contentRecordsRaw.length === 0;
+  const contentRecords = usingDemoRecords ? demoPublishContentRecords() : contentRecordsRaw;
   const { data: plans, error: plansError, isLoading: plansLoading, mutate: mutatePlans } = useSWR('api/publish-plans', api.getPublishPlans);
   const visibleJobs = useMemo(
     () => (filter === 'all' ? jobs : jobs?.filter((job) => attentionStatuses.has(job.status))),
@@ -418,7 +425,18 @@ export function PublishRecordsView() {
 
       <div className="ui-card overflow-hidden" data-testid="publish-content-records">
         <div className="border-b border-brand-border p-4">
-          <h4 className="text-sm font-bold text-gray-900">发布内容记录</h4>
+          <div className="flex items-center gap-2">
+            <h4 className="text-sm font-bold text-gray-900">发布内容记录</h4>
+            {usingDemoRecords && (
+              <span
+                data-testid="publish-records-demo-badge"
+                title="本机还没有发布记录，这里展示的是演示数据，不代表平台已核验发布"
+                className="rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700"
+              >
+                {DEMO_BADGE}
+              </span>
+            )}
+          </div>
           <p className="mt-1 text-xs text-gray-500">这里只显示账号、封面、标题和远端状态；最多展示最近 100 条。</p>
         </div>
         {contentRecordsError ? <p className="p-4 text-sm text-red-600">发布内容记录加载失败</p> : null}
@@ -426,14 +444,19 @@ export function PublishRecordsView() {
           <div className="divide-y divide-brand-border">
             {contentRecords.map((item) => (
               <article key={item.id} className="flex items-center gap-3 p-3">
-                <div className="h-16 w-16 shrink-0 overflow-hidden border border-brand-border bg-brand-bg">
-                  <img
-                    src={`/api/publish-content-records/${item.id}/cover`}
-                    alt=""
-                    loading="lazy"
-                    className="h-full w-full object-cover"
-                    onError={(event) => { event.currentTarget.style.visibility = 'hidden'; }}
-                  />
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden border border-brand-border bg-brand-bg">
+                  {isDemoRecordID(item.id) ? (
+                    // 演示行没有真实封面，用平台图标占位，不伪造截图。
+                    <PlatformIcon platform={item.platform_code} className="h-7 w-7 opacity-60" />
+                  ) : (
+                    <img
+                      src={`/api/publish-content-records/${item.id}/cover`}
+                      alt=""
+                      loading="lazy"
+                      className="h-full w-full object-cover"
+                      onError={(event) => { event.currentTarget.style.visibility = 'hidden'; }}
+                    />
+                  )}
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">

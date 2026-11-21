@@ -27,6 +27,16 @@ function render(responses) {
       if (name === '../store') return { useUIStore: (select) => select({ productMode: 'media', toast: { show() {} } }) };
       if (name === '../accountBindings') return { duplicateAccountBindingIDs };
       if (name === '../workspaceMode') return { platformCodesForMode };
+      // 演示数据默认关闭：这些用例断言的是「空库如实显示为空」，所以恒定返回
+      // 关闭，不引入任何演示行。
+      if (name === '../lib/demoData') {
+        return {
+          DEMO_BADGE: '演示数据',
+          DEMO_IDENTITIES: [],
+          demoAccountsFor: () => [],
+          isDemoModeEnabled: () => false,
+        };
+      }
       if (name.startsWith('./')) return { [name.slice(2)]: () => null };
       return require(name);
     },

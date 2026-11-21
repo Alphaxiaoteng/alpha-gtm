@@ -90,10 +90,9 @@ export function XHSDataDashboardView() {
     () => identities.filter((identity) => identity.enabled).slice().sort((a, b) => a.sort - b.sort || a.id - b.id),
     [identities],
   );
-  const defaultIdentity = useMemo(
-    () => sortedIdentities.find((identity) => identity.name.trim() === '浏览器1') ?? sortedIdentities[0],
-    [sortedIdentities],
-  );
+  // 默认选中第一个启用的矩阵；矩阵现在按市场命名（越南、印尼…），不再按编号，
+  // 所以不能靠名字匹配，直接取排序后的第一个。
+  const defaultIdentity = useMemo(() => sortedIdentities[0], [sortedIdentities]);
   const selectedIdentity = useMemo(
     () => sortedIdentities.find((identity) => identity.id === selectedIdentityID) ?? defaultIdentity,
     [defaultIdentity, selectedIdentityID, sortedIdentities],

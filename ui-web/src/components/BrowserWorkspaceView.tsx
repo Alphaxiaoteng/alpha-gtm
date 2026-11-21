@@ -25,6 +25,7 @@ import { api, type Account, type AccountAsset, type EgoIdentity, type EgoLoginQR
 import { duplicateAccountBindingIDs } from '../accountBindings';
 import { PlatformIcon } from './PlatformIcon';
 import { useUIStore } from '../store';
+import { DEMO_BADGE, DEMO_IDENTITIES, demoAccountsFor, isDemoModeEnabled } from '../lib/demoData';
 import { platformCodesForMode } from '../workspaceMode';
 
 export type BrowserWorkspaceSection = 'accounts' | 'fleet' | 'overview';
@@ -236,13 +237,33 @@ export function BrowserWorkspaceView({ initialSection: _initialSection = 'accoun
   const { data: sessionMonitor, mutate: mutateSessionMonitor } = useSWR('api/ego/session-monitor', api.getEgoSessionMonitor, { refreshInterval: 30_000 });
   const { data: legacyAccounts, mutate: mutateLegacyAccounts } = useSWR('api/ego/legacy-accounts', api.getEgoLegacyAccounts);
   const { data: egoProfilesData } = useSWR('api/ego/profiles', api.getEgoProfiles);
-  const identities = identityData ?? emptyIdentities;
-  const accounts = accountData ?? emptyAccounts;
+  // 演示矩阵需要显式开启（?demo=1），默认关闭：空的账号库必须如实显示为空。
+  // 开启后仍要求后端确实没有真实账号，绝不覆盖真实数据。
+  const usingDemoAccounts = isDemoModeEnabled() && accountData !== undefined && accountData.length === 0;
+  const demoIdentities = useMemo<EgoIdentity[]>(() => {
+    const real = identityData ?? [];
+    if (!usingDemoAccounts || real.length === 0) return [];
+    // 真实矩阵保留原样，演示市场追加在后；负数 id 不会和真实矩阵撞号。
+    const now = real[0].created_at;
+    return [
+      real[0],
+      ...DEMO_IDENTITIES.map((demo, index) => ({
+        id: demo.id,
+        name: demo.name,
+        enabled: true,
+        sort: 100 + index,
+        created_at: now,
+        updated_at: now,
+      })),
+    ];
+  }, [identityData, usingDemoAccounts]);
+  const identities = usingDemoAccounts ? demoIdentities : (identityData ?? emptyIdentities);
+  const accounts = usingDemoAccounts ? demoAccountsFor(identities) : (accountData ?? emptyAccounts);
   const accountDataReady = identityData !== undefined && accountData !== undefined;
   const accountDataError = Boolean(identitiesError || accountsError);
   const configurationUnavailable = !accountDataReady || accountDataError;
   const visiblePlatformCodes = useMemo(() => platformCodesForMode(platformOrder, productMode), [productMode]);
-  const modeAccounts = useMemo(() => accounts.filter((account) => visiblePlatformCodes.includes(account.platformCode)), [accounts, visiblePlatformCodes]);
+  const modeAccounts = useMemo(() => accounts.filter((account) => visiblePlatformCodes.includes(account.platformCode)), [accounts, visiblePlatformCodes, usingDemoAccounts]);
   const duplicateAccountIDs = useMemo(() => duplicateAccountBindingIDs(modeAccounts), [modeAccounts]);
   const accountAssets = accountAssetData ?? emptyAccountAssets;
   const { data: doctor, error: doctorError } = useSWR('api/ego/doctor', api.getEgoDoctor);
@@ -843,6 +864,15 @@ export function BrowserWorkspaceView({ initialSection: _initialSection = 'accoun
                       {identity.profile_id && (
                         <span className="rounded-md bg-white border border-brand-border px-2 py-0.5 text-[10px] font-semibold text-gray-600 shadow-2xs">
                           {identity.profile_name || identity.profile_id}
+                        </span>
+                      )}
+                      {usingDemoAccounts && (
+                        <span
+                          data-testid="browser-accounts-demo-badge"
+                          title="本机数据库还没有账号；TikTok 四个账号为 2026-11-21 实测数据，其余平台为演示占位"
+                          className="rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700"
+                        >
+                          {DEMO_BADGE}
                         </span>
                       )}
                     </div>

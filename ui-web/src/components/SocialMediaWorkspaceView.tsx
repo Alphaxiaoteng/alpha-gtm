@@ -69,9 +69,9 @@ export function SocialMediaWorkspaceView({ initialSection = 'video' }: { initial
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2 text-xs font-bold text-brand-fg">
               <Film className="h-4 w-4 text-brand-accent" />
-              <span>老板娘 Sophia 实拍短视频素材（TikTok @kooying.brake.fact + 抖音 · ≤60 秒）</span>
+              <span>TikTok 素材</span>
             </div>
-            <span className="text-[11px] text-brand-muted">点击播放预览 · 一键复制外贸配文发布</span>
+            <span className="text-[11px] text-brand-muted">点击预览 · 复制配文</span>
           </div>
           <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-5">
             {(realVideos ?? []).map((v) => (
