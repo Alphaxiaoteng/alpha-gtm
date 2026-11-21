@@ -197,6 +197,9 @@ func (s *Service) ensureGuanyingBots(ctx context.Context) error {
 	}
 
 	legacyIDs := []string{
+		// 上一版唯一的专家号：不在新五人群里，必须清掉，否则侧栏会同时出现
+		// 旧专家与新团队，看起来像没生效。
+		"bot_gy_gtm_growth",
 		"bot_gy_quote_expert",
 		"bot_gy_site_maintainer",
 		"bot_gy_site_operator",
@@ -275,8 +278,20 @@ func (s *Service) ensureGuanyingBots(ctx context.Context) error {
 			{"关键事实", "独立站目录 web/ 挂载在 /brand-site/index.html（135款实拍）；线上官网 https://www.kooying.com/（468个URL）；飞书 Base 通过 lark-cli 同步。"},
 			{"关键事实", "已验证 TikTok 官方矩阵：@kooying.autoparts（2423粉/48.3K赞/累计266.1万播）、@kooying.brake.fact（Sophia +8615957118669）、@kooying_judy26、@kooying.brake.lin。"},
 		},
-		"bot_gy_gtm_growth": {
+		"bot_gy_content_ops": {
 			{"关键事实", "已入库 5 条 ≤60s 老板娘 Sophia 实拍短片（ui-web/public/guanying-videos/manifest.json），可直接用于 TikTok/WhatsApp 二创与独立站背书。"},
+			{"关键事实", "TikTok 实测账号：@kooying.autoparts（2423粉/2.66M播放，2023-10 后停更）、@kooying.brake.fact（Sophia +86 159-5711-8669）、@kooying_judy26（Bio 挂官网）、@kooying.brake.lin（备用）。"},
+		},
+		"bot_gy_seo": {
+			{"关键事实", "kooying.com Sitemap 约 468 URL（产品与分类 278 / news 190 / 风电 9）；已知 16 处拼写硬伤（Trcuk/Beake/Fiction/Btake/Mercedsbenz/Trailor/Ivceo）、首页与关于页 H1=0、产品页 JSON-LD 大写 Offers 且价格为 0、llms.txt 被 <pre> 包裹。"},
+		},
+		"bot_gy_tech": {
+			{"关键事实", "台架实测：Krauss 400℃ 恒力矩厚度磨损 0.040mm（行业参照 0.085mm），失重 2.300g（参照 2.610g），摩擦系数 0.35~0.38；三大配方系列 GY-NAO-38 / GY-CF-400 / GY-STD-35。"},
+			{"关键事实", "高频换桥风险：HOWO 后桥 14 孔 vs 8 孔、Mercedes 17276 的 140mm vs 170mm 蹄铁宽度、BPW 19032 为 8 孔挂车桥专用；错孔直接导致整柜退货。"},
+		},
+		"bot_gy_data": {
+			{"关键事实", "询盘甄别口径：终端车队 / 汽配连锁 / 纯贸易商；判断依据是公司类型、询盘是否给出具体型号与数量、以及是否只问价格。"},
+			{"关键事实", "结果同步走官方 lark-cli 写飞书多维表格；本地 SQLite 是业务真源，飞书是镜像。"},
 		},
 	}
 	for botID, entries := range seedBotMemories {

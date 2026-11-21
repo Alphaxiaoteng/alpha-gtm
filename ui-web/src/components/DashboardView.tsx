@@ -1483,28 +1483,8 @@ export const DashboardView: React.FC = () => {
           {section === 'content' && !selectedSignal && (
             <section className="overflow-hidden">
               <div className="flex flex-wrap items-center gap-2 border-b border-brand-border px-3.5 py-2" role="tablist" aria-label="雷达内容类型">
-                {([
-                  ['keywords', '关键词搜索', Folder],
-                  ['videos', '视频搜索', Film],
-                  ['creators', '博主监控', UserRoundSearch],
-                ] as Array<[RadarContentView, string, React.ElementType]>).map(([id, label, Icon]) => (
-                  <button
-                    key={id}
-                    type="button"
-                    role="tab"
-                    aria-selected={contentView === id}
-                    onClick={() => {
-                      setContentView(id);
-                      if (id !== 'creators') setSelectedCreatorKey('');
-                    }}
-                    className={`flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition ${
-                      contentView === id ? 'bg-brand-surface-raised text-brand-fg shadow-xs' : 'text-brand-fg-subtle hover:bg-black/[0.04] hover:text-brand-fg'
-                    }`}
-                  >
-                    <Icon className="h-3.5 w-3.5" />
-                    {label}
-                  </button>
-                ))}
+                {/* 关键词搜索 / 视频搜索 / 博主监控 三个切换已去掉：内容统一在热榜里展示，
+                    不再要求用户先选一种视图。 */}
                 {contentView === 'creators' ? (
                   <div className="ml-auto flex items-center gap-1 rounded-md border border-brand-border p-0.5" role="tablist" aria-label="博主监控子视图">
                     {([

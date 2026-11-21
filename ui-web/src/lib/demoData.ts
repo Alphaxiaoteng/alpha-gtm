@@ -151,28 +151,28 @@ const DEMO_ACCOUNTS: DemoAccountSpec[] = [
   // —— 其余市场：每个矩阵固定 4 个平台，TikTok / YouTube / Facebook / Instagram，
   // 与越南的账号数一致，也覆盖实际投放的四个主力渠道。 ——
   { id: -1101, identityID: -9001, platformCode: 'tiktok', name: 'kooying.indonesia', identifier: '@kooying.id', avatar: LOGO, remark: 'TikTok · 演示', measured: false },
-  { id: -1102, identityID: -9001, platformCode: 'youtube', name: 'Kooying Parts Indonesia', identifier: '演示占位', avatar: LOGO, remark: 'YouTube · 演示', measured: false },
-  { id: -1103, identityID: -9001, platformCode: 'facebook', name: 'Kooying Rem Indonesia', identifier: '演示占位', avatar: LOGO, remark: 'Facebook 主页 · 演示', measured: false },
+  { id: -1102, identityID: -9001, platformCode: 'youtube', name: 'Kooying Parts Indonesia', identifier: '@kooying', avatar: LOGO, remark: 'YouTube · 演示', measured: false },
+  { id: -1103, identityID: -9001, platformCode: 'facebook', name: 'Kooying Rem Indonesia', identifier: '@kooying', avatar: LOGO, remark: 'Facebook 主页 · 演示', measured: false },
   { id: -1104, identityID: -9001, platformCode: 'instagram', name: 'kooying.indonesia', identifier: '@kooying.indonesia', avatar: LOGO, remark: 'Instagram · 演示', measured: false },
 
   { id: -1201, identityID: -9002, platformCode: 'tiktok', name: 'kooying.arabia', identifier: '@kooying.arabia', avatar: LOGO, remark: 'TikTok · 演示', measured: false },
-  { id: -1202, identityID: -9002, platformCode: 'youtube', name: 'Kooying Middle East', identifier: '演示占位', avatar: LOGO, remark: 'YouTube · 演示', measured: false },
-  { id: -1203, identityID: -9002, platformCode: 'facebook', name: 'Kooying Middle East', identifier: '演示占位', avatar: LOGO, remark: 'Facebook 主页 · 演示', measured: false },
+  { id: -1202, identityID: -9002, platformCode: 'youtube', name: 'Kooying Middle East', identifier: '@kooying', avatar: LOGO, remark: 'YouTube · 演示', measured: false },
+  { id: -1203, identityID: -9002, platformCode: 'facebook', name: 'Kooying Middle East', identifier: '@kooying', avatar: LOGO, remark: 'Facebook 主页 · 演示', measured: false },
   { id: -1204, identityID: -9002, platformCode: 'instagram', name: 'kooying.me', identifier: '@kooying.me', avatar: LOGO, remark: 'Instagram · 演示', measured: false },
 
   { id: -1301, identityID: -9003, platformCode: 'tiktok', name: 'kooying.brasil', identifier: '@kooying.brasil', avatar: LOGO, remark: 'TikTok · 演示', measured: false },
-  { id: -1302, identityID: -9003, platformCode: 'youtube', name: 'Kooying Brasil', identifier: '演示占位', avatar: LOGO, remark: 'YouTube · 演示', measured: false },
-  { id: -1303, identityID: -9003, platformCode: 'facebook', name: 'Kooying Brasil', identifier: '演示占位', avatar: LOGO, remark: 'Facebook 主页 · 演示', measured: false },
+  { id: -1302, identityID: -9003, platformCode: 'youtube', name: 'Kooying Brasil', identifier: '@kooying', avatar: LOGO, remark: 'YouTube · 演示', measured: false },
+  { id: -1303, identityID: -9003, platformCode: 'facebook', name: 'Kooying Brasil', identifier: '@kooying', avatar: LOGO, remark: 'Facebook 主页 · 演示', measured: false },
   { id: -1304, identityID: -9003, platformCode: 'instagram', name: 'kooying.brasil', identifier: '@kooying.brasil', avatar: LOGO, remark: 'Instagram · 演示', measured: false },
 
   { id: -1401, identityID: -9004, platformCode: 'tiktok', name: 'kooying.ng', identifier: '@kooying.ng', avatar: LOGO, remark: 'TikTok · 演示', measured: false },
-  { id: -1402, identityID: -9004, platformCode: 'youtube', name: 'Kooying Nigeria', identifier: '演示占位', avatar: LOGO, remark: 'YouTube · 演示', measured: false },
-  { id: -1403, identityID: -9004, platformCode: 'facebook', name: 'Kooying Nigeria', identifier: '演示占位', avatar: LOGO, remark: 'Facebook 主页 · 演示', measured: false },
+  { id: -1402, identityID: -9004, platformCode: 'youtube', name: 'Kooying Nigeria', identifier: '@kooying', avatar: LOGO, remark: 'YouTube · 演示', measured: false },
+  { id: -1403, identityID: -9004, platformCode: 'facebook', name: 'Kooying Nigeria', identifier: '@kooying', avatar: LOGO, remark: 'Facebook 主页 · 演示', measured: false },
   { id: -1404, identityID: -9004, platformCode: 'instagram', name: 'kooying.ng', identifier: '@kooying.ng', avatar: LOGO, remark: 'Instagram · 演示', measured: false },
 
   { id: -1501, identityID: -9005, platformCode: 'tiktok', name: 'kooying.russia', identifier: '@kooying.ru', avatar: LOGO, remark: 'TikTok · 演示', measured: false },
-  { id: -1502, identityID: -9005, platformCode: 'youtube', name: 'Kooying Russia', identifier: '演示占位', avatar: LOGO, remark: 'YouTube · 演示', measured: false },
-  { id: -1503, identityID: -9005, platformCode: 'facebook', name: 'Kooying Russia', identifier: '演示占位', avatar: LOGO, remark: 'Facebook 主页 · 演示', measured: false },
+  { id: -1502, identityID: -9005, platformCode: 'youtube', name: 'Kooying Russia', identifier: '@kooying', avatar: LOGO, remark: 'YouTube · 演示', measured: false },
+  { id: -1503, identityID: -9005, platformCode: 'facebook', name: 'Kooying Russia', identifier: '@kooying', avatar: LOGO, remark: 'Facebook 主页 · 演示', measured: false },
   { id: -1504, identityID: -9005, platformCode: 'instagram', name: 'kooying.ru', identifier: '@kooying.ru', avatar: LOGO, remark: 'Instagram · 演示', measured: false },
 ];
 
@@ -215,7 +215,7 @@ function toAccount(spec: DemoAccountSpec, identityId: number): Account {
     // 标成 platform_fallback，免得被读成「从平台观察到」。
     avatarSource: spec.avatar ? (spec.measured ? 'observed' : 'platform_fallback') : undefined,
     accountIdentifier: spec.identifier,
-    loginState: spec.measured ? 'logged_in' : 'unknown',
+    loginState: 'logged_in',
     loginMode: 'browser_profile_session',
     authMethod: 'unknown',
     remark: spec.remark,
