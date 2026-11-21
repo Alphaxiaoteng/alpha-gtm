@@ -131,27 +131,27 @@ const DEMO_ACCOUNTS: DemoAccountSpec[] = [
   },
 
   // —— 印尼：东南亚主力，TikTok + Facebook ——
-  { id: -1101, identityID: -9001, platformCode: 'tiktok', name: 'kooying.indonesia', identifier: '@kooying.id', avatar: '/demo/kooying-logo.png', remark: '印尼语号 · 演示', measured: false },
-  { id: -1102, identityID: -9001, platformCode: 'meta', name: 'Kooying Rem Indonesia', identifier: '演示占位', avatar: '/demo/kooying-logo.png', remark: 'Meta 主页 · 演示', measured: false },
-  { id: -1103, identityID: -9001, platformCode: 'youtube', name: 'Kooying Parts ID', identifier: '演示占位', avatar: '/demo/kooying-logo.png', remark: 'YouTube 频道 · 演示', measured: false },
+  { id: -1101, identityID: -9001, platformCode: 'tiktok', name: 'kooying.indonesia', identifier: '@kooying.id', avatar: '/demo/kooying-logo-square.jpg', remark: '印尼语号 · 演示', measured: false },
+  { id: -1102, identityID: -9001, platformCode: 'meta', name: 'Kooying Rem Indonesia', identifier: '演示占位', avatar: '/demo/kooying-logo-square.jpg', remark: 'Meta 主页 · 演示', measured: false },
+  { id: -1103, identityID: -9001, platformCode: 'youtube', name: 'Kooying Parts ID', identifier: '演示占位', avatar: '/demo/kooying-logo-square.jpg', remark: 'YouTube 频道 · 演示', measured: false },
 
   // —— 沙特：中东高温市场，主打矿山长坡配方 ——
-  { id: -1201, identityID: -9002, platformCode: 'meta', name: 'Kooying Middle East', identifier: '演示占位', avatar: '/demo/kooying-logo.png', remark: 'Meta 主页 · 演示', measured: false },
-  { id: -1202, identityID: -9002, platformCode: 'x', name: 'kooying_gcc', identifier: '@kooying_gcc', avatar: '/demo/kooying-logo.png', remark: 'X 帐号 · 演示', measured: false },
-  { id: -1203, identityID: -9002, platformCode: 'youtube', name: 'Kooying GCC', identifier: '演示占位', avatar: '/demo/kooying-logo.png', remark: 'YouTube 频道 · 演示', measured: false },
+  { id: -1201, identityID: -9002, platformCode: 'meta', name: 'Kooying Middle East', identifier: '演示占位', avatar: '/demo/kooying-logo-square.jpg', remark: 'Meta 主页 · 演示', measured: false },
+  { id: -1202, identityID: -9002, platformCode: 'x', name: 'kooying_gcc', identifier: '@kooying_gcc', avatar: '/demo/kooying-logo-square.jpg', remark: 'X 帐号 · 演示', measured: false },
+  { id: -1203, identityID: -9002, platformCode: 'youtube', name: 'Kooying GCC', identifier: '演示占位', avatar: '/demo/kooying-logo-square.jpg', remark: 'YouTube 频道 · 演示', measured: false },
 
   // —— 巴西：南美，葡语 ——
-  { id: -1301, identityID: -9003, platformCode: 'tiktok', name: 'kooying.brasil', identifier: '@kooying.brasil', avatar: '/demo/kooying-logo.png', remark: 'TikTok · 演示', measured: false },
-  { id: -1302, identityID: -9003, platformCode: 'meta', name: 'Kooying Brasil', identifier: '演示占位', avatar: '/demo/kooying-logo.png', remark: 'Meta 主页 · 演示', measured: false },
-  { id: -1303, identityID: -9003, platformCode: 'youtube', name: 'Kooying Brasil', identifier: '演示占位', avatar: '/demo/kooying-logo.png', remark: 'YouTube 频道 · 演示', measured: false },
+  { id: -1301, identityID: -9003, platformCode: 'tiktok', name: 'kooying.brasil', identifier: '@kooying.brasil', avatar: '/demo/kooying-logo-square.jpg', remark: 'TikTok · 演示', measured: false },
+  { id: -1302, identityID: -9003, platformCode: 'meta', name: 'Kooying Brasil', identifier: '演示占位', avatar: '/demo/kooying-logo-square.jpg', remark: 'Meta 主页 · 演示', measured: false },
+  { id: -1303, identityID: -9003, platformCode: 'youtube', name: 'Kooying Brasil', identifier: '演示占位', avatar: '/demo/kooying-logo-square.jpg', remark: 'YouTube 频道 · 演示', measured: false },
 
   // —— 尼日利亚：非洲西海岸 ——
-  { id: -1401, identityID: -9004, platformCode: 'meta', name: 'Kooying Nigeria', identifier: '演示占位', avatar: '/demo/kooying-logo.png', remark: 'Meta 主页 · 演示', measured: false },
-  { id: -1402, identityID: -9004, platformCode: 'tiktok', name: 'kooying.ng', identifier: '@kooying.ng', avatar: '/demo/kooying-logo.png', remark: 'TikTok · 演示', measured: false },
+  { id: -1401, identityID: -9004, platformCode: 'meta', name: 'Kooying Nigeria', identifier: '演示占位', avatar: '/demo/kooying-logo-square.jpg', remark: 'Meta 主页 · 演示', measured: false },
+  { id: -1402, identityID: -9004, platformCode: 'tiktok', name: 'kooying.ng', identifier: '@kooying.ng', avatar: '/demo/kooying-logo-square.jpg', remark: 'TikTok · 演示', measured: false },
 
   // —— 俄罗斯：俄语区，HOWO / Shacman 为主 ——
-  { id: -1501, identityID: -9005, platformCode: 'youtube', name: 'Kooying Russia', identifier: '演示占位', avatar: '/demo/kooying-logo.png', remark: 'YouTube 频道 · 演示', measured: false },
-  { id: -1502, identityID: -9005, platformCode: 'meta', name: 'Kooying Russia', identifier: '演示占位', avatar: '/demo/kooying-logo.png', remark: 'Meta 主页 · 演示', measured: false },
+  { id: -1501, identityID: -9005, platformCode: 'youtube', name: 'Kooying Russia', identifier: '演示占位', avatar: '/demo/kooying-logo-square.jpg', remark: 'YouTube 频道 · 演示', measured: false },
+  { id: -1502, identityID: -9005, platformCode: 'meta', name: 'Kooying Russia', identifier: '演示占位', avatar: '/demo/kooying-logo-square.jpg', remark: 'Meta 主页 · 演示', measured: false },
 ];
 
 /**
