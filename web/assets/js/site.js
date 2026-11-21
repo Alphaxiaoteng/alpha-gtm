@@ -524,17 +524,18 @@
         statusBadge.textContent = "Dispatching to AlphaGTM Radar...";
       }
       try {
+        const apiBase =
+          window.location && window.location.port === "17422"
+            ? window.location.origin
+            : GTM_API_BASE;
         const leadPayload = {
-          source: "kooying-brand-website",
           company,
-          contact,
-          market,
-          query,
-          quantity: qty,
-          matched_codes: topMatches.map((m) => m.wva),
-          notes,
+          country: market,
+          channel: "KOOYING 品牌独立站 (/brand-site)",
+          inquiry_text: `${query} · Qty: ${qty} sets · Contact: ${contact || "N/A"}${notes ? " · " + notes : ""}`.trim(),
+          seo_page_id: "seo_wva29087_disc",
         };
-        const resp = await fetch(`${GTM_API_BASE}/api/guanying/leads`, {
+        const resp = await fetch(`${apiBase}/api/guanying/leads`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(leadPayload),

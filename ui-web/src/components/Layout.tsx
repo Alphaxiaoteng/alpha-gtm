@@ -4,7 +4,7 @@ import { prefetchView } from '../lib/routePrefetch';
 import { BUILTIN_ALPHA_AGENT_ID } from '../lib/botInbox';
 import useSWR from 'swr';
 import { api, setToken } from '../api';
-import { Activity, BarChart3, BookOpen, Bot, CheckCircle, ChevronDown, ChevronRight, Database, Film, FolderOpen, PanelLeftOpen, Radio, Settings, Sparkles, UserRoundSearch, XCircle, type LucideIcon } from 'lucide-react';
+import { Activity, BarChart3, Bot, CheckCircle, ChevronDown, ChevronRight, Film, FolderOpen, Globe, PanelLeftOpen, Radio, Settings, Sparkles, UserRoundSearch, XCircle, type LucideIcon } from 'lucide-react';
 import { applySkin, getStoredSkin, type SkinId } from '../themes';
 import { LocalLoadingState } from './LocalLoadingState';
 import { AgentContextDrawer, AGENT_CONTEXT_OPEN_EVENT, type AgentContextSelection } from './AgentContextDrawer';
@@ -33,35 +33,35 @@ interface Workspace {
 const WORKSPACES: Workspace[] = [
   {
     id: 'crawler',
-    label: '产品与选型数据库',
-    icon: Database,
+    label: '识片报价与防漏单',
+    icon: Sparkles,
     defaultTab: 'crawler',
     matches: ['crawler'],
   },
   {
     id: 'studio',
-    label: 'SEO 独立站建站',
-    icon: Sparkles,
+    label: '官网 SEO 诊断与优化',
+    icon: Globe,
     defaultTab: 'studio',
     matches: ['studio'],
   },
   {
+    id: 'monitor',
+    label: '站点维护与巡检',
+    icon: Activity,
+    defaultTab: 'monitor',
+    matches: ['monitor'],
+  },
+  {
     id: 'social',
-    label: '内容运营',
+    label: '短视频与内容运营',
     icon: FolderOpen,
     defaultTab: 'social-media',
     matches: ['social-media', 'contents', 'templates'],
   },
   {
-    id: 'knowledge',
-    label: '品牌知识库',
-    icon: BookOpen,
-    defaultTab: 'knowledge',
-    matches: ['knowledge'],
-  },
-  {
     id: 'dashboard',
-    label: '数据与飞书 CLI',
+    label: '数据与飞书协同',
     icon: BarChart3,
     defaultTab: 'dashboard',
     matches: ['dashboard'],
@@ -359,7 +359,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }
                   : 'text-brand-muted hover:text-brand-fg'
               }`}
             >
-              <Database
+              <Sparkles
                 aria-hidden="true"
                 className={`h-3.5 w-3.5 transition-transform duration-200 ${activeTab !== 'bot' ? 'scale-105 text-brand-fg' : 'text-brand-muted'}`}
                 strokeWidth={activeTab !== 'bot' ? 2 : 1.75}

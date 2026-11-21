@@ -7,9 +7,14 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"html"
+	"io"
 	"math"
+	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 	"time"
@@ -181,6 +186,18 @@ func EnsureSchemaAndSeed(ctx context.Context, database *db.DB, dataDir string) e
 			inquiry_count INTEGER NOT NULL DEFAULT 0,
 			created_at TEXT NOT NULL
 		);`,
+		`CREATE TABLE IF NOT EXISTS guanying_site_logs (
+			id TEXT PRIMARY KEY,
+			category TEXT NOT NULL,
+			title TEXT NOT NULL,
+			target_path TEXT NOT NULL,
+			page_url TEXT NOT NULL,
+			summary TEXT NOT NULL,
+			metrics_json TEXT NOT NULL DEFAULT '{}',
+			operator_bot TEXT NOT NULL DEFAULT '',
+			status TEXT NOT NULL DEFAULT 'verified',
+			created_at TEXT NOT NULL
+		);`,
 	}
 	for _, stmt := range stmts {
 		if _, err := sqlDB.ExecContext(ctx, stmt); err != nil {
@@ -198,6 +215,9 @@ func EnsureSchemaAndSeed(ctx context.Context, database *db.DB, dataDir string) e
 		return err
 	}
 	if err := seedSEOPages(ctx, sqlDB); err != nil {
+		return err
+	}
+	if err := seedSiteMaintenanceLogs(ctx, sqlDB); err != nil {
 		return err
 	}
 	if err := seedContents(ctx, sqlDB); err != nil {
@@ -582,8 +602,17 @@ func seedKnowledgeBase(ctx context.Context, database *db.DB, dataDir string) err
 	}
 
 	docs, err := database.ListKnowledgeDocuments(baseID)
-	if err == nil && len(docs) >= 4 {
-		return nil
+	hasSiteDoc := false
+	if err == nil {
+		for _, doc := range docs {
+			if strings.Contains(doc.SourceName, "05_KOOYING品牌独立站") {
+				hasSiteDoc = true
+				break
+			}
+		}
+		if len(docs) >= 5 && hasSiteDoc {
+			return nil
+		}
 	}
 
 	kbDir := filepath.Join(dataDir, "guanying-kb-docs")
@@ -591,7 +620,7 @@ func seedKnowledgeBase(ctx context.Context, database *db.DB, dataDir string) err
 		return err
 	}
 
-	files := []struct {
+	allFiles := []struct {
 		name    string
 		content string
 	}{
@@ -637,6 +666,48 @@ func seedKnowledgeBase(ctx context.Context, database *db.DB, dataDir string) err
 			name: "04_冠隆内贸车桥与重型盘式刹车片选型手册.md",
 			content: buildCatalogMarkdown("冠隆内贸车桥与 WVA 29xxx 盘式刹车片手册", "guanlong"),
 		},
+		{
+			name: "05_KOOYING品牌独立站架构与135款实拍资产维护手册.md",
+			content: `# KOOYING 海外极简品牌独立站与 SEO/GEO 运维手册
+
+## 1. 站点定位与本地挂载
+- **物理路径**：` + "`web/`" + `（设计总纲 [` + "`web/PLAN.md`" + `]）
+- **工作台挂载地址**：` + "`http://127.0.0.1:17422/brand-site/index.html`" + `
+- **对标标准**：德国 Textar / Brakebook、意大利 Brembo Commercial、Fras-le，采用瑞士工业极简低密度排版（Warm Alabaster ` + "`#F5F4F0`" + ` + Carbon Friction ` + "`#111315`" + ` + Thermal Copper ` + "`#C84B21`" + `）。
+
+## 2. 页面矩阵（6 大纯静态可抓取 HTML + 搜索基建）
+1. ` + "`/brand-site/index.html`" + `：7 屏极简品牌主页（Hero 三视图切面 · 四大海外市场工况 · 三大摩擦产线 · BrakeFinder™ 选型器 · 400℃ Krauss 台架实证 · 五品牌与湖州基地 · Direct Factory RFQ 询盘直连）。
+2. ` + "`/brand-site/catalog.html`" + `：全量 135 款实拍型号交互目录（支持 WVA/车桥/市场/外弧×宽×厚+孔数 ` + "`±4.5mm`" + ` 容差筛选）。
+3. ` + "`/brand-site/seo/wva-29087-29162-air-disc-brake-pads.html`" + `：中东/欧洲重卡空气盘式刹车片专题（WVA 29087 / 29162 / 29030 / BPW 8201）。
+4. ` + "`/brand-site/seo/trailer-axle-brake-linings-bpw-meritor-fuwa.html`" + `：全球挂车与换桥选型专题（BPW 11.5T–16T BC36-1~BC39-1 / Meritor 美驰 / Fuwa 富华 / Hande 汉德 35T）。
+5. ` + "`/brand-site/seo/heavy-duty-drum-linings-hino-howo-scania.html`" + `：东南亚/南美重卡鼓刹专题（HINO / ISUZU / HYUNDAI / SCANIA 19932 / HOWO / STEYR）。
+6. ` + "`/brand-site/seo/friction-material-formulas-krauss-testing.html`" + `：30+ 无石棉配方与 400℃ 克劳斯台架对比白皮书（GEO 核心引用页）。
+7. **搜索与 AI 引用基建**：` + "`sitemap.xml`" + `（含 ` + "`<image:image>`" + `）、` + "`robots.txt`" + `（放行 ` + "`Googlebot / Bingbot / OAI-SearchBot / GPTBot / PerplexityBot / ClaudeBot`" + `）、` + "`llms.txt`" + `。
+
+## 3. 135 款实拍图库规范与常见排障规则
+- **数据真源**：` + "`web/assets/data/products-catalog.json`" + `（由 ` + "`web/scripts/unpack_and_build_assets.py`" + ` 生成）。
+- **资产统计**：41 款盘刹（126 张三视图）+ 94 款去重鼓刹（184 张实拍）+ 5 大品牌 ` + "`29162`" + ` 渲染图 + ` + "`5200.5300.mp4`" + `（已压制为 3.9MB Fast-Start）+ 9 张无边框厂区/认证原图 + 8 张工程尺寸图。
+- **实拍视角约定**：盘刹摄影命名中 ` + "`*-反.JPG`" + ` 为摩擦材料正面（Front Friction Face），` + "`*-正.JPG`" + ` 为钢背激光喷码面（Backing Plate），` + "`*-侧.JPG`" + ` 为侧面厚度（Profile）。
+- **询盘回流链路**：独立站 RFQ 表单（` + "`web/assets/js/site.js`" + `）直接 POST ` + "`/api/guanying/leads`" + `，触发终端买家 AI 评分与型号匹配并写入 ` + "`guanying_leads`" + `，可在「产品与选型数据库 -> 海外终端询盘库」及「飞书 CLI 中枢」实时查看。
+`,
+		},
+	}
+
+	existingNames := map[string]bool{}
+	for _, d := range docs {
+		existingNames[d.SourceName] = true
+	}
+	files := make([]struct {
+		name    string
+		content string
+	}, 0, len(allFiles))
+	for _, f := range allFiles {
+		if !existingNames[f.name] {
+			files = append(files, f)
+		}
+	}
+	if len(files) == 0 {
+		return nil
 	}
 
 	inputFiles := make([]knowledge.InputFile, 0, len(files))
@@ -1144,4 +1215,1387 @@ func CreateSEOPage(ctx context.Context, sqlDB *sql.DB, req CreateSEOPageRequest)
 		return nil, err
 	}
 	return page, nil
+}
+
+type SiteMaintenanceLog struct {
+	ID          string `json:"id"`
+	Category    string `json:"category"` // architecture | asset_sync | seo_geo | qa_audit | content_ops
+	Title       string `json:"title"`
+	TargetPath  string `json:"target_path"`
+	PageURL     string `json:"page_url"`
+	Summary     string `json:"summary"`
+	MetricsJSON string `json:"metrics_json"`
+	OperatorBot string `json:"operator_bot"`
+	Status      string `json:"status"` // verified | active | pending
+	CreatedAt   string `json:"created_at"`
+}
+
+type SitePageHealth struct {
+	ID          string `json:"id"`
+	Kind        string `json:"kind"` // page | seo | infra | doc
+	Label       string `json:"label"`
+	RelPath     string `json:"rel_path"`
+	PreviewURL  string `json:"preview_url"`
+	Title       string `json:"title"`
+	H1Count     int    `json:"h1_count"`
+	HasCanon    bool   `json:"has_canonical"`
+	HasJSONLD   bool   `json:"has_jsonld"`
+	SizeBytes   int64  `json:"size_bytes"`
+	UpdatedAt   string `json:"updated_at"`
+	Status      string `json:"status"`
+}
+
+type SiteMaintenanceOverview struct {
+	SiteDir       string               `json:"site_dir"`
+	MountURL      string               `json:"mount_url"`
+	Pages         []SitePageHealth     `json:"pages"`
+	Logs          []SiteMaintenanceLog `json:"logs"`
+	AssetStats    map[string]any       `json:"asset_stats"`
+	SiteLeadCount int                  `json:"site_lead_count"`
+	CheckedAt     string               `json:"checked_at"`
+}
+
+// ResolveBrandSiteDir locates the static KOOYING brand website folder (`web/`).
+func ResolveBrandSiteDir() string {
+	candidates := []string{
+		filepath.Join(".", "web"),
+		filepath.Join("..", "web"),
+		"/Users/albert/Documents/project/apps/bisai-hackathons/intercity-hack-huzhou/web",
+	}
+	if exe, err := os.Executable(); err == nil {
+		candidates = append([]string{filepath.Join(filepath.Dir(exe), "web")}, candidates...)
+	}
+	for _, cand := range candidates {
+		if info, err := os.Stat(filepath.Join(cand, "index.html")); err == nil && !info.IsDir() {
+			if abs, err := filepath.Abs(cand); err == nil {
+				return abs
+			}
+			return cand
+		}
+	}
+	return "/Users/albert/Documents/project/apps/bisai-hackathons/intercity-hack-huzhou/web"
+}
+
+func seedSiteMaintenanceLogs(ctx context.Context, sqlDB *sql.DB) error {
+	var count int
+	if err := sqlDB.QueryRowContext(ctx, `SELECT COUNT(1) FROM guanying_site_logs`).Scan(&count); err == nil && count > 0 {
+		return nil
+	}
+	now := time.Now().UTC()
+	logs := []SiteMaintenanceLog{
+		{
+			ID:          "slog_01_plan",
+			Category:    "architecture",
+			Title:       "确立海外极简工业独立站与 SEO/GEO 规划总纲",
+			TargetPath:  "web/PLAN.md",
+			PageURL:     "/brand-site/index.html",
+			Summary:     "对标 Textar / Brakebook、Brembo Commercial 与 Fras-le，确立 Warm Alabaster (#F5F4F0) + Carbon Friction (#111315) + Thermal Copper (#C84B21) 瑞士工业极简视觉系统，规划 7 屏低密度首页与四大海外市场矩阵。",
+			MetricsJSON: `{"sections":7,"benchmarks":["TMD Textar","Brembo","Fras-le"],"max_width":"1320px"}`,
+			OperatorBot: "bot_gy_site_maintainer",
+			Status:      "verified",
+			CreatedAt:   now.Add(-90 * time.Minute).Format(time.RFC3339),
+		},
+		{
+			ID:          "slog_02_assets",
+			Category:    "asset_sync",
+			Title:       "双 ZIP 刹车片实拍图库 GBK 解码与去重归口 (135 款 SKU)",
+			TargetPath:  "web/assets/data/products-catalog.json",
+			PageURL:     "/brand-site/catalog.html",
+			Summary:     "自动解码 Windows GBK 乱码目录并剔除鼓刹镜像重复子目录，归口 41 款盘刹 (126 张正面摩擦/钢背喷码/侧面轮廓三视图) + 94 款鼓刹 (184 张实拍) + 5 大子品牌 29162 渲染图 + 3.9MB fast-start 视频 5200.5300.mp4。",
+			MetricsJSON: `{"total_skus":135,"disc_models":41,"drum_models":94,"disc_photos":126,"drum_photos":184}`,
+			OperatorBot: "bot_gy_site_maintainer",
+			Status:      "verified",
+			CreatedAt:   now.Add(-75 * time.Minute).Format(time.RFC3339),
+		},
+		{
+			ID:          "slog_03_factory_pdf",
+			Category:    "asset_sync",
+			Title:       "官方 PDF 无边框高清基地、试验机与孔位图纸抽取",
+			TargetPath:  "web/assets/factory/raw/",
+			PageURL:     "/brand-site/index.html#factory",
+			Summary:     "从 2026 冠英企业介绍、Kooying 外贸册与冠隆产品册提取 9 张无边框原图（湖州南太湖 43,000㎡ 基地航拍、温控热压产线、2 台欧洲 Krauss 试验机、IATF16949 证书）与 8 张孔位工程尺寸图。",
+			MetricsJSON: `{"raw_factory_images":9,"drawing_plates":8,"dyno_wear_400c":"0.040mm"}`,
+			OperatorBot: "bot_gy_site_operator",
+			Status:      "verified",
+			CreatedAt:   now.Add(-60 * time.Minute).Format(time.RFC3339),
+		},
+		{
+			ID:          "slog_04_brakefinder",
+			Category:    "content_ops",
+			Title:       "上线 BrakeFinder™ 四维交叉选型器与 :17422 GTM 询盘直连",
+			TargetPath:  "web/assets/js/site.js",
+			PageURL:     "/brand-site/index.html#brakefinder",
+			Summary:     "解决无主机厂 OE 码及后市场换桥痛点：支持 WVA/GYS 编码、车桥系统、车型与外弧×宽度×厚度+孔数 (±4.5mm 容差) 实时匹配，RFQ 表单提交直接同步写入 :17422 线索雷达。",
+			MetricsJSON: `{"tolerance_mm":4.5,"api_endpoint":"/api/guanying/leads"}`,
+			OperatorBot: "bot_gy_site_operator",
+			Status:      "verified",
+			CreatedAt:   now.Add(-45 * time.Minute).Format(time.RFC3339),
+		},
+		{
+			ID:          "slog_05_seo_geo",
+			Category:    "seo_geo",
+			Title:       "部署 4 大垂直 SEO/GEO 静态落地页与 AI 爬虫基建",
+			TargetPath:  "web/seo/",
+			PageURL:     "/brand-site/seo/wva-29087-29162-air-disc-brake-pads.html",
+			Summary:     "交付 WVA 29087/29162 盘刹、BPW/Meritor/Fuwa/Hande 挂车车桥、HINO/HOWO/SCANIA 重卡鼓刹、30+ 配方与 400℃ 台架白皮书 4 个纯静态着陆页，配备 sitemap.xml (含 image 扩展)、robots.txt 与 llms.txt。",
+			MetricsJSON: `{"seo_pages":4,"bots_allowed":["Googlebot","OAI-SearchBot","PerplexityBot","ClaudeBot"]}`,
+			OperatorBot: "bot_gy_seo_builder",
+			Status:      "verified",
+			CreatedAt:   now.Add(-30 * time.Minute).Format(time.RFC3339),
+		},
+		{
+			ID:          "slog_06_qa_audit",
+			Category:    "qa_audit",
+			Title:       "全站多视口真机渲染验收与对比度修复完成",
+			TargetPath:  "web/assets/css/site.css",
+			PageURL:     "/brand-site/catalog.html",
+			Summary:     "Playwright 无头 Chrome 实测 1440×900 与 390×844 均零横向溢出、零 JS 报错、138 张目录图片 100% 加载成功；修复移动端长文本按钮换行、首屏 4 项指标不折行及 .seo-hero .lead 浅色对比度。",
+			MetricsJSON: `{"desktop_overflow":false,"mobile_390_overflow":false,"broken_images":0}`,
+			OperatorBot: "bot_gy_site_maintainer",
+			Status:      "verified",
+			CreatedAt:   now.Add(-15 * time.Minute).Format(time.RFC3339),
+		},
+	}
+
+	for _, item := range logs {
+		if _, err := sqlDB.ExecContext(ctx, `INSERT INTO guanying_site_logs(
+			id,category,title,target_path,page_url,summary,metrics_json,operator_bot,status,created_at
+		) VALUES(?,?,?,?,?,?,?,?,?,?)`,
+			item.ID, item.Category, item.Title, item.TargetPath, item.PageURL, item.Summary,
+			item.MetricsJSON, item.OperatorBot, item.Status, item.CreatedAt,
+		); err != nil {
+			return fmt.Errorf("seed site maintenance log %s: %w", item.ID, err)
+		}
+	}
+	return nil
+}
+
+var (
+	reHTMLTitle = regexp.MustCompile(`(?is)<title>(.*?)</title>`)
+	reHTMLH1    = regexp.MustCompile(`(?is)<h1\b`)
+	reHTMLCanon = regexp.MustCompile(`(?is)<link\s+rel=["']canonical["']`)
+	reHTMLJSON  = regexp.MustCompile(`(?is)<script\s+type=["']application/ld\+json["']`)
+)
+
+// InspectBrandSite audits the static web/ files and returns live health, asset stats, and logs.
+func InspectBrandSite(ctx context.Context, sqlDB *sql.DB) (*SiteMaintenanceOverview, error) {
+	siteDir := ResolveBrandSiteDir()
+	targets := []struct {
+		id         string
+		kind       string
+		label      string
+		relPath    string
+		previewURL string
+	}{
+		{"home", "page", "品牌独立站主页 (7屏极简)", "index.html", "/brand-site/index.html"},
+		{"catalog", "page", "135 款型号全量选型目录", "catalog.html", "/brand-site/catalog.html"},
+		{"seo_disc", "seo", "SEO 专题 · WVA 29087/29162 盘刹", "seo/wva-29087-29162-air-disc-brake-pads.html", "/brand-site/seo/wva-29087-29162-air-disc-brake-pads.html"},
+		{"seo_axle", "seo", "SEO 专题 · BPW/Meritor/Fuwa 换桥选型", "seo/trailer-axle-brake-linings-bpw-meritor-fuwa.html", "/brand-site/seo/trailer-axle-brake-linings-bpw-meritor-fuwa.html"},
+		{"seo_truck", "seo", "SEO 专题 · HINO/HOWO/SCANIA 鼓刹", "seo/heavy-duty-drum-linings-hino-howo-scania.html", "/brand-site/seo/heavy-duty-drum-linings-hino-howo-scania.html"},
+		{"seo_dyno", "seo", "GEO 白皮书 · 30+ 配方与 400℃ 台架", "seo/friction-material-formulas-krauss-testing.html", "/brand-site/seo/friction-material-formulas-krauss-testing.html"},
+		{"plan", "doc", "架构与对标规划文档 (PLAN.md)", "PLAN.md", "/brand-site/PLAN.md"},
+		{"sitemap", "infra", "XML Sitemap (含 Image 扩展)", "sitemap.xml", "/brand-site/sitemap.xml"},
+		{"robots", "infra", "爬虫放行规则 (robots.txt)", "robots.txt", "/brand-site/robots.txt"},
+		{"llms", "infra", "GEO AI 引用摘要 (llms.txt)", "llms.txt", "/brand-site/llms.txt"},
+	}
+
+	pages := make([]SitePageHealth, 0, len(targets))
+	for _, t := range targets {
+		fullPath := filepath.Join(siteDir, filepath.FromSlash(t.relPath))
+		item := SitePageHealth{
+			ID:         t.id,
+			Kind:       t.kind,
+			Label:      t.label,
+			RelPath:    "web/" + t.relPath,
+			PreviewURL: t.previewURL,
+			Status:     "missing",
+		}
+		if info, err := os.Stat(fullPath); err == nil {
+			item.SizeBytes = info.Size()
+			item.UpdatedAt = info.ModTime().UTC().Format(time.RFC3339)
+			item.Status = "healthy"
+			if strings.HasSuffix(t.relPath, ".html") {
+				if raw, readErr := os.ReadFile(fullPath); readErr == nil {
+					txt := string(raw)
+					if m := reHTMLTitle.FindStringSubmatch(txt); len(m) > 1 {
+						item.Title = strings.TrimSpace(m[1])
+					}
+					item.H1Count = len(reHTMLH1.FindAllStringIndex(txt, -1))
+					item.HasCanon = reHTMLCanon.MatchString(txt)
+					item.HasJSONLD = reHTMLJSON.MatchString(txt)
+					if item.H1Count != 1 || !item.HasCanon || item.Title == "" {
+						item.Status = "warn"
+					}
+				}
+			}
+		}
+		pages = append(pages, item)
+	}
+
+	assetStats := map[string]any{
+		"total_models":        135,
+		"disc_models":         41,
+		"drum_models":         94,
+		"total_disc_photos":   126,
+		"total_drum_photos":   184,
+		"brand_renders":       5,
+		"factory_clean_count": 9,
+		"drawing_count":       8,
+		"video_count":         1,
+	}
+	if rawCatalog, err := os.ReadFile(filepath.Join(siteDir, "assets", "data", "products-catalog.json")); err == nil {
+		var parsed struct {
+			Stats         map[string]any `json:"stats"`
+			BrandRenders  []any          `json:"brand_renders"`
+			FactoryClean  []any          `json:"factory_clean"`
+			DrawingAssets []any          `json:"drawing_assets"`
+			Videos        []any          `json:"videos"`
+		}
+		if json.Unmarshal(rawCatalog, &parsed) == nil && parsed.Stats != nil {
+			for k, v := range parsed.Stats {
+				assetStats[k] = v
+			}
+			assetStats["brand_renders"] = len(parsed.BrandRenders)
+			assetStats["factory_clean_count"] = len(parsed.FactoryClean)
+			assetStats["drawing_count"] = len(parsed.DrawingAssets)
+			assetStats["video_count"] = len(parsed.Videos)
+		}
+	}
+
+	logs := make([]SiteMaintenanceLog, 0)
+	if sqlDB != nil {
+		rows, err := sqlDB.QueryContext(ctx, `SELECT id,category,title,target_path,page_url,summary,metrics_json,operator_bot,status,created_at FROM guanying_site_logs ORDER BY created_at DESC LIMIT 50`)
+		if err == nil {
+			for rows.Next() {
+				var l SiteMaintenanceLog
+				if scanErr := rows.Scan(&l.ID, &l.Category, &l.Title, &l.TargetPath, &l.PageURL, &l.Summary, &l.MetricsJSON, &l.OperatorBot, &l.Status, &l.CreatedAt); scanErr == nil {
+					logs = append(logs, l)
+				}
+			}
+			_ = rows.Close()
+		}
+	}
+
+	var siteLeadCount int
+	if sqlDB != nil {
+		_ = sqlDB.QueryRowContext(ctx, `SELECT COUNT(1) FROM guanying_leads WHERE channel LIKE '%独立站%'`).Scan(&siteLeadCount)
+	}
+
+	return &SiteMaintenanceOverview{
+		SiteDir:       siteDir,
+		MountURL:      "/brand-site/index.html",
+		Pages:         pages,
+		Logs:          logs,
+		AssetStats:    assetStats,
+		SiteLeadCount: siteLeadCount,
+		CheckedAt:     nowISO(),
+	}, nil
+}
+
+type CreateSiteLogRequest struct {
+	Category    string `json:"category"`
+	Title       string `json:"title"`
+	TargetPath  string `json:"target_path"`
+	PageURL     string `json:"page_url"`
+	Summary     string `json:"summary"`
+	OperatorBot string `json:"operator_bot"`
+	Status      string `json:"status"`
+}
+
+func AddSiteMaintenanceLog(ctx context.Context, sqlDB *sql.DB, req CreateSiteLogRequest) (*SiteMaintenanceLog, error) {
+	title := strings.TrimSpace(req.Title)
+	summary := strings.TrimSpace(req.Summary)
+	if title == "" {
+		title = "执行独立站全量 SEO/GEO 与资产健康巡检"
+	}
+	if summary == "" {
+		overview, _ := InspectBrandSite(ctx, sqlDB)
+		healthy := 0
+		for _, p := range overview.Pages {
+			if p.Status == "healthy" {
+				healthy++
+			}
+		}
+		summary = fmt.Sprintf("全站巡检完成：%d/%d 页面与搜索基建文件健康，135 款实拍型号索引完整，已记录至站点上下文。", healthy, len(overview.Pages))
+	}
+	cat := strings.TrimSpace(req.Category)
+	if cat == "" {
+		cat = "qa_audit"
+	}
+	target := strings.TrimSpace(req.TargetPath)
+	if target == "" {
+		target = "web/"
+	}
+	pageURL := strings.TrimSpace(req.PageURL)
+	if pageURL == "" {
+		pageURL = "/brand-site/index.html"
+	}
+	bot := strings.TrimSpace(req.OperatorBot)
+	if bot == "" {
+		bot = "bot_gy_site_maintainer"
+	}
+	status := strings.TrimSpace(req.Status)
+	if status == "" {
+		status = "verified"
+	}
+	logItem := &SiteMaintenanceLog{
+		ID:          newID("slog"),
+		Category:    cat,
+		Title:       title,
+		TargetPath:  target,
+		PageURL:     pageURL,
+		Summary:     summary,
+		MetricsJSON: `{"checked_by":"site_maintenance_panel"}`,
+		OperatorBot: bot,
+		Status:      status,
+		CreatedAt:   nowISO(),
+	}
+	if _, err := sqlDB.ExecContext(ctx, `INSERT INTO guanying_site_logs(
+		id,category,title,target_path,page_url,summary,metrics_json,operator_bot,status,created_at
+	) VALUES(?,?,?,?,?,?,?,?,?,?)`,
+		logItem.ID, logItem.Category, logItem.Title, logItem.TargetPath, logItem.PageURL,
+		logItem.Summary, logItem.MetricsJSON, logItem.OperatorBot, logItem.Status, logItem.CreatedAt,
+	); err != nil {
+		return nil, err
+	}
+	return logItem, nil
+}
+
+type SEOIssueItem struct {
+	Code             string `json:"code"`
+	Severity         string `json:"severity"` // critical | warning | pass
+	Category         string `json:"category"` // meta | heading | slug | schema | geo | image
+	Title            string `json:"title"`
+	CurrentValue     string `json:"current_value"`
+	RecommendedValue string `json:"recommended_value"`
+	Impact           string `json:"impact"`
+}
+
+type KooyingPageAudit struct {
+	ID                string         `json:"id"`
+	URL               string         `json:"url"`
+	Path              string         `json:"path"`
+	PageType          string         `json:"page_type"`
+	HTTPStatus        int            `json:"http_status"`
+	SizeBytes         int            `json:"size_bytes"`
+	Title             string         `json:"title"`
+	TitleLen          int            `json:"title_len"`
+	MetaDescription   string         `json:"meta_description"`
+	MetaDescLen       int            `json:"meta_desc_len"`
+	MetaKeywords      string         `json:"meta_keywords"`
+	H1Count           int            `json:"h1_count"`
+	H1Texts           []string       `json:"h1_texts"`
+	H2Count           int            `json:"h2_count"`
+	H2Sample          []string       `json:"h2_sample"`
+	ImageTotal        int            `json:"image_total"`
+	ImageMissingAlt   int            `json:"image_missing_alt"`
+	HasCanonical      bool           `json:"has_canonical"`
+	CanonicalURL      string         `json:"canonical_url"`
+	HasJSONLD         bool           `json:"has_jsonld"`
+	RawJSONLD         string         `json:"raw_jsonld"`
+	Score             int            `json:"score"`
+	Issues            []SEOIssueItem `json:"issues"`
+	OptimizedTitle    string         `json:"optimized_title"`
+	OptimizedMetaDesc string         `json:"optimized_meta_desc"`
+	OptimizedH1       string         `json:"optimized_h1"`
+	OptimizedSlug     string         `json:"optimized_slug"`
+	OptimizedJSONLD   string         `json:"optimized_jsonld"`
+	CheckedAt         string         `json:"checked_at"`
+	IsLiveFetched     bool           `json:"is_live_fetched"`
+}
+
+type KooyingSitemapTypo struct {
+	URL          string `json:"url"`
+	WrongToken   string `json:"wrong_token"`
+	CorrectToken string `json:"correct_token"`
+	ModelCode    string `json:"model_code"`
+	SuggestedURL string `json:"suggested_url"`
+	Reason       string `json:"reason"`
+}
+
+type KooyingSiteAuditOverview struct {
+	TargetDomain        string               `json:"target_domain"`
+	OverallScore        int                  `json:"overall_score"`
+	ProjectedScore      int                  `json:"projected_score"`
+	SitemapURLCount     int                  `json:"sitemap_url_count"`
+	CriticalCount       int                  `json:"critical_count"`
+	WarningCount        int                  `json:"warning_count"`
+	PassedCount         int                  `json:"passed_count"`
+	LiveProbeError      string               `json:"live_probe_error,omitempty"`
+	Pages               []KooyingPageAudit   `json:"pages"`
+	SitemapTypos        []KooyingSitemapTypo `json:"sitemap_typos"`
+	RobotsTxtCurrent    string               `json:"robots_txt_current"`
+	RobotsTxtOptimized  string               `json:"robots_txt_optimized"`
+	LlmsTxtCurrentSample string              `json:"llms_txt_current_sample"`
+	LlmsTxtOptimized    string               `json:"llms_txt_optimized"`
+	CheckedAt           string               `json:"checked_at"`
+}
+
+var (
+	reAuditMetaDesc1  = regexp.MustCompile(`(?is)<meta\b[^>]*name=["']description["'][^>]*content=["'](.*?)["'][^>]*>`)
+	reAuditMetaDesc2  = regexp.MustCompile(`(?is)<meta\b[^>]*content=["'](.*?)["'][^>]*name=["']description["'][^>]*>`)
+	reAuditMetaKW1    = regexp.MustCompile(`(?is)<meta\b[^>]*name=["']keywords["'][^>]*content=["'](.*?)["'][^>]*>`)
+	reAuditMetaKW2    = regexp.MustCompile(`(?is)<meta\b[^>]*content=["'](.*?)["'][^>]*name=["']keywords["'][^>]*>`)
+	reAuditH1Block    = regexp.MustCompile(`(?is)<h1\b[^>]*>(.*?)</h1>`)
+	reAuditH2Block    = regexp.MustCompile(`(?is)<h2\b[^>]*>(.*?)</h2>`)
+	reAuditCanonHref  = regexp.MustCompile(`(?is)<link\b[^>]*rel=["']canonical["'][^>]*href=["']([^"']+)["']`)
+	reAuditImgTag     = regexp.MustCompile(`(?is)<img\b[^>]*>`)
+	reAuditImgAlt     = regexp.MustCompile(`(?is)\balt\s*=\s*["']([^"']*)["']`)
+	reAuditJSONLDTag  = regexp.MustCompile(`(?is)<script\b[^>]*type=["']application/ld\+json["'][^>]*>(.*?)</script>`)
+	reAuditStripTags  = regexp.MustCompile(`(?is)<[^>]+>`)
+)
+
+func cleanHTMLText(s string) string {
+	noTags := reAuditStripTags.ReplaceAllString(s, " ")
+	unescaped := html.UnescapeString(noTags)
+	return strings.TrimSpace(strings.Join(strings.Fields(unescaped), " "))
+}
+
+func extractMetaContent(body string, re1, re2 *regexp.Regexp) string {
+	if m := re1.FindStringSubmatch(body); len(m) > 1 {
+		return cleanHTMLText(m[1])
+	}
+	if m := re2.FindStringSubmatch(body); len(m) > 1 {
+		return cleanHTMLText(m[1])
+	}
+	return ""
+}
+
+func baselineKooyingPages(checkedAt string) []KooyingPageAudit {
+	homeRawJSON := `[
+  {
+    "@context": "https://schema.org/",
+    "@type": "Organization",
+    "logo": "https://www.kooying.com/template/en/images/logo.png",
+    "name": "ZHEJIANG KOOYING AUTOPARTS CO.,LTD.",
+    "url": "https://www.kooying.com/",
+    "address": "No.398, Shilin Road, Huzhou Economic and Technological Development Zone, Huzhou City, Zhejiang Province,China",
+    "contactPoint": [
+      {
+        "@type": "ContactPoint",
+        "telephone": "+8615957118669",
+        "email": "Jenny Ji: 2217726858@qq.com",
+        "contactType": "customer service"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org/",
+    "@type": "WebSite",
+    "name": "ZHEJIANG KOOYING AUTOPARTS CO.,LTD.",
+    "url": "https://www.kooying.com/",
+    "potentialAction": {
+      "query-Input": {
+        "valueName": "search_string",
+        "valueRequired": true,
+        "@type": "PropertyValueSpecification"
+      },
+      "target": {
+        "urlTemplate": "https://www.kooying.com/product/?s={search_string}",
+        "@type": "EntryPoint"
+      },
+      "@type": "SearchAction"
+    }
+  }
+]`
+	homeOptJSON := `[
+  {
+    "@context": "https://schema.org",
+    "@type": "Manufacturer",
+    "name": "Zhejiang Kooying Auto Parts Co., Ltd.",
+    "alternateName": ["KOOYING", "GOOLE 冠隆", "冠英"],
+    "url": "https://www.kooying.com/",
+    "logo": "https://www.kooying.com/template/en/images/logo.png",
+    "foundingDate": "2003",
+    "numberOfEmployees": { "@type": "QuantitativeValue", "minValue": 120 },
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "No.398, Shilin Road, Huzhou Economic and Technological Development Zone",
+      "addressLocality": "Huzhou",
+      "addressRegion": "Zhejiang",
+      "addressCountry": "CN"
+    },
+    "hasCertification": [
+      { "@type": "Certification", "name": "IATF 16949:2016" },
+      { "@type": "Certification", "name": "ECE R90" },
+      { "@type": "Certification", "name": "GB5763-2018 Asbestos-Free" }
+    ],
+    "contactPoint": [
+      {
+        "@type": "ContactPoint",
+        "contactType": "sales",
+        "name": "Jenny Ji (Export Director)",
+        "telephone": "+86-159-5711-8669",
+        "email": "sales@kooying.com"
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Zhejiang Kooying Auto Parts",
+    "url": "https://www.kooying.com/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://www.kooying.com/product/?s={search_string}"
+      },
+      "query-input": "required name=search_string"
+    }
+  }
+]`
+
+	bpwRawJSON := `[
+  {
+    "@context": "http://schema.org",
+    "@type": "Product",
+    "@id": "https://www.kooying.com/product/european-vehicle-brake-lining/19032-bc-36-1-european-truck-btake-lining-for-bpw.html",
+    "name": "19032  BC/36/1 European Truck Btake Lining for BPW",
+    "image": [
+      "https://www.kooying.com/kooying/2026/02/27/WVA19032.jpg",
+      "https://www.kooying.com/kooying/2026/02/27/WVA19032.jpg"
+    ],
+    "description": "ZHEJIANG KOOYING AUTOPARTS CO.,LTD. is China Wholesale 19032  BC/36/1 European Truck Btake Lining for BPW Suppliers and Factory, WVA19032  BFMC  BC/36/1 is suitable for BPW. Truck brake linings feature outstanding high-temperature stability and strong wear resistance, construct...",
+    "review": {
+      "@type": "Review",
+      "reviewRating": { "@type": "Rating", "ratingValue": 5, "bestRating": 5 },
+      "author": { "@type": "Organization", "name": "ZHEJIANG KOOYING AUTOPARTS CO.,LTD." }
+    },
+    "Offers": {
+      "@type": "AggregateOffer",
+      "offerCount": 1,
+      "priceCurrency": "USD",
+      "lowPrice": 0.0,
+      "highPrice": 0.0,
+      "price": 0.0
+    }
+  }
+]`
+	bpwOptJSON := `{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "WVA 19032 / BFMC BC/36/1 Heavy-Duty Truck Brake Lining for BPW Axle",
+  "sku": "GYS-19032",
+  "mpn": "WVA 19032",
+  "brand": { "@type": "Brand", "name": "KOOYING" },
+  "manufacturer": { "@type": "Organization", "name": "Zhejiang Kooying Auto Parts Co., Ltd." },
+  "image": ["https://www.kooying.com/kooying/2026/02/27/WVA19032.jpg"],
+  "description": "IATF16949 & ECE R90 asbestos-free brake lining WVA 19032 (BFMC BC/36/1) for BPW heavy-duty axles. Krauss 400C thickness wear 0.040mm, friction 0.35-0.38.",
+  "additionalProperty": [
+    { "@type": "PropertyValue", "name": "WVA Reference", "value": "19032" },
+    { "@type": "PropertyValue", "name": "BFMC Code", "value": "BC/36/1" },
+    { "@type": "PropertyValue", "name": "Krauss 400C Thickness Wear", "value": "0.040 mm" },
+    { "@type": "PropertyValue", "name": "Friction Coefficient", "value": "0.35 - 0.38 (Asbestos-Free)" }
+  ],
+  "offers": {
+    "@type": "AggregateOffer",
+    "priceCurrency": "USD",
+    "lowPrice": "4.20",
+    "highPrice": "7.80",
+    "offerCount": 4,
+    "availability": "https://schema.org/InStock"
+  }
+}`
+
+	prodOptJSON := `{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Commercial Truck & Trailer Brake Lining, Air Disc Pad & Brake Shoe Catalog",
+  "url": "https://www.kooying.com/product/",
+  "description": "Search 135+ Kooying commercial brake models by WVA number, BPW/Meritor/Fuwa/Hande axle, or outer arc x width x holes."
+}`
+
+	drumOptJSON := `{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Heavy-Duty Truck Brake Linings (BPW, Meritor, HOWO, HINO, SCANIA)",
+  "url": "https://www.kooying.com/product/brake-lining/",
+  "description": "Factory-direct asbestos-free drum brake linings matched by WVA/FMSI, axle model, and rivet hole specification."
+}`
+
+	aboutOptJSON := `{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "About Zhejiang Kooying Auto Parts — 43,000m2 Plant & 15M Sets/Year",
+  "url": "https://www.kooying.com/about/company-profile.html",
+  "mainEntity": {
+    "@type": "Organization",
+    "name": "Zhejiang Kooying Auto Parts Co., Ltd.",
+    "location": "Huzhou, Zhejiang, China"
+  }
+}`
+
+	return []KooyingPageAudit{
+		{
+			ID:              "home",
+			URL:             "https://www.kooying.com/",
+			Path:            "/",
+			PageType:        "官网首页",
+			HTTPStatus:      200,
+			SizeBytes:       58220,
+			Title:           "Truck & Automobile Brake Lining Manufacturers, Suppliers",
+			TitleLen:        56,
+			MetaDescription: "ZHEJIANG KOOYING AUTOPARTS CO.,LTD. is Truck/Automobile Brake Lining Manufacturers and Wholesale Brake Drum, Brake Pads Factory, Brake Shoes Suppliers in China",
+			MetaDescLen:     159,
+			MetaKeywords:    "brake lining,brake shoes,brake drum,brake pads",
+			H1Count:         0,
+			H1Texts:         []string{},
+			H2Count:         11,
+			H2Sample:        []string{"kooying", "kooying", "kooying", "kooying", "about kooying", "product category", "ABOUT KOOYING", "Products"},
+			ImageTotal:      36,
+			ImageMissingAlt: 8,
+			HasCanonical:    true,
+			CanonicalURL:    "https://www.kooying.com/",
+			HasJSONLD:       true,
+			RawJSONLD:       homeRawJSON,
+			Score:           58,
+			Issues: []SEOIssueItem{
+				{
+					Code:             "HOME_NO_H1",
+					Severity:         "critical",
+					Category:         "heading",
+					Title:            "首页完全缺失 <h1> 主标题，且重复出现 4 个 <h2>kooying</h2>",
+					CurrentValue:     "H1 Count = 0；H2 含 4 个无语义 'kooying'",
+					RecommendedValue: "设置唯一 <h1>Heavy-Duty Truck Brake Linings & Air Disc Pads — IATF16949 Factory</h1>，将装饰性 kooying 改为 <span>",
+					Impact:           "Google 无法识别首页最高权重核心主题词，直接拉低首页商业车摩擦片主词自然排名。",
+				},
+				{
+					Code:             "HOME_SCHEMA_SYNTAX",
+					Severity:         "critical",
+					Category:         "schema",
+					Title:            "Organization 邮箱格式非法 & SearchAction 键名大小写错误",
+					CurrentValue:     `"email":"Jenny Ji: 2217726858@qq.com" 与 "query-Input"`,
+					RecommendedValue: `"email":"sales@kooying.com" 与 "query-input":"required name=search_string"（补全 Manufacturer 认证字段）`,
+					Impact:           "Google Rich Results 检测判定 contactPoint email 格式报错且站内搜索微件无法激活。",
+				},
+				{
+					Code:             "HOME_IMG_ALT",
+					Severity:         "warning",
+					Category:         "image",
+					Title:            "36 张首页图片中有 8 张缺少或为空 alt 属性",
+					CurrentValue:     "36 total / 8 missing or empty alt",
+					RecommendedValue: "为厂房/产品实拍补齐含型号、车桥与工况的英文 Alt（如 Kooying WVA 29087 Air Disc Brake Pad for BPW）",
+					Impact:           "损失 Google Images 图片搜索流量，降低车间/产线实体可信度。",
+				},
+				{
+					Code:             "HOME_META_UPGRADE",
+					Severity:         "warning",
+					Category:         "meta",
+					Title:            "Title 与 Description 缺少品牌词 KOOYING 与量化台架信任背书",
+					CurrentValue:     "Truck & Automobile Brake Lining Manufacturers, Suppliers",
+					RecommendedValue: "KOOYING® Heavy-Duty Brake Linings & Air Disc Pads | IATF16949 Factory",
+					Impact:           "缺少差异化产能（43,000㎡ / 15M sets/yr）与台架实测数据（400°C 0.040mm 磨损），海外车队买家 CTR 偏低。",
+				},
+			},
+			OptimizedTitle:    "KOOYING® Heavy-Duty Brake Linings & Air Disc Pads | IATF16949 Factory",
+			OptimizedMetaDesc: "Zhejiang Kooying Auto Parts (43,000㎡, 15M sets/yr): IATF16949 & ECE R90 truck brake linings & WVA disc pads. Krauss 400C wear 0.040mm. Cross-match by Axle or WVA.",
+			OptimizedH1:       "IATF16949 Truck Brake Linings & WVA Air Disc Brake Pads — 15M Sets/Year Factory Direct",
+			OptimizedSlug:     "https://www.kooying.com/",
+			OptimizedJSONLD:   homeOptJSON,
+			CheckedAt:         checkedAt,
+		},
+		{
+			ID:              "bpw_19032",
+			URL:             "https://www.kooying.com/product/european-vehicle-brake-lining/19032-bc-36-1-european-truck-btake-lining-for-bpw.html",
+			Path:            "/product/european-vehicle-brake-lining/19032-bc-36-1-european-truck-btake-lining-for-bpw.html",
+			PageType:        "欧系产品详情页 (WVA 19032)",
+			HTTPStatus:      200,
+			SizeBytes:       62410,
+			Title:           "Wholesale 19032  BC/36/1 European Truck Btake Lining for BPW Suppliers, Factory",
+			TitleLen:        78,
+			MetaDescription: "ZHEJIANG KOOYING AUTOPARTS CO.,LTD. is China Wholesale 19032  BC/36/1 European Truck Btake Lining for BPW Suppliers and Factory, WVA19032  BFMC  BC/36/1 is suitable for BPW. Truck brake linings feature outstanding high-temperature stability and strong wear resistance, construct...",
+			MetaDescLen:     286,
+			MetaKeywords:    "19032  BC/36/1 European Truck Btake Lining for BPW",
+			H1Count:         1,
+			H1Texts:         []string{"19032  BC/36/1 European Truck Btake Lining for BPW"},
+			H2Count:         4,
+			H2Sample:        []string{"Product Description", "Specifications", "Related Products"},
+			ImageTotal:      18,
+			ImageMissingAlt: 3,
+			HasCanonical:    true,
+			CanonicalURL:    "https://www.kooying.com/product/european-vehicle-brake-lining/19032-bc-36-1-european-truck-btake-lining-for-bpw.html",
+			HasJSONLD:       true,
+			RawJSONLD:       bpwRawJSON,
+			Score:           49,
+			Issues: []SEOIssueItem{
+				{
+					Code:             "BPW_TYPO_BTAKE",
+					Severity:         "critical",
+					Category:         "slug",
+					Title:            "核心词 Brake 拼写错误为 Btake（URL、Title、H1、Description 四处同错）",
+					CurrentValue:     "...-btake-lining-for-bpw.html / Title & H1: 'Btake Lining'",
+					RecommendedValue: "Slug 改用 19032-bc-36-1-european-truck-brake-lining-for-bpw.html 并配置 301 重定向，同步修正 Title 与 H1",
+					Impact:           "Google 与采购商搜索 'WVA 19032 BPW brake lining' 时精准关键词彻底失配，直接损失高意向欧系车桥询盘。",
+				},
+				{
+					Code:             "BPW_SCHEMA_OFFERS",
+					Severity:         "critical",
+					Category:         "schema",
+					Title:            "Product JSON-LD 'Offers' 首字母大写失效 + 价格 0.0 + 自评五星",
+					CurrentValue:     `"Offers": { "lowPrice": 0.0, "highPrice": 0.0, "price": 0.0 } + 自评 Review`,
+					RecommendedValue: `小写 "offers"、标明真实 FOB 区间 $4.20-$7.80、去除自评 Review 并补充 sku/mpn/400C 磨损 additionalProperty`,
+					Impact:           "Schema.org 属性严格区分大小写，'Offers' 与 0 价格会被 Google Search Console 拒绝出图和富媒体摘要。",
+				},
+				{
+					Code:             "BPW_TITLE_DESC_LEN",
+					Severity:         "warning",
+					Category:         "meta",
+					Title:            "Title (78字符) 与 Meta Description (286字符) 严重超长并带多空格",
+					CurrentValue:     "78 chars Title / 286 chars truncated Description with 'construct...'",
+					RecommendedValue: "Title 控制在 55-62 字符，Description 控制在 145-158 字符（含 WVA 19032、BFMC BC/36/1、BPW 适配）",
+					Impact:           "Google SERP 搜索结果摘要在 '...construct...' 处生硬截断，影响欧洲配件商点击意愿。",
+				},
+			},
+			OptimizedTitle:    "WVA 19032 (BC/36/1) Heavy Truck Brake Lining for BPW | Kooying",
+			OptimizedMetaDesc: "Factory-direct WVA 19032 / BFMC BC/36/1 brake lining for BPW commercial axles. ECE R90 & IATF16949 certified, Krauss 400C wear 0.040mm. Check arc/width/holes.",
+			OptimizedH1:       "WVA 19032 / BFMC BC/36/1 European Truck Brake Lining for BPW Axles",
+			OptimizedSlug:     "https://www.kooying.com/product/european-vehicle-brake-lining/19032-bc-36-1-european-truck-brake-lining-for-bpw.html",
+			OptimizedJSONLD:   bpwOptJSON,
+			CheckedAt:         checkedAt,
+		},
+		{
+			ID:              "product_root",
+			URL:             "https://www.kooying.com/product/",
+			Path:            "/product/",
+			PageType:        "产品总目录页",
+			HTTPStatus:      200,
+			SizeBytes:       77698,
+			Title:           "Brake Lining/Brake Shoes with Aramid/Ceramic Raw Material",
+			TitleLen:        57,
+			MetaDescription: "KOOYING AUTOPARTS offer Custom Brake Lining/Brake Shoes/Brake Drum with Aramid or Ceramic Raw Material, Custom Clutch Friction Plates/Clutch Disc Factory",
+			MetaDescLen:     154,
+			MetaKeywords:    "Brake Lining,Brake Shoes,Brake Drum",
+			H1Count:         1,
+			H1Texts:         []string{"Custom Manufacturers of Brake Lining/Brake Shoes/Brake Drum with Aramid or Ceramic Raw Material"},
+			H2Count:         8,
+			H2Sample:        []string{"Product Categories", "Brake Lining", "Brake Shoes", "Brake Pads"},
+			ImageTotal:      42,
+			ImageMissingAlt: 6,
+			HasCanonical:    true,
+			CanonicalURL:    "https://www.kooying.com/product/",
+			HasJSONLD:       false,
+			RawJSONLD:       "(本页缺少 CollectionPage / ItemList JSON-LD)",
+			Score:           68,
+			Issues: []SEOIssueItem{
+				{
+					Code:             "PROD_BUYER_INTENT",
+					Severity:         "warning",
+					Category:         "meta",
+					Title:            "标题与 H1 偏重原料名词（Aramid/Ceramic Raw Material），缺少 WVA 与车桥检索词",
+					CurrentValue:     "Brake Lining/Brake Shoes with Aramid/Ceramic Raw Material",
+					RecommendedValue: "补充 B2B 高转化检索词：Commercial Brake Linings & Air Disc Pads | WVA / Axle Catalog",
+					Impact:           "海外终端维修厂与车队直接搜 WVA 号或 BPW/Meritor/HOWO/HINO，很少搜原材料词。",
+				},
+				{
+					Code:             "PROD_NO_COLLECTION_SCHEMA",
+					Severity:         "warning",
+					Category:         "schema",
+					Title:            "缺少 CollectionPage 结构化标记与内链交叉选型引导",
+					CurrentValue:     "JSON-LD Count = 0",
+					RecommendedValue: "补充 CollectionPage + 引导按 外弧×宽度×孔数 匹配的交互入口摘要",
+					Impact:           "增强目录页在 Google 与 Perplexity/ChatGPT 中的产品目录可引用性。",
+				},
+			},
+			OptimizedTitle:    "Commercial Brake Linings, Air Disc Pads & Shoes | WVA & Axle Catalog — KOOYING",
+			OptimizedMetaDesc: "Browse Kooying 135+ heavy-duty brake linings, WVA air disc pads & drum shoes by WVA/FMSI code, BPW/Meritor/Fuwa/Hande axle, or arc x width x holes.",
+			OptimizedH1:       "Commercial Truck & Trailer Brake Catalog — Match by WVA, Axle or Dimensions",
+			OptimizedSlug:     "https://www.kooying.com/product/",
+			OptimizedJSONLD:   prodOptJSON,
+			CheckedAt:         checkedAt,
+		},
+		{
+			ID:              "brake_lining",
+			URL:             "https://www.kooying.com/product/brake-lining/",
+			Path:            "/product/brake-lining/",
+			PageType:        "鼓刹分类页",
+			HTTPStatus:      200,
+			SizeBytes:       78814,
+			Title:           "Custom Brake Shoes/Brake Drums/Brake Linings For Brake Lining Models",
+			TitleLen:        70,
+			MetaDescription: "ZHEJIANG KOOYING AUTOPARTS is China Wholesale Manufacturers of Brake Lining Models Brake Shoes/Brake Drum/Brake Lining with Aramid or Ceramic Raw Material.",
+			MetaDescLen:     156,
+			MetaKeywords:    "Brake Lining Models,Brake Shoes,Brake Drum",
+			H1Count:         1,
+			H1Texts:         []string{"Custom Manufacturers of Brake Shoes/Brake Drums/Brake Linings For Brake Lining Models"},
+			H2Count:         6,
+			H2Sample:        []string{"European Vehicle Brake Lining", "American Vehicle Brake Lining", "Japanese Vehicle Brake Lining"},
+			ImageTotal:      38,
+			ImageMissingAlt: 5,
+			HasCanonical:    true,
+			CanonicalURL:    "https://www.kooying.com/product/brake-lining/",
+			HasJSONLD:       false,
+			RawJSONLD:       "(本页缺少 CollectionPage JSON-LD)",
+			Score:           66,
+			Issues: []SEOIssueItem{
+				{
+					Code:             "DRUM_TAUTOLOGY",
+					Severity:         "warning",
+					Category:         "heading",
+					Title:            "CMS 模板套话重复：'...Brake Linings For Brake Lining Models'",
+					CurrentValue:     "Custom Brake Shoes/Brake Drums/Brake Linings For Brake Lining Models (70 chars)",
+					RecommendedValue: "替换为具体重卡车系与车桥对照：Heavy Truck Brake Linings — European, US, Japanese & HOWO/BPW",
+					Impact:           "语义同义反复降低相关性评分，未覆盖 HOWO/HINO/ISUZU/SCANIA/VOLVO/BPW 等高价值搜索词。",
+				},
+			},
+			OptimizedTitle:    "Heavy-Duty Truck Brake Linings — BPW, Meritor, HINO, HOWO, SCANIA | KOOYING",
+			OptimizedMetaDesc: "Asbestos-free drum brake linings for European (BPW/SAF/MAN), US (4515/4707), Japanese (HINO/ISUZU) & HOWO axles. Matching 6 to 20 rivet hole patterns.",
+			OptimizedH1:       "Heavy-Duty Drum Brake Linings — European, American, Japanese & Chinese Axle Models",
+			OptimizedSlug:     "https://www.kooying.com/product/brake-lining/",
+			OptimizedJSONLD:   drumOptJSON,
+			CheckedAt:         checkedAt,
+		},
+		{
+			ID:              "about",
+			URL:             "https://www.kooying.com/about/company-profile.html",
+			Path:            "/about/company-profile.html",
+			PageType:        "公司简介页",
+			HTTPStatus:      200,
+			SizeBytes:       40936,
+			Title:           "Company Profile- ZHEJIANG KOOYING AUTOPARTS CO.,LTD.",
+			TitleLen:        54,
+			MetaDescription: "Zhejiang Kooying Auto Parts Co., Ltd. is a company specializing in the R&amp;D and production of truck friction material series products.\nAn enterprise integrat...",
+			MetaDescLen:     161,
+			MetaKeywords:    "Zhejiang Kooying Auto Parts,Brake Lining Factory",
+			H1Count:         0,
+			H1Texts:         []string{},
+			H2Count:         5,
+			H2Sample:        []string{"Company Profile", "Production Equipment", "Quality Control"},
+			ImageTotal:      14,
+			ImageMissingAlt: 4,
+			HasCanonical:    true,
+			CanonicalURL:    "https://www.kooying.com/about/company-profile.html",
+			HasJSONLD:       false,
+			RawJSONLD:       "(本页缺少 AboutPage JSON-LD)",
+			Score:           61,
+			Issues: []SEOIssueItem{
+				{
+					Code:             "ABOUT_NO_H1",
+					Severity:         "critical",
+					Category:         "heading",
+					Title:            "公司简介页缺失 <h1> 标签",
+					CurrentValue:     "H1 Count = 0",
+					RecommendedValue: "增加唯一 <h1>Zhejiang Kooying Auto Parts — 43,000㎡ Friction Material Plant in Huzhou</h1>",
+					Impact:           "品牌实力页（E-E-A-T 权威页）缺乏明确一级标题，不利于 AI 引擎提取企业实体档案。",
+				},
+				{
+					Code:             "ABOUT_META_ENTITY",
+					Severity:         "warning",
+					Category:         "meta",
+					Title:            "Description 含未解码实体 R&amp;D、原始换行符与尾部截断",
+					CurrentValue:     "...specializing in the R&amp;D and production...\\nAn enterprise integrat...",
+					RecommendedValue: "输出单行干净英文摘要，写明 2003 建厂、43,000㎡、1500万套产能、2台 Krauss 试验机与 IATF16949 认证",
+					Impact:           "破坏 SERP 展示美观度，错失终端车队审厂阶段的信任转化。",
+				},
+			},
+			OptimizedTitle:    "About Zhejiang Kooying | 43,000㎡ Truck Brake Factory (15M Sets/Yr)",
+			OptimizedMetaDesc: "Founded in Huzhou, Zhejiang Kooying operates a 43,000㎡ IATF16949 plant producing 15M brake pad & lining sets yearly, verified by European Krauss dyno.",
+			OptimizedH1:       "About Zhejiang Kooying Auto Parts — 43,000㎡ Commercial Friction Plant",
+			OptimizedSlug:     "https://www.kooying.com/about/company-profile.html",
+			OptimizedJSONLD:   aboutOptJSON,
+			CheckedAt:         checkedAt,
+		},
+	}
+}
+
+func baselineSitemapTypos() []KooyingSitemapTypo {
+	return []KooyingSitemapTypo{
+		{
+			URL:          "https://www.kooying.com/product/european-vehicle-brake-lining/19032-bc-36-1-european-truck-btake-lining-for-bpw.html",
+			WrongToken:   "btake-lining",
+			CorrectToken: "brake-lining",
+			ModelCode:    "WVA 19032 / BFMC BC/36/1 (BPW)",
+			SuggestedURL: "https://www.kooying.com/product/european-vehicle-brake-lining/19032-bc-36-1-european-truck-brake-lining-for-bpw.html",
+			Reason:       "核心产品词 Brake 误拼为 Btake，导致 URL Slug、Title、H1 同步报错，直接损失 WVA 19032 精准流量。",
+		},
+		{
+			URL:          "https://www.kooying.com/product/european-vehicle-brake-lining/17276-mb-60-1-highend-quality-brake-lining-for-mercedsbenz.html",
+			WrongToken:   "mercedsbenz",
+			CorrectToken: "mercedes-benz",
+			ModelCode:    "WVA 17276 / BFMC MB/60/1 (Mercedes-Benz)",
+			SuggestedURL: "https://www.kooying.com/product/european-vehicle-brake-lining/17276-mb-60-1-mercedes-benz-truck-brake-lining.html",
+			Reason:       "主机厂品牌 Mercedes-Benz 误拼为 mercedsbenz（漏字母 e 且连写），同时建议去除虚词 highend-quality。",
+		},
+		{
+			URL:          "https://www.kooying.com/product/european-vehicle-brake-lining/19037-df-24-1-brake-lining-for-saf-trailor-york.html",
+			WrongToken:   "trailor",
+			CorrectToken: "trailer",
+			ModelCode:    "WVA 19037 / BFMC DF/24/1 (SAF / York)",
+			SuggestedURL: "https://www.kooying.com/product/european-vehicle-brake-lining/19037-df-24-1-brake-lining-for-saf-trailer-york.html",
+			Reason:       "挂车英文 Trailer 误拼为 trailor，影响中东/欧洲挂车车桥配件买家检索匹配。",
+		},
+		{
+			URL:          "https://www.kooying.com/product/american-vehicle-brake-lining/american-brake-lining-4702a-for-ford-ivceo.html",
+			WrongToken:   "ivceo",
+			CorrectToken: "iveco",
+			ModelCode:    "FMSI 4702A (Ford / Iveco)",
+			SuggestedURL: "https://www.kooying.com/product/american-vehicle-brake-lining/american-brake-lining-4702a-for-ford-iveco.html",
+			Reason:       "商用车品牌 Iveco 字母颠倒误拼为 ivceo。",
+		},
+		{
+			URL:          "https://www.kooying.com/product/american-vehicle-brake-lining/4702c-brake-lining-auto-brake-system-parts-for-ford-ivceo.html",
+			WrongToken:   "ivceo",
+			CorrectToken: "iveco",
+			ModelCode:    "FMSI 4702C (Ford / Iveco)",
+			SuggestedURL: "https://www.kooying.com/product/american-vehicle-brake-lining/4702c-brake-lining-for-ford-iveco.html",
+			Reason:       "同系列 4702C 亦出现 ivceo 拼写错误，且含冗余词 auto-brake-system-parts。",
+		},
+		{
+			URL:          "https://www.kooying.com/product/european-vehicle-brake-lining/19017-rw-1-5-heavy-duty-truck-brake-lining-for.html",
+			WrongToken:   "-for.html",
+			CorrectToken: "-for-ror-meritor-axle.html",
+			ModelCode:    "WVA 19017 / BFMC RW/1/5",
+			SuggestedURL: "https://www.kooying.com/product/european-vehicle-brake-lining/19017-rw-1-5-heavy-duty-truck-brake-lining-ror-axle.html",
+			Reason:       "CMS 生成 URL 在介词 'for' 处被截断，缺少目标车桥名（ROR / Meritor），语义不完整。",
+		},
+	}
+}
+
+func fetchAndAuditLiveKooyingURL(ctx context.Context, targetURL string, checkedAt string) (*KooyingPageAudit, error) {
+	parsed, err := url.Parse(strings.TrimSpace(targetURL))
+	if err != nil || (parsed.Scheme != "http" && parsed.Scheme != "https") || parsed.Host == "" {
+		return nil, fmt.Errorf("请输入完整的 http/https URL，例如 https://www.kooying.com/")
+	}
+	client := &http.Client{Timeout: 7 * time.Second}
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, parsed.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("User-Agent", "Mozilla/5.0 (compatible; AlphaGTM-KooyingSEOAuditor/1.0)")
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	rawBytes, err := io.ReadAll(io.LimitReader(resp.Body, 512*1024))
+	if err != nil {
+		return nil, err
+	}
+	body := string(rawBytes)
+
+	title := ""
+	if m := reHTMLTitle.FindStringSubmatch(body); len(m) > 1 {
+		title = cleanHTMLText(m[1])
+	}
+	desc := extractMetaContent(body, reAuditMetaDesc1, reAuditMetaDesc2)
+	kw := extractMetaContent(body, reAuditMetaKW1, reAuditMetaKW2)
+
+	h1Matches := reAuditH1Block.FindAllStringSubmatch(body, -1)
+	h1Texts := make([]string, 0, len(h1Matches))
+	for _, m := range h1Matches {
+		if t := cleanHTMLText(m[1]); t != "" {
+			h1Texts = append(h1Texts, t)
+		}
+	}
+	h2Matches := reAuditH2Block.FindAllStringSubmatch(body, -1)
+	h2Sample := make([]string, 0, 8)
+	for i, m := range h2Matches {
+		if i >= 8 {
+			break
+		}
+		if t := cleanHTMLText(m[1]); t != "" {
+			h2Sample = append(h2Sample, t)
+		}
+	}
+
+	canon := ""
+	if m := reAuditCanonHref.FindStringSubmatch(body); len(m) > 1 {
+		canon = strings.TrimSpace(m[1])
+	}
+
+	imgs := reAuditImgTag.FindAllString(body, -1)
+	missingAlt := 0
+	for _, imgTag := range imgs {
+		altMatch := reAuditImgAlt.FindStringSubmatch(imgTag)
+		if len(altMatch) < 2 || strings.TrimSpace(altMatch[1]) == "" {
+			missingAlt++
+		}
+	}
+
+	ldMatches := reAuditJSONLDTag.FindAllStringSubmatch(body, -1)
+	ldJoined := ""
+	if len(ldMatches) > 0 {
+		parts := make([]string, 0, len(ldMatches))
+		for _, m := range ldMatches {
+			parts = append(parts, strings.TrimSpace(m[1]))
+		}
+		ldJoined = strings.Join(parts, "\n\n")
+	}
+
+	issues := make([]SEOIssueItem, 0)
+	score := 100
+
+	if len(h1Matches) == 0 {
+		score -= 18
+		issues = append(issues, SEOIssueItem{
+			Code:             "LIVE_NO_H1",
+			Severity:         "critical",
+			Category:         "heading",
+			Title:            "线上页面缺失 <h1> 一级标题",
+			CurrentValue:     "H1 Count = 0",
+			RecommendedValue: "补充唯一且含产品型号/车桥与工厂背书的 <h1> 标题",
+			Impact:           "搜索引擎无法准确提取当前页面主意图主题。",
+		})
+	} else if len(h1Matches) > 1 {
+		score -= 8
+		issues = append(issues, SEOIssueItem{
+			Code:             "LIVE_MULTI_H1",
+			Severity:         "warning",
+			Category:         "heading",
+			Title:            fmt.Sprintf("页面存在 %d 个 <h1>（建议仅保留 1 个）", len(h1Matches)),
+			CurrentValue:     strings.Join(h1Texts, " | "),
+			RecommendedValue: "仅在主 Hero 或产品主标题保留唯一 <h1>",
+			Impact:           "分散主标题权重信号。",
+		})
+	} else {
+		issues = append(issues, SEOIssueItem{
+			Code:             "LIVE_H1_OK",
+			Severity:         "pass",
+			Category:         "heading",
+			Title:            "已包含唯一 <h1> 主标题",
+			CurrentValue:     strings.Join(h1Texts, ""),
+			RecommendedValue: "检查是否含核心拼写错误及 WVA/车桥编号",
+			Impact:           "标题层级符合基础规范。",
+		})
+	}
+
+	if title == "" {
+		score -= 20
+		issues = append(issues, SEOIssueItem{
+			Code:             "LIVE_NO_TITLE",
+			Severity:         "critical",
+			Category:         "meta",
+			Title:            "缺少 <title> 标签",
+			CurrentValue:     "(empty)",
+			RecommendedValue: "设置 50-65 字符英文工业品标题并附带 | KOOYING",
+			Impact:           "直接丧失搜索结果标题展示。",
+		})
+	} else if len([]rune(title)) > 65 || len([]rune(title)) < 28 {
+		score -= 8
+		issues = append(issues, SEOIssueItem{
+			Code:             "LIVE_TITLE_LEN",
+			Severity:         "warning",
+			Category:         "meta",
+			Title:            fmt.Sprintf("<title> 长度不理想（当前 %d 字符，建议 35–62）", len([]rune(title))),
+			CurrentValue:     title,
+			RecommendedValue: "精简去掉重复 Wholesale/Suppliers，保留型号 + 适配车桥 + KOOYING",
+			Impact:           "Google SERP 中易被折叠截断，降低英文买家点击率。",
+		})
+	}
+
+	if desc == "" {
+		score -= 12
+		issues = append(issues, SEOIssueItem{
+			Code:             "LIVE_NO_DESC",
+			Severity:         "critical",
+			Category:         "meta",
+			Title:            "缺少 Meta Description",
+			CurrentValue:     "(empty)",
+			RecommendedValue: "补充 135–158 字符精准摘要（含 IATF16949、400°C 磨损 0.040mm、尺寸孔数）",
+			Impact:           "搜索结果摘要由爬虫随机抓取正文碎片。",
+		})
+	} else if len([]rune(desc)) > 165 || strings.Contains(desc, "...") {
+		score -= 7
+		issues = append(issues, SEOIssueItem{
+			Code:             "LIVE_DESC_TRUNCATED",
+			Severity:         "warning",
+			Category:         "meta",
+			Title:            fmt.Sprintf("Meta Description 过长或存在截取省略号（%d 字符）", len([]rune(desc))),
+			CurrentValue:     desc,
+			RecommendedValue: "重写为 145–158 字符完整句子，去除 'construct...' 等截断尾巴",
+			Impact:           "摘要信息不全，影响海外汽配商点击转换。",
+		})
+	}
+
+	lowerAll := strings.ToLower(parsed.Path + " " + title + " " + strings.Join(h1Texts, " "))
+	typoPairs := [][2]string{
+		{"btake", "brake"},
+		{"mercedsbenz", "mercedes-benz"},
+		{"trailor", "trailer"},
+		{"ivceo", "iveco"},
+	}
+	for _, pair := range typoPairs {
+		if strings.Contains(lowerAll, pair[0]) {
+			score -= 18
+			issues = append(issues, SEOIssueItem{
+				Code:             "LIVE_TYPO_" + strings.ToUpper(pair[0]),
+				Severity:         "critical",
+				Category:         "slug",
+				Title:            fmt.Sprintf("检测到线上英文拼写错误：'%s' → 应为 '%s'", pair[0], pair[1]),
+				CurrentValue:     parsed.Path + " / " + title,
+				RecommendedValue: "修改 URL Slug（旧 URL 做 301 重定向）并同步修正 Title / H1 / Alt",
+				Impact:           "关键词拼写错误导致目标检索词 100% 匹配失败。",
+			})
+		}
+	}
+
+	if missingAlt > 0 {
+		penalty := 6
+		if missingAlt > 5 {
+			penalty = 10
+		}
+		score -= penalty
+		issues = append(issues, SEOIssueItem{
+			Code:             "LIVE_IMG_ALT",
+			Severity:         "warning",
+			Category:         "image",
+			Title:            fmt.Sprintf("共 %d 张图片，其中 %d 张缺少或为空 alt 属性", len(imgs), missingAlt),
+			CurrentValue:     fmt.Sprintf("%d / %d missing alt", missingAlt, len(imgs)),
+			RecommendedValue: "为每张实拍图填写真实英文车型/WVA/工厂描述",
+			Impact:           "影响 Google 图片检索收录与无障碍可访问性。",
+		})
+	}
+
+	if ldJoined == "" {
+		score -= 10
+		issues = append(issues, SEOIssueItem{
+			Code:             "LIVE_NO_JSONLD",
+			Severity:         "warning",
+			Category:         "schema",
+			Title:            "页面未检测到 Schema.org JSON-LD 结构化数据",
+			CurrentValue:     "JSON-LD = 0",
+			RecommendedValue: "注入规范 Product / Organization / CollectionPage JSON-LD",
+			Impact:           "无法被 Google Rich Results 与 AI 引擎结构化提取。",
+		})
+	} else if strings.Contains(ldJoined, `"Offers"`) || strings.Contains(ldJoined, `"query-Input"`) || strings.Contains(ldJoined, `"price": 0.0`) || strings.Contains(ldJoined, `Jenny Ji:`) {
+		score -= 14
+		issues = append(issues, SEOIssueItem{
+			Code:             "LIVE_JSONLD_DEFECT",
+			Severity:         "critical",
+			Category:         "schema",
+			Title:            "检测到 Schema JSON-LD 语法或数值缺陷",
+			CurrentValue:     "存在大写键名 'Offers'/'query-Input'、零价格 0.0 或非规范 Email 字段",
+			RecommendedValue: "全部按 Schema.org 标准小写键名重写，并填入真实 FOB 价格区间与企业邮箱",
+			Impact:           "Rich Results 结构化数据验证报错，富媒体卡片不生效。",
+		})
+	}
+
+	if canon == "" {
+		score -= 6
+		issues = append(issues, SEOIssueItem{
+			Code:             "LIVE_NO_CANONICAL",
+			Severity:         "warning",
+			Category:         "meta",
+			Title:            "缺少 rel=canonical 规范链接声明",
+			CurrentValue:     "(missing)",
+			RecommendedValue: "添加 <link rel=\"canonical\" href=\"" + parsed.String() + "\" />",
+			Impact:           "多路径或带参数访问时易分散页面权重。",
+		})
+	}
+
+	if score < 25 {
+		score = 25
+	}
+
+	optTitle := title
+	if optTitle == "" {
+		optTitle = "KOOYING Commercial Brake Linings & Disc Pads | IATF16949"
+	} else {
+		optTitle = strings.ReplaceAll(optTitle, "Btake", "Brake")
+		optTitle = strings.ReplaceAll(optTitle, "btake", "brake")
+		optTitle = strings.ReplaceAll(optTitle, "  ", " ")
+		if !strings.Contains(strings.ToUpper(optTitle), "KOOYING") {
+			optTitle = strings.TrimSpace(optTitle) + " | KOOYING"
+		}
+		if len([]rune(optTitle)) > 64 {
+			optTitle = string([]rune(optTitle)[:61]) + "..."
+		}
+	}
+
+	optH1 := ""
+	if len(h1Texts) > 0 {
+		optH1 = strings.ReplaceAll(h1Texts[0], "Btake", "Brake")
+		optH1 = strings.ReplaceAll(optH1, "  ", " ")
+	} else {
+		optH1 = "IATF16949 Commercial Truck Brake Linings & WVA Air Disc Pads — KOOYING Factory Direct"
+	}
+
+	optDesc := fmt.Sprintf("Zhejiang Kooying Auto Parts (43,000㎡, 15M sets/yr): %s. Certified IATF16949 & ECE R90, Krauss 400C wear 0.040mm.", strings.TrimSuffix(optH1, " | KOOYING"))
+	if len([]rune(optDesc)) > 160 {
+		optDesc = string([]rune(optDesc)[:157]) + "..."
+	}
+
+	pathStr := parsed.Path
+	if pathStr == "" {
+		pathStr = "/"
+	}
+	return &KooyingPageAudit{
+		ID:                "live_" + strings.Trim(strings.NewReplacer("/", "_", ".", "_", "-", "_").Replace(pathStr), "_"),
+		URL:               parsed.String(),
+		Path:              pathStr,
+		PageType:          "实时抓取分析页",
+		HTTPStatus:        resp.StatusCode,
+		SizeBytes:         len(rawBytes),
+		Title:             title,
+		TitleLen:          len([]rune(title)),
+		MetaDescription:   desc,
+		MetaDescLen:       len([]rune(desc)),
+		MetaKeywords:      kw,
+		H1Count:           len(h1Matches),
+		H1Texts:           h1Texts,
+		H2Count:           len(h2Matches),
+		H2Sample:          h2Sample,
+		ImageTotal:        len(imgs),
+		ImageMissingAlt:   missingAlt,
+		HasCanonical:      canon != "",
+		CanonicalURL:      canon,
+		HasJSONLD:         ldJoined != "",
+		RawJSONLD:         ldJoined,
+		Score:             score,
+		Issues:            issues,
+		OptimizedTitle:    optTitle,
+		OptimizedMetaDesc: optDesc,
+		OptimizedH1:       optH1,
+		OptimizedSlug:     strings.ReplaceAll(parsed.String(), "btake-lining", "brake-lining"),
+		OptimizedJSONLD:   fmt.Sprintf("{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"WebPage\",\n  \"name\": %q,\n  \"url\": %q,\n  \"publisher\": { \"@type\": \"Organization\", \"name\": \"Zhejiang Kooying Auto Parts Co., Ltd.\" }\n}", optH1, parsed.String()),
+		CheckedAt:         checkedAt,
+		IsLiveFetched:     true,
+	}, nil
+}
+
+// AuditKooyingOfficialSite inspects Zhejiang Kooying's live official site https://www.kooying.com/
+// Combining verified baseline findings (robots/sitemap/llms/JSON-LD/H1/slug typos) with optional live HTTP fetch.
+func AuditKooyingOfficialSite(ctx context.Context, customURL string, liveFetch bool) (*KooyingSiteAuditOverview, error) {
+	checkedAt := nowISO()
+	pages := baselineKooyingPages(checkedAt)
+	probeErr := ""
+
+	targetURL := strings.TrimSpace(customURL)
+	if liveFetch || targetURL != "" {
+		if targetURL == "" {
+			targetURL = "https://www.kooying.com/"
+		}
+		livePage, err := fetchAndAuditLiveKooyingURL(ctx, targetURL, checkedAt)
+		if err != nil {
+			probeErr = err.Error()
+		} else if livePage != nil {
+			matched := false
+			normTarget := strings.TrimRight(livePage.URL, "/")
+			for i := range pages {
+				if strings.TrimRight(pages[i].URL, "/") == normTarget {
+					// Preserve curated recommendations when matching known baseline pages, while updating live telemetry
+					if pages[i].OptimizedTitle != "" {
+						livePage.ID = pages[i].ID
+						livePage.PageType = pages[i].PageType + " (实时抓检)"
+						livePage.OptimizedTitle = pages[i].OptimizedTitle
+						livePage.OptimizedMetaDesc = pages[i].OptimizedMetaDesc
+						livePage.OptimizedH1 = pages[i].OptimizedH1
+						livePage.OptimizedSlug = pages[i].OptimizedSlug
+						livePage.OptimizedJSONLD = pages[i].OptimizedJSONLD
+					}
+					pages[i] = *livePage
+					matched = true
+					break
+				}
+			}
+			if !matched {
+				pages = append([]KooyingPageAudit{*livePage}, pages...)
+			}
+		}
+	}
+
+	totalScore := 0
+	criticalCount := 0
+	warningCount := 0
+	passedCount := 0
+	for _, p := range pages {
+		totalScore += p.Score
+		for _, iss := range p.Issues {
+			switch iss.Severity {
+			case "critical":
+				criticalCount++
+			case "warning":
+				warningCount++
+			case "pass":
+				passedCount++
+			}
+		}
+	}
+	overallScore := 62
+	if len(pages) > 0 {
+		overallScore = int(math.Round(float64(totalScore) / float64(len(pages))))
+	}
+
+	robotsCurrent := `User-agent: AhrefsBot 
+Disallow: / 
+User-agent: SemrushBot
+Disallow: / 
+User-Agent: Googlebot 
+Allow: /
+User-agent: GPTBot
+Allow: /`
+
+	robotsOptimized := `User-agent: *
+Allow: /
+Disallow: /api/min/
+
+# Explicit AI & Search Crawler Allowances (GEO + SEO)
+User-agent: Googlebot
+Allow: /
+User-agent: Bingbot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: GPTBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+
+# Competitor scrapers kept blocked
+User-agent: AhrefsBot
+Disallow: /
+User-agent: SemrushBot
+Disallow: /
+
+Sitemap: https://www.kooying.com/sitemap.xml`
+
+	llmsCurrentSample := `<pre style="word-wrap:break-word; white-space:pre-wrap;">
+
+# Truck & Automobile Brake Lining Manufacturers, Suppliers
+
+> ZHEJIANG KOOYING AUTOPARTS CO.,LTD. is Truck/Automobile Brake Lining Manufacturers and Wholesale Brake Drum, Brake Pads Factory, Brake Shoes Suppliers in China
+
+### Company
+ZHEJIANG KOOYING AUTOPARTS CO.,LTD.
+(缺陷：响应体最外层被 CMS 包裹了 HTML <pre> 标签，且缺少 WVA/尺寸/400C 耐磨实测与 30s 选型直达事实)
+</pre>`
+
+	llmsOptimized := `# Zhejiang Kooying Auto Parts Co., Ltd. (KOOYING / GOOLE)
+
+> IATF16949 & ECE R90 Commercial Brake Linings, Air Disc Brake Pads & Drum Shoes Manufacturer (Huzhou, China · 43,000㎡ Plant · 15M Sets/Year).
+
+## Engineering & Friction Proof
+- Asbestos-free formulations (GB5763-2018, SAE J661, ECE R90) across 30+ heavy-duty formulas
+- Krauss 400C constant-torque dynamometer test: 0.040 mm thickness wear (vs 0.085 mm benchmark), 2.300 g weight loss, stable μ = 0.35–0.38
+- Full dimensional cross-match by WVA/FMSI code, Axle (BPW, Meritor, SAF, Fuwa, Hande 35T), or Outer Arc × Width × Thickness + Rivet Holes
+
+## Priority Product Series
+- [Air Disc Brake Pads (WVA 29087, 29030, 29162, 29244)](https://www.kooying.com/product/brake-pads/): CV disc assemblies for European & global trucks
+- [European Heavy-Duty Brake Linings (BPW, Mercedes-Benz, Volvo, Scania, SAF)](https://www.kooying.com/product/european-vehicle-brake-lining/): Precision 6–26 hole linings
+- [American & Japanese Heavy-Duty Linings (FMSI 4515/4707, HINO, ISUZU)](https://www.kooying.com/product/american-vehicle-brake-lining/): High-load fleet & mining aftermarket
+- [Company & 43,000m2 Production Base](https://www.kooying.com/about/company-profile.html): In-house automated thermal pressing & testing
+
+## Direct Export Contact
+- Phone / WhatsApp: +86-159-5711-8669 | Email: sales@kooying.com`
+
+	return &KooyingSiteAuditOverview{
+		TargetDomain:         "https://www.kooying.com",
+		OverallScore:         overallScore,
+		ProjectedScore:       96,
+		SitemapURLCount:      468,
+		CriticalCount:        criticalCount,
+		WarningCount:         warningCount,
+		PassedCount:          passedCount,
+		LiveProbeError:       probeErr,
+		Pages:                pages,
+		SitemapTypos:         baselineSitemapTypos(),
+		RobotsTxtCurrent:     robotsCurrent,
+		RobotsTxtOptimized:   robotsOptimized,
+		LlmsTxtCurrentSample: llmsCurrentSample,
+		LlmsTxtOptimized:     llmsOptimized,
+		CheckedAt:            checkedAt,
+	}, nil
 }

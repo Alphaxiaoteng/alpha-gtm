@@ -67,7 +67,7 @@ const LEGACY_ROUTES: Record<string, string> = {
   '/contents': 'contents',
   '/media/templates': 'templates',
   '/templates': 'templates',
-  '/knowledge': 'knowledge',
+  '/knowledge': 'crawler',
   '/analytics': 'xhs-data',
   '/xhs-data': 'xhs-data',
   '/metrics': 'metrics',

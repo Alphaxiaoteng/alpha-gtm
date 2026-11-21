@@ -946,6 +946,8 @@ func (s *Server) handleAPIJobsEventsAll(w http.ResponseWriter, r *http.Request) 
 
 func (s *Server) routes() {
 	s.mux.HandleFunc("/healthz", s.handleHealthz)
+	brandSiteDir := guanying.ResolveBrandSiteDir()
+	s.mux.Handle("/brand-site/", http.StripPrefix("/brand-site/", http.FileServer(http.Dir(brandSiteDir))))
 	s.mux.Handle("/", AssetsHandler())
 	s.mux.HandleFunc("/api/overview", s.handleAPIOverview)
 	// 手机端只读端点。它们和其余 /api/* 一样走 Bearer 鉴权（有用户时），
@@ -985,6 +987,10 @@ func (s *Server) routes() {
 	s.mux.HandleFunc("POST /api/guanying/leads", s.handleAPIGuanyingLeads)
 	s.mux.HandleFunc("GET /api/guanying/seo-pages", s.handleAPIGuanyingSEOPages)
 	s.mux.HandleFunc("POST /api/guanying/seo-pages", s.handleAPIGuanyingSEOPages)
+	s.mux.HandleFunc("GET /api/guanying/site-maintenance", s.handleAPIGuanyingSiteMaintenance)
+	s.mux.HandleFunc("POST /api/guanying/site-maintenance", s.handleAPIGuanyingSiteMaintenance)
+	s.mux.HandleFunc("GET /api/guanying/seo-audit", s.handleAPIGuanyingSEOAudit)
+	s.mux.HandleFunc("POST /api/guanying/seo-audit", s.handleAPIGuanyingSEOAudit)
 	s.mux.HandleFunc("GET /api/desktop/screen/permission", s.handleAPIDesktopScreenPermission)
 	s.mux.HandleFunc("POST /api/desktop/screen/permission", s.handleAPIDesktopScreenPermission)
 	s.mux.HandleFunc("POST /api/desktop/screen/reveal", s.handleAPIDesktopScreenReveal)
@@ -1454,7 +1460,8 @@ func validSidecarSecret(value string) bool {
 func (s *Server) withCORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		origin := r.Header.Get("Origin")
-		if origin == "http://127.0.0.1:3080" || origin == "http://localhost:3080" {
+		if origin == "http://127.0.0.1:3080" || origin == "http://localhost:3080" ||
+			strings.HasPrefix(origin, "http://127.0.0.1:") || strings.HasPrefix(origin, "http://localhost:") {
 			w.Header().Set("Access-Control-Allow-Origin", origin)
 			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 			w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Request-ID")

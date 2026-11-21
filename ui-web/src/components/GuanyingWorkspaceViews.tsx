@@ -3,10 +3,11 @@ import useSWR from 'swr';
 import {
   ArrowRight,
   CheckCircle2,
+  Clock,
   Copy,
-  Database,
   ExternalLink,
   FileCheck2,
+  Film,
   Filter,
   Globe,
   Layers,
@@ -17,6 +18,7 @@ import {
   ShieldCheck,
   Sparkles,
   Table2,
+  Zap,
 } from 'lucide-react';
 import { api } from '../api';
 import { useUIStore } from '../store';
@@ -140,12 +142,64 @@ async function fetchJSON<T>(url: string, init?: RequestInit): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-const PRESET_SCENARIOS = [
-  { label: '东风 EQ153 / 换桥防错', query: 'EQ153', outer: '', width: '', holes: '' },
-  { label: 'WVA 29087 盘刹报价', query: '29087', outer: '', width: '', holes: '' },
-  { label: '汉德 35T (240×220·20孔)', query: '', outer: '240', width: '220', holes: '20' },
-  { label: 'HOWO 14孔 vs 8孔核对', query: 'HOWO', outer: '', width: '220', holes: '' },
-  { label: 'BPW 挂车桥 (19032/307AF)', query: 'BPW', outer: '', width: '', holes: '' },
+export interface GuanyingVideoItem {
+  id: string;
+  filename: string;
+  url: string;
+  title: string;
+  platform: string;
+  account: string;
+  source_url: string;
+  duration_sec: number;
+  tags: string[];
+  suggested_caption: string;
+}
+
+const SCENARIO_PLAYBOOKS = [
+  {
+    id: 'hand-measure',
+    badge: '场景一 · 无 OE 编码识片',
+    title: '门店手量尺寸 30 秒报价',
+    pain: '客户发卡尺实测外弧 240 × 宽 220mm（20孔），无原厂编码',
+    action: '±5mm 公差瞬时锁定汉德 35T (3501D10-120) 并出双语报价',
+    query: '',
+    outer: '240',
+    width: '220',
+    holes: '20',
+  },
+  {
+    id: 'axle-swap',
+    badge: '场景二 · 换桥防退货',
+    title: '后市场改装/换桥纠错',
+    pain: '买家口述东风 EQ153，海外维修厂常改桥造成错孔错铆钉',
+    action: '强制触发换桥对比与 14孔/铆钉核对红线提醒，杜绝整柜退货',
+    query: 'EQ153',
+    outer: '',
+    width: '',
+    holes: '',
+  },
+  {
+    id: 'mining-heat',
+    badge: '场景三 · 矿山高温工况',
+    title: '非洲/拉美重载长坡配方升级',
+    pain: 'WVA 29087 盘刹重载长坡易热衰，用低价竞品 2 个月磨穿',
+    action: '自动挂载 GY-NAO-38 配方（400℃磨损仅 0.040mm，寿命 3 倍）',
+    query: '29087',
+    outer: '',
+    width: '',
+    holes: '',
+  },
+  {
+    id: 'howo-compare',
+    badge: '场景四 · 重汽高频核孔',
+    title: 'HOWO 14 孔 vs 8 孔防错发',
+    pain: '重汽出口询盘常混报 HOWO 后桥 14 孔与 8 孔规格',
+    action: '并列校对 GYS-126 等匹配型号与 FOB 单价，一线 30 秒发车',
+    query: 'HOWO',
+    outer: '',
+    width: '220',
+    holes: '',
+  },
 ];
 
 export const GuanyingDatabaseView: React.FC = () => {
@@ -156,8 +210,18 @@ export const GuanyingDatabaseView: React.FC = () => {
   const { data: overview, mutate } = useSWR('api/guanying/overview', () =>
     fetchJSON<GuanyingOverview>('/api/guanying/overview'),
   );
+  const { data: videosData } = useSWR<GuanyingVideoItem[]>('guanying-videos/manifest', async () => {
+    try {
+      const res = await fetch('/guanying-videos/manifest.json');
+      if (!res.ok) return [];
+      return (await res.json()) as GuanyingVideoItem[];
+    } catch {
+      return [];
+    }
+  });
+  const videos = videosData ?? [];
 
-  const [subTab, setSubTab] = useState<'catalog' | 'leads'>('catalog');
+  const [subTab, setSubTab] = useState<'catalog' | 'leads' | 'videos'>('catalog');
   const [query, setQuery] = useState('');
   const [outerArc, setOuterArc] = useState('');
   const [widthMM, setWidthMM] = useState('');
@@ -209,7 +273,15 @@ export const GuanyingDatabaseView: React.FC = () => {
 
   const selectedProduct = activeProduct ?? filteredProducts[0] ?? products[0] ?? null;
 
-  async function generateQuote(opts: { productID?: string; leadID?: string; queryText?: string; save?: boolean }) {
+  async function generateQuote(opts: {
+    productID?: string;
+    leadID?: string;
+    queryText?: string;
+    outerArcMM?: number;
+    widthMM?: number;
+    holesCount?: number;
+    save?: boolean;
+  }) {
     setMatching(true);
     try {
       const resp = await fetchJSON<{ quote?: GuanyingQuote; matches: Array<{ product: GuanyingProduct }> }>(
@@ -217,10 +289,10 @@ export const GuanyingDatabaseView: React.FC = () => {
         {
           method: 'POST',
           body: JSON.stringify({
-            query: opts.queryText ?? query,
-            outer_arc_mm: Number(outerArc) || 0,
-            width_mm: Number(widthMM) || 0,
-            holes: Number(holes) || 0,
+            query: opts.queryText !== undefined ? opts.queryText : query,
+            outer_arc_mm: opts.outerArcMM !== undefined ? opts.outerArcMM : Number(outerArc) || 0,
+            width_mm: opts.widthMM !== undefined ? opts.widthMM : Number(widthMM) || 0,
+            holes: opts.holesCount !== undefined ? opts.holesCount : Number(holes) || 0,
             product_id: opts.productID || '',
             lead_id: opts.leadID || '',
             save_quote: Boolean(opts.save),
@@ -233,7 +305,7 @@ export const GuanyingDatabaseView: React.FC = () => {
       if (resp.quote) {
         setActiveQuote(resp.quote);
         if (opts.save) {
-          toast.show(`已生成并保存报价单：${resp.quote.product_code}`, 'success');
+          toast.show(`已生成并保存场景报价单：${resp.quote.product_code}`, 'success');
           await mutate();
         }
       } else {
@@ -260,41 +332,92 @@ export const GuanyingDatabaseView: React.FC = () => {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-brand-accent">
-            <Database className="h-3.5 w-3.5" />
-            <span>1:1 官方 PDF 目录结构化数据库 · 浙江冠英 (Kooying / GOOLE)</span>
+            <Zap className="h-3.5 w-3.5" />
+            <span>浙江冠英 GTM 核心业务场景工作台 · 智能识片报价 · 跨时差防漏单</span>
           </div>
           <h1 className="mt-1 text-2xl font-bold tracking-tight text-brand-fg">
-            产品与选型数据库
+            识片报价与防漏单场景
           </h1>
           <p className="mt-1 text-xs text-brand-muted">
-            覆盖 Kooying 英文册、冠隆产品册及 2026 企业台架报告；解决无 OE 编码、后市场换桥与 2 小时报价痛点。
+            聚焦门店手量识片、后市场换桥纠错、矿山高温配方升级与跨时差防漏单 4 大成交场景，30 秒直出中英双语报价单。
           </p>
         </div>
 
-        <div className="flex items-center gap-2 rounded-xl border border-brand-border bg-brand-surface p-1">
+        <div className="flex flex-wrap items-center gap-1.5 rounded-xl border border-brand-border bg-brand-surface p-1">
           <button
             type="button"
             onClick={() => setSubTab('catalog')}
-            className={`rounded-lg px-3.5 py-1.5 text-xs font-semibold transition ${
+            className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
               subTab === 'catalog' ? 'bg-brand-accent text-brand-on-accent shadow-xs' : 'text-brand-muted hover:text-brand-fg'
             }`}
           >
-            刹车片与车桥库 ({products.length})
+            <Zap className="h-3.5 w-3.5" />
+            现场识片与 30 秒报价
           </button>
           <button
             type="button"
             onClick={() => setSubTab('leads')}
-            className={`rounded-lg px-3.5 py-1.5 text-xs font-semibold transition ${
+            className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
               subTab === 'leads' ? 'bg-brand-accent text-brand-on-accent shadow-xs' : 'text-brand-muted hover:text-brand-fg'
             }`}
           >
-            海外终端询盘库 ({overview?.stats.terminal_lead_count ?? 0})
+            <ShieldCheck className="h-3.5 w-3.5" />
+            跨时差询盘防漏单 ({overview?.stats.terminal_lead_count ?? 0})
+          </button>
+          <button
+            type="button"
+            onClick={() => setSubTab('videos')}
+            className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
+              subTab === 'videos' ? 'bg-brand-accent text-brand-on-accent shadow-xs' : 'text-brand-muted hover:text-brand-fg'
+            }`}
+          >
+            <Film className="h-3.5 w-3.5" />
+            老板娘实拍短视频 ({videos.length})
           </button>
         </div>
       </div>
 
       {subTab === 'catalog' ? (
         <>
+          {/* Scenario Playbook Cards */}
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            {SCENARIO_PLAYBOOKS.map((sc) => (
+              <button
+                key={sc.id}
+                type="button"
+                onClick={() => {
+                  setQuery(sc.query);
+                  setOuterArc(sc.outer);
+                  setWidthMM(sc.width);
+                  setHoles(sc.holes);
+                  setSeriesFilter('全部');
+                  setActiveProduct(null);
+                  void generateQuote({
+                    queryText: sc.query,
+                    outerArcMM: Number(sc.outer) || 0,
+                    widthMM: Number(sc.width) || 0,
+                    holesCount: Number(sc.holes) || 0,
+                    save: true,
+                  });
+                }}
+                className="ui-card group flex flex-col justify-between space-y-2.5 p-4 text-left transition hover:border-brand-accent hover:bg-brand-surface-raised"
+              >
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="rounded-full bg-brand-accent/12 px-2 py-0.5 text-[10px] font-bold text-brand-accent">
+                      {sc.badge}
+                    </span>
+                    <ArrowRight className="h-3.5 w-3.5 text-brand-muted transition group-hover:translate-x-0.5 group-hover:text-brand-accent" />
+                  </div>
+                  <h3 className="text-xs font-bold text-brand-fg">{sc.title}</h3>
+                  <p className="text-[11px] leading-relaxed text-brand-muted">{sc.pain}</p>
+                </div>
+                <p className="border-t border-brand-border/70 pt-2 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+                  {sc.action}
+                </p>
+              </button>
+            ))}
+          </div>
           {/* Search & Dimension Bar */}
           <div className="ui-card space-y-4 p-5">
             <div className="grid gap-3 md:grid-cols-[2fr_repeat(3,minmax(100px,0.55fr))_auto]">
@@ -341,10 +464,10 @@ export const GuanyingDatabaseView: React.FC = () => {
 
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex flex-wrap items-center gap-1.5">
-                <span className="text-[11px] font-medium text-brand-muted">高频演示场景：</span>
-                {PRESET_SCENARIOS.map((sc) => (
+                <span className="text-[11px] font-medium text-brand-muted">快速演练参数：</span>
+                {SCENARIO_PLAYBOOKS.map((sc) => (
                   <button
-                    key={sc.label}
+                    key={sc.id}
                     type="button"
                     onClick={() => {
                       setQuery(sc.query);
@@ -355,7 +478,7 @@ export const GuanyingDatabaseView: React.FC = () => {
                     }}
                     className="rounded-full border border-brand-border bg-brand-surface-raised px-2.5 py-1 text-[11px] font-medium text-brand-fg transition hover:border-brand-accent hover:text-brand-accent"
                   >
-                    {sc.label}
+                    {sc.title}
                   </button>
                 ))}
                 {(query || outerArc || widthMM || holes || seriesFilter !== '全部') && (
@@ -577,8 +700,8 @@ export const GuanyingDatabaseView: React.FC = () => {
             </div>
           </div>
         </>
-      ) : (
-        /* Leads Database Sub-tab */
+      ) : subTab === 'leads' ? (
+        /* Overseas Inquiry Anti-Miss Sub-tab */
         <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
@@ -657,6 +780,101 @@ export const GuanyingDatabaseView: React.FC = () => {
                       一键匹配并出报价单 <ArrowRight className="h-3.5 w-3.5" />
                     </button>
                   )}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      ) : (
+        /* Sophia Real Factory & Canton Fair Short Videos <=60s */
+        <div className="space-y-4">
+          <div className="ui-card flex flex-wrap items-center justify-between gap-3 p-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 text-xs font-bold text-brand-fg">
+                <Film className="h-4 w-4 text-brand-accent" />
+                <span>冠英老板娘 Sophia 实拍短视频素材库（TikTok @kooying.brake.fact + 抖音，全部 ≤ 60 秒）</span>
+              </div>
+              <p className="text-[11px] text-brand-muted">
+                已真实拉取老板娘 Sophia 海外 TikTok 与抖音源头工厂/广交会发车实拍片，可直接用于外贸 WhatsApp 跟单、独立站信任背书与 AI 脚本二创。
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setActiveTab('social-media')}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-brand-accent px-3.5 py-2 text-xs font-semibold text-brand-on-accent hover:brightness-110"
+            >
+              进入短视频与内容运营 <ArrowRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {videos.map((v) => (
+              <article key={v.id} className="ui-card flex flex-col justify-between space-y-3 p-4">
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5">
+                      <span className="rounded bg-brand-accent/12 px-2 py-0.5 text-[10px] font-bold text-brand-accent">
+                        {v.platform} · {v.account}
+                      </span>
+                      <span className="inline-flex items-center gap-1 rounded bg-emerald-500/12 px-2 py-0.5 text-[10px] font-semibold text-emerald-600">
+                        <Clock className="h-3 w-3" /> {v.duration_sec}s
+                      </span>
+                    </div>
+                    <a
+                      href={v.source_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 text-[11px] font-medium text-brand-muted hover:text-brand-accent"
+                    >
+                      原链接 <ExternalLink className="h-3 w-3" />
+                    </a>
+                  </div>
+
+                  <video
+                    controls
+                    playsInline
+                    preload="metadata"
+                    src={v.url}
+                    className="h-56 w-full rounded-xl border border-brand-border bg-black object-contain"
+                  />
+
+                  <h3 className="text-xs font-bold text-brand-fg">{v.title}</h3>
+                  <div className="flex flex-wrap gap-1">
+                    {v.tags.map((t) => (
+                      <span key={t} className="rounded bg-brand-fg/[0.06] px-1.5 py-0.5 text-[10px] text-brand-muted">
+                        #{t}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="rounded-lg bg-brand-bg/70 p-2.5 text-[11px] leading-relaxed text-brand-fg/85">
+                    {v.suggested_caption}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      void navigator.clipboard?.writeText(v.suggested_caption);
+                      toast.show('外贸英文贴文已复制，可直接发 TikTok / WhatsApp', 'success');
+                    }}
+                    className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-brand-border px-2.5 py-2 text-[11px] font-semibold text-brand-fg hover:bg-brand-fg/[0.04]"
+                  >
+                    <Copy className="h-3.5 w-3.5" /> 复制外贸配文
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAgentDraft({
+                        mode: 'chat',
+                        message: `请基于老板娘 Sophia 这条实拍素材（${v.title}，时长 ${v.duration_sec}s，原链接：${v.source_url}），为中东/非洲重卡车队与维修门店二创 1 套 45 秒英西双语短视频口播分镜，并给出结尾引导发 WVA/尺寸到 WhatsApp +86 159-5711-8669 的 CTA 钩子。\n参考配文：${v.suggested_caption}`,
+                      });
+                      setActiveTab('bot');
+                    }}
+                    className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-brand-accent/15 px-2.5 py-2 text-[11px] font-semibold text-brand-accent hover:bg-brand-accent/25"
+                  >
+                    <MessageSquarePlus className="h-3.5 w-3.5" /> 交给 Bot 二创脚本
+                  </button>
                 </div>
               </article>
             ))}
@@ -1035,9 +1253,9 @@ export const GuanyingDataFeishuView: React.FC = () => {
             <Table2 className="h-3.5 w-3.5" />
             <span>冠英 GTM 数据总览 · 飞书 CLI (lark-cli) 实时上云中枢</span>
           </div>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-brand-fg">数据与飞书 CLI 中枢</h1>
+          <h1 className="mt-1 text-2xl font-bold tracking-tight text-brand-fg">数据与飞书 CLI 协同中枢</h1>
           <p className="mt-1 text-xs text-brand-muted">
-            本地 SQLite 为资产真源，通过官方 lark-cli 将冠英产品选型、海外终端询盘、SEO 页面、内容稿件及知识库增量镜像至飞书多维表格。
+            本地 SQLite 为业务真源，通过官方 lark-cli 将场景报价、海外终端询盘、SEO 独立站着陆页及短视频内容稿件实时镜像至飞书多维表格。
           </p>
         </div>
 
@@ -1065,13 +1283,12 @@ export const GuanyingDataFeishuView: React.FC = () => {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
-          { label: '官方刹车片型号库', value: stats?.product_count ?? 47, note: 'Kooying + 冠隆 1:1 目录' },
+          { label: '场景快速报价单', value: stats?.quote_count ?? 3, note: '30 秒生成双语报价 + 换桥纠错' },
           { label: '高价值终端询盘', value: stats?.terminal_lead_count ?? 0, note: `已过滤 ${stats?.filtered_trader_count ?? 0} 条贸易商` },
           { label: 'SEO 独立站着陆页', value: stats?.seo_page_count ?? 4, note: '含 Google Product JSON-LD' },
-          { label: 'GTM 内容运营稿件', value: stats?.content_count ?? 6, note: 'LinkedIn / TikTok / WhatsApp' },
-          { label: '品牌与台架知识文档', value: stats?.knowledge_doc_count ?? 4, note: '含 400℃ 磨损对比数据' },
+          { label: '短视频与内容运营', value: stats?.content_count ?? 6, note: '含老板娘 ≤60s 工厂实拍素材' },
         ].map((card) => (
           <div key={card.label} className="ui-card space-y-1 p-4">
             <span className="text-[11px] font-medium text-brand-muted">{card.label}</span>

@@ -19,7 +19,7 @@ code = qr.make_image(fill_color="#0A0A0A", back_color="#FFFFFF").convert("RGB")
 
 # 白底卡片：留白 + 下方一行说明
 pad = 46
-label_h = 70
+label_h = 108
 card = Image.new(
     "RGB",
     (code.width + pad * 2, code.height + pad * 2 + label_h),
@@ -27,20 +27,30 @@ card = Image.new(
 )
 card.paste(code, (pad, pad))
 d = ImageDraw.Draw(card)
-# 用系统字体画一行提示
-try:
-    font = ImageFont = None
-    from PIL import ImageFont as _IF
-    font = _IF.truetype(
-        "/System/Library/Fonts/PingFang.ttc", 26
-    )
-except Exception:
-    font = None
+# 用本机真实存在的中文字体画提示（Hiragino Sans GB 在 macOS 上稳定可用）
+from PIL import ImageFont as _IF
+font = None
+# 依次尝试，取第一个能渲染「扫」字的字体
+for font_path in [
+    "/System/Library/Fonts/Hiragino Sans GB.ttc",
+    "/System/Library/Fonts/STHeiti Medium.ttc",
+    "/System/Library/Fonts/Supplemental/Songti.ttc",
+]:
+    try:
+        candidate = _IF.truetype(font_path, 30, index=0)
+        if candidate.getbbox("扫")[2] > 0:
+            font = candidate
+            break
+    except Exception:
+        continue
+if font is None:
+    raise RuntimeError("找不到可用的中文字体，二维码说明无法出图")
+
 text = "扫码查看 AlphaGTM"
-bbox = d.textbbox((0, 0), text, font=font) if font else (0, 0, 300, 26)
+bbox = d.textbbox((0, 0), text, font=font)
 tw = bbox[2] - bbox[0]
 d.text(
-    ((card.width - tw) / 2, code.height + pad * 2 - 4),
+    ((card.width - tw) / 2, code.height + pad * 2 + 2),
     text,
     fill="#0A0A0A",
     font=font,

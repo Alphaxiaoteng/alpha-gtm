@@ -8,11 +8,11 @@ const PublishWorkspaceView = lazy(() => import('./components/PublishWorkspaceVie
 const SocialMediaWorkspaceView = lazy(() => import('./components/SocialMediaWorkspaceView').then((m) => ({ default: m.SocialMediaWorkspaceView })));
 const DashboardView = lazy(() => import('./components/GuanyingWorkspaceViews').then((m) => ({ default: m.GuanyingDataFeishuView })));
 const XHSDataDashboardView = lazy(() => import('./components/XHSDataDashboardView').then((m) => ({ default: m.XHSDataDashboardView })));
-const KnowledgeView = lazy(() => import('./components/KnowledgeView').then((m) => ({ default: m.KnowledgeView })));
 const ContentCalendarView = lazy(() => import('./components/ContentCalendarView').then((m) => ({ default: m.ContentCalendarView })));
-const RuntimeMonitorView = lazy(() => import('./components/RuntimeMonitorView').then((m) => ({ default: m.RuntimeMonitorView })));
 const ShopWorkspaceView = lazy(() => import('./components/ShopWorkspaceView').then((m) => ({ default: m.ShopWorkspaceView })));
 const StudioWorkspaceView = lazy(() => import('./components/GuanyingWorkspaceViews').then((m) => ({ default: m.GuanyingSeoBuilderView })));
+const RuntimeMonitorView = lazy(() => import('./components/RuntimeMonitorView').then((m) => ({ default: m.RuntimeMonitorView })));
+const ShopWorkspaceView = lazy(() => import('./components/ShopWorkspaceView').then((m) => ({ default: m.ShopWorkspaceView })));
 const CrawlerView = lazy(() => import('./components/GuanyingWorkspaceViews').then((m) => ({ default: m.GuanyingDatabaseView })));
 const CognitiveMemoryView = lazy(() => import('./components/CognitiveMemoryView').then((m) => ({ default: m.CognitiveMemoryView })));
 import { LocalLoadingState } from './components/LocalLoadingState';
@@ -188,7 +188,7 @@ function App() {
       case 'skills':
         return <EgoSettingsView initialSection="skills" />;
       case 'knowledge':
-        return <KnowledgeView />;
+        return <CrawlerView />;
       case 'calendar':
         return <ContentCalendarView />;
       case 'xhs-data':

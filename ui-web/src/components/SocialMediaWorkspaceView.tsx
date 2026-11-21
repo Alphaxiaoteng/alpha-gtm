@@ -3,7 +3,9 @@ import useSWR from 'swr';
 import { requestWorkspaceChange } from '../store';
 import { useUIStore } from '../store';
 import { api, type PublishRecord } from '../api';
+import { Clock, Copy, ExternalLink, Film } from 'lucide-react';
 import { LocalContentView, type ContentPublishInfo, type LocalContentKind } from './LocalContentView';
+import type { GuanyingVideoItem } from './GuanyingWorkspaceViews';
 
 type SocialMediaSection = LocalContentKind;
 
@@ -30,7 +32,17 @@ export function SocialMediaWorkspaceView({ initialSection = 'video' }: { initial
     setSection(nextSection);
   };
 
+  const toast = useUIStore((state) => state.toast);
   const { data: publishRecords } = useSWR<PublishRecord[]>('api/publish-records', api.getPublishRecords);
+  const { data: realVideos } = useSWR<GuanyingVideoItem[]>('guanying-videos/manifest', async () => {
+    try {
+      const res = await fetch('/guanying-videos/manifest.json');
+      if (!res.ok) return [];
+      return (await res.json()) as GuanyingVideoItem[];
+    } catch {
+      return [];
+    }
+  });
 
 
 
@@ -52,6 +64,58 @@ export function SocialMediaWorkspaceView({ initialSection = 'video' }: { initial
 
   return (
     <section className="space-y-5" data-testid="social-media-workspace">
+      {(realVideos ?? []).length > 0 && (
+        <div className="ui-card space-y-3 p-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2 text-xs font-bold text-brand-fg">
+              <Film className="h-4 w-4 text-brand-accent" />
+              <span>老板娘 Sophia 实拍短视频素材（TikTok @kooying.brake.fact + 抖音 · ≤60 秒）</span>
+            </div>
+            <span className="text-[11px] text-brand-muted">点击播放预览 · 一键复制外贸配文发布</span>
+          </div>
+          <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-5">
+            {(realVideos ?? []).map((v) => (
+              <div key={v.id} className="space-y-2 rounded-xl border border-brand-border bg-brand-bg/60 p-2.5">
+                <div className="flex items-center justify-between gap-1 text-[10px]">
+                  <span className="rounded bg-brand-accent/12 px-1.5 py-0.5 font-bold text-brand-accent">{v.platform}</span>
+                  <span className="inline-flex items-center gap-0.5 text-emerald-600 font-semibold">
+                    <Clock className="h-2.5 w-2.5" /> {v.duration_sec}s
+                  </span>
+                </div>
+                <video
+                  controls
+                  playsInline
+                  preload="metadata"
+                  src={v.url}
+                  className="h-40 w-full rounded-lg bg-black object-contain"
+                />
+                <p className="line-clamp-2 text-[11px] font-semibold text-brand-fg">{v.title}</p>
+                <div className="flex items-center justify-between gap-2 pt-0.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      void navigator.clipboard?.writeText(v.suggested_caption);
+                      toast.show('外贸短片配文已复制', 'success');
+                    }}
+                    className="inline-flex items-center gap-1 rounded border border-brand-border px-2 py-1 text-[10px] font-medium text-brand-fg hover:bg-brand-fg/[0.04]"
+                  >
+                    <Copy className="h-2.5 w-2.5" /> 复制配文
+                  </button>
+                  <a
+                    href={v.source_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-0.5 text-[10px] text-brand-muted hover:text-brand-accent"
+                  >
+                    原视频 <ExternalLink className="h-2.5 w-2.5" />
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div role="tablist" aria-label="内容库分类" className="inline-flex border-b border-brand-border">
           {sections.map(({ id, label }) => (
