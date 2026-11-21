@@ -1,0 +1,2250 @@
+@import "tailwindcss";
+
+/* Alpha-Nexus 可切换主题。每个可达 Skin 只保留一组结构与颜色 token。 */
+
+@theme {
+  --color-brand-bg: var(--brand-bg);
+  --color-brand-surface: var(--brand-surface);
+  --color-brand-surface-raised: var(--brand-surface-raised);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-accent-hover: var(--brand-accent-hover);
+  --color-brand-on-accent: var(--brand-on-accent);
+  --color-brand-success: var(--brand-success);
+  --color-brand-danger: var(--brand-danger);
+  --color-brand-warning: var(--brand-warning);
+  --color-brand-border: var(--brand-border);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-fg: var(--brand-fg);
+  --color-brand-fg-subtle: var(--brand-fg-subtle);
+  /* Role-split type tokens (applyFont writes runtime stacks) */
+  --font-sans: var(--font-body-runtime, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif);
+  --font-display: var(--font-display-runtime, -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif);
+  --font-mono: var(--font-mono-runtime, "JetBrains Mono", "IBM Plex Mono", monospace);
+  --radius-ui: var(--ui-radius);
+  --radius-card: var(--ui-radius-card);
+  --radius-btn: var(--ui-radius-btn);
+}
+
+/* Shared defaults = monochrome light, preventing a colored flash before React mounts. */
+:root {
+  --brand-bg: #fcfcfb;
+  --brand-surface: #ffffff;
+  --brand-surface-raised: #f7f7f5;
+  --brand-border: #e5e5e1;
+  --brand-card-border: #ebebe7;
+  --ui-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  --brand-accent: #111111;
+  --brand-accent-hover: #000000;
+  --brand-on-accent: #ffffff;
+  --brand-muted: #5b5c57;
+  --brand-fg: #111111;
+  --brand-fg-subtle: #4a4b47;
+  --brand-sidebar: #f5f5f3;
+  --brand-glow: rgba(0, 0, 0, 0.08);
+  --brand-input-bg: #ffffff;
+  --brand-success: #15803d;
+  --brand-danger: #dc2626;
+  --brand-warning: #52525b;
+  --brand-soft: #f5f5f3;
+  --brand-mint: #f5f5f3;
+  --brand-cream: #fcfcfb;
+  --ui-radius: 7px;
+  --ui-radius-card: 8px;
+  --ui-radius-btn: 7px;
+  --ui-shadow: none;
+  --ui-shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.1);
+  --ui-sidebar-w: 15rem;
+  --ui-nav-gap: 0.25rem;
+  --ui-header-h: 3.5rem;
+  --ui-content-pad: clamp(1rem, 2vw, 1.5rem);
+  --ui-blur: 0px;
+  --ui-nav-active-bg: #eaeae6;
+  --ui-nav-active-border: 0;
+  --ui-letter: 0;
+  --motion-fast: 120ms;
+  --motion-base: 180ms;
+  --motion-slow: 240ms;
+  --motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --motion-ease-enter: cubic-bezier(0, 0, 0.2, 1);
+  --font-display-runtime: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Helvetica Neue", sans-serif;
+  --font-ui-runtime: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
+  --font-sans-runtime: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
+  --font-body-runtime: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
+  --font-mono-runtime: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* ════════════════════════════════════════
+   Alpha-Nexus — 黑白工作台
+   ════════════════════════════════════════ */
+[data-skin="claude"] {
+  --brand-bg: #fcfcfb;
+  --brand-surface: #ffffff;
+  --brand-surface-raised: #f7f7f5;
+  --brand-border: #e5e5e1;
+  --brand-accent: #111111;
+  --brand-accent-hover: #000000;
+  --brand-on-accent: #ffffff;
+  --brand-muted: #5b5c57;
+  --brand-fg: #111111;
+  --brand-fg-subtle: #4a4b47;
+  --brand-sidebar: #f5f5f3;
+  --brand-glow: rgba(0, 0, 0, 0.08);
+  --brand-input-bg: #ffffff;
+  --brand-success: #15803d;
+  --brand-danger: #dc2626;
+  --brand-warning: #52525b;
+  --brand-soft: #f5f5f3;
+  --brand-mint: #f5f5f3;
+  --brand-cream: #fcfcfb;
+  --ui-radius: 7px;
+  --ui-radius-card: 8px;
+  --ui-radius-btn: 7px;
+  --ui-shadow: none;
+  --ui-shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.1);
+  --ui-content-pad: clamp(1rem, 2vw, 1.5rem);
+  --ui-nav-active-bg: #eaeae6;
+  --ui-nav-active-border: 0;
+  --ui-letter: -0.01em;
+  --ui-sidebar-w: 15rem;
+  --ui-blur: 0px;
+  --font-display-runtime: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Helvetica Neue", sans-serif;
+  --font-ui-runtime: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
+  --font-sans-runtime: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
+  --font-body-runtime: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
+  --font-mono-runtime: ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+/* 装饰色归入灰阶；成功、失败、人工处理的绿色、红色和琥珀色保持语义。 */
+[data-skin="claude"] {
+  --color-blue-50: var(--color-gray-50);
+  --color-blue-100: var(--color-gray-100);
+  --color-blue-200: var(--color-gray-200);
+  --color-blue-300: var(--color-gray-300);
+  --color-blue-400: var(--color-gray-400);
+  --color-blue-500: var(--color-gray-500);
+  --color-blue-600: var(--color-gray-600);
+  --color-blue-700: var(--color-gray-700);
+  --color-blue-800: var(--color-gray-800);
+  --color-blue-900: var(--color-gray-900);
+  --color-blue-950: var(--color-gray-950);
+  --color-cyan-50: var(--color-gray-50);
+  --color-cyan-100: var(--color-gray-100);
+  --color-cyan-200: var(--color-gray-200);
+  --color-cyan-300: var(--color-gray-300);
+  --color-cyan-400: var(--color-gray-400);
+  --color-cyan-500: var(--color-gray-500);
+  --color-cyan-600: var(--color-gray-600);
+  --color-cyan-700: var(--color-gray-700);
+  --color-cyan-800: var(--color-gray-800);
+  --color-cyan-900: var(--color-gray-900);
+  --color-cyan-950: var(--color-gray-950);
+  --color-indigo-50: var(--color-gray-50);
+  --color-indigo-100: var(--color-gray-100);
+  --color-indigo-200: var(--color-gray-200);
+  --color-indigo-300: var(--color-gray-300);
+  --color-indigo-400: var(--color-gray-400);
+  --color-indigo-500: var(--color-gray-500);
+  --color-indigo-600: var(--color-gray-600);
+  --color-indigo-700: var(--color-gray-700);
+  --color-indigo-800: var(--color-gray-800);
+  --color-indigo-900: var(--color-gray-900);
+  --color-indigo-950: var(--color-gray-950);
+  --color-pink-50: var(--color-gray-50);
+  --color-pink-100: var(--color-gray-100);
+  --color-pink-200: var(--color-gray-200);
+  --color-pink-300: var(--color-gray-300);
+  --color-pink-400: var(--color-gray-400);
+  --color-pink-500: var(--color-gray-500);
+  --color-pink-600: var(--color-gray-600);
+  --color-pink-700: var(--color-gray-700);
+  --color-pink-800: var(--color-gray-800);
+  --color-pink-900: var(--color-gray-900);
+  --color-pink-950: var(--color-gray-950);
+  --color-purple-50: var(--color-gray-50);
+  --color-purple-100: var(--color-gray-100);
+  --color-purple-200: var(--color-gray-200);
+  --color-purple-300: var(--color-gray-300);
+  --color-purple-400: var(--color-gray-400);
+  --color-purple-500: var(--color-gray-500);
+  --color-purple-600: var(--color-gray-600);
+  --color-purple-700: var(--color-gray-700);
+  --color-purple-800: var(--color-gray-800);
+  --color-purple-900: var(--color-gray-900);
+  --color-purple-950: var(--color-gray-950);
+  --color-sky-50: var(--color-gray-50);
+  --color-sky-100: var(--color-gray-100);
+  --color-sky-200: var(--color-gray-200);
+  --color-sky-300: var(--color-gray-300);
+  --color-sky-400: var(--color-gray-400);
+  --color-sky-500: var(--color-gray-500);
+  --color-sky-600: var(--color-gray-600);
+  --color-sky-700: var(--color-gray-700);
+  --color-sky-800: var(--color-gray-800);
+  --color-sky-900: var(--color-gray-900);
+  --color-sky-950: var(--color-gray-950);
+  --color-violet-50: var(--color-gray-50);
+  --color-violet-100: var(--color-gray-100);
+  --color-violet-200: var(--color-gray-200);
+  --color-violet-300: var(--color-gray-300);
+  --color-violet-400: var(--color-gray-400);
+  --color-violet-500: var(--color-gray-500);
+  --color-violet-600: var(--color-gray-600);
+  --color-violet-700: var(--color-gray-700);
+  --color-violet-800: var(--color-gray-800);
+  --color-violet-900: var(--color-gray-900);
+  --color-violet-950: var(--color-gray-950);
+}
+
+/* StyleSeed：标题衬线 + 正文无衬线协调 */
+[data-skin="claude"] .type-title,
+[data-skin="claude"] .alpha-wordmark,
+[data-skin="claude"] [data-testid="app-title"],
+[data-skin="claude"] [data-testid="page-title"] {
+  font-family: var(--font-display-runtime) !important;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--brand-fg);
+  font-variant-numeric: lining-nums;
+  font-feature-settings: "lnum" 1;
+}
+[data-skin="claude"] body,
+[data-skin="claude"] [data-testid="app-shell"] {
+  font-family: var(--font-body-runtime);
+  color: var(--brand-fg);
+  background: var(--brand-bg);
+}
+[data-skin="claude"] .claude-desk-aside {
+  background: color-mix(in srgb, var(--brand-sidebar) 96%, #fff);
+}
+[data-skin="claude"] .claude-desk {
+  background: var(--brand-bg);
+}
+
+/* ════════════════════════════════════════
+   HERMES AGENT — 官方 WebUI 气质（默认）
+   黑画布 #111 · 表面 #1a · 正文灰白 · 中性点缀 #f3f4f6
+   参考：hermes-webui dark（已去金，统一黑白灰度）
+   ════════════════════════════════════════ */
+[data-skin="hermes"] {
+  --brand-bg: #111111;
+  --brand-surface: #1a1a1a;
+  --brand-surface-raised: #222222;
+  --brand-border: rgba(255, 255, 255, 0.08);
+  --brand-accent: #f3f4f6;
+  --brand-accent-hover: #ffffff;
+  --brand-on-accent: #111111;
+  --brand-muted: #9ca3af;
+  --brand-fg: #f3f4f6;
+  --brand-fg-subtle: #9ca3af;
+  --brand-sidebar: #0c0c0c;
+  --brand-glow: rgba(255, 255, 255, 0.18);
+  --brand-input-bg: #141414;
+  --brand-success: #34d399;
+  --brand-danger: #f87171;
+  --brand-warning: #d4d4d8;
+  --brand-soft: #1c1c1c;
+  --brand-mint: #121816;
+  --brand-cream: #1a1a1a;
+  --ui-radius: 10px;
+  --ui-radius-card: 12px;
+  --ui-radius-btn: 8px;
+  --ui-shadow: 0 1px 0 rgba(255, 255, 255, 0.04), 0 8px 24px rgba(0, 0, 0, 0.45);
+  --ui-shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.55);
+  --ui-content-pad: 1.5rem;
+  --ui-nav-active-bg: color-mix(in srgb, var(--brand-fg) 10%, transparent);
+  --ui-nav-active-border: 0;
+  --ui-letter: -0.011em;
+  --ui-sidebar-w: 15rem;
+  --ui-blur: 0px;
+  --font-display-runtime: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-ui-runtime: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-sans-runtime: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-body-runtime: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono-runtime: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* Hermes：无衬线专业 UI，标题与正文同一系统栈 */
+[data-skin="hermes"] .type-title,
+[data-skin="hermes"] .alpha-wordmark,
+[data-skin="hermes"] [data-testid="app-title"],
+[data-skin="hermes"] [data-testid="page-title"] {
+  font-family: var(--font-display-runtime) !important;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--brand-fg);
+}
+[data-skin="hermes"] body,
+[data-skin="hermes"] [data-testid="app-shell"] {
+  font-family: var(--font-body-runtime);
+  color: var(--brand-fg);
+  background: var(--brand-bg);
+}
+[data-skin="hermes"] .claude-desk,
+[data-skin="hermes"] .claude-desk-aside {
+  background: var(--brand-bg);
+}
+[data-skin="hermes"] .claude-desk-aside {
+  background: var(--brand-sidebar);
+  border-color: var(--brand-border);
+}
+
+/* ════════════════════════════════════════
+   PIXEL / VibeCafé — 黑黄像素极客终端
+   规范：~/.gemini/config/design.md [style:pixelgeek]
+   纯黑底 · 卡片 #121212 · JetBrains Mono · 硬边 0 圆角 · 荧光黄 #FFD700
+   ════════════════════════════════════════ */
+[data-skin="pixel"] {
+  --brand-bg: #000000;
+  --brand-surface: #121212;
+  --brand-surface-raised: #1a1a1a;
+  --brand-border: #ffffff;
+  --brand-accent: #ffd700;
+  --brand-accent-hover: #ffff00;
+  --brand-on-accent: #000000;
+  --brand-muted: #888888;
+  --brand-fg: #ffffff;
+  --brand-fg-subtle: #a0a0a0;
+  --brand-sidebar: #080808;
+  --brand-glow: rgba(255, 215, 0, 0.28);
+  --brand-input-bg: #000000;
+  --brand-success: #00ffff;
+  --brand-danger: #ff4444;
+  --brand-warning: #d4d4d8;
+  --brand-soft: #1a1800;
+  --brand-mint: #001a1a;
+  --brand-cream: #121212;
+  --ui-radius: 0px;
+  --ui-radius-card: 0px;
+  --ui-radius-btn: 0px;
+  --ui-shadow: 4px 4px 0 #ffd700;
+  --ui-shadow-lg: 8px 8px 0 #ffd700;
+  --ui-content-pad: 1.5rem;
+  --ui-nav-active-bg: #ffd700;
+  --ui-nav-active-border: 0;
+  --ui-letter: 0;
+  --ui-blur: 0px;
+  --font-display-runtime: "JetBrains Mono", "Fira Code", "SF Mono", ui-monospace, monospace;
+  --font-ui-runtime: "JetBrains Mono", "Fira Code", "SF Mono", ui-monospace, monospace;
+  --font-sans-runtime: "JetBrains Mono", "Fira Code", "SF Mono", ui-monospace, monospace;
+  --font-body-runtime: "JetBrains Mono", "Fira Code", "SF Mono", ui-monospace, monospace;
+  --font-mono-runtime: "JetBrains Mono", "Fira Code", "SF Mono", ui-monospace, monospace;
+}
+
+/* 像素字词标 — 步进感标题，正文仍用 JetBrains Mono */
+[data-skin="pixel"] .alpha-wordmark,
+[data-skin="pixel"] [data-testid="app-title"],
+[data-skin="pixel"] .type-title {
+  font-family: "Press Start 2P", "JetBrains Mono", monospace !important;
+  font-size: 0.68em;
+  line-height: 1.6;
+  letter-spacing: 0 !important;
+  image-rendering: pixelated;
+  color: #ffd700;
+  text-shadow: 2px 2px 0 #333;
+}
+
+/* 硬边铁律：全站 0 圆角 + 2px 粗边（像素步进） */
+[data-skin="pixel"] *,
+[data-skin="pixel"] *::before,
+[data-skin="pixel"] *::after {
+  border-radius: 0 !important;
+}
+
+[data-skin="pixel"] aside,
+[data-skin="pixel"] .bg-brand-surface,
+[data-skin="pixel"] .border,
+[data-skin="pixel"] input,
+[data-skin="pixel"] textarea,
+[data-skin="pixel"] select,
+[data-skin="pixel"] button,
+[data-skin="pixel"] [class*="rounded"] {
+  border-color: color-mix(in srgb, #fff 22%, transparent);
+}
+
+[data-skin="pixel"] aside {
+  border-right: 2px solid #222 !important;
+  background: #080808 !important;
+}
+
+[data-skin="pixel"] header {
+  border-bottom: 2px solid #222 !important;
+  background: #000 !important;
+}
+
+/* 导航激活：荧光黄底 + 黑字 */
+[data-skin="pixel"] nav button[aria-current="page"],
+[data-skin="pixel"] nav a[aria-current="page"],
+[data-skin="pixel"] .nav-active {
+  background: #ffd700 !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+  box-shadow: 3px 3px 0 #fff;
+  font-weight: 700;
+}
+
+/* 卡片 / 面板：黑灰底 + 2px 白边步进 */
+[data-skin="pixel"] .card,
+[data-skin="pixel"] [data-testid="app-main"] .border {
+  border: 2px solid #333 !important;
+  background: #121212 !important;
+  box-shadow: 4px 4px 0 #1a1a00;
+}
+
+/* 主按钮：荧光黄硬块 */
+[data-skin="pixel"] .bg-brand-accent,
+[data-skin="pixel"] button.bg-brand-accent {
+  background: #ffd700 !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+  box-shadow: 3px 3px 0 #666;
+  font-weight: 700;
+}
+[data-skin="pixel"] .bg-brand-accent:hover,
+[data-skin="pixel"] button.bg-brand-accent:hover {
+  background: #ffff00 !important;
+  box-shadow: 4px 4px 0 #888;
+}
+
+/* 输入：纯黑底 + 2px 边 */
+[data-skin="pixel"] input,
+[data-skin="pixel"] textarea,
+[data-skin="pixel"] select {
+  background: #000 !important;
+  border: 2px solid #444 !important;
+  color: #fff !important;
+  font-family: "JetBrains Mono", "Fira Code", monospace !important;
+}
+[data-skin="pixel"] input:focus,
+[data-skin="pixel"] textarea:focus,
+[data-skin="pixel"] select:focus {
+  border-color: #ffd700 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 1px #ffd700;
+}
+
+/* Agent 对话：硬边像素气泡 */
+[data-skin="pixel"] .agent-studio,
+[data-skin="pixel"] .claude-desk {
+  background: #000 !important;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+}
+[data-skin="pixel"] .claude-desk-aside {
+  background: #080808 !important;
+  border-right: 2px solid #222 !important;
+}
+
+/* ════════════════════════════════════════
+   DARK GAME — 克制黑灰像素 HUD（保留 mario ID 兼容已保存偏好）
+   ════════════════════════════════════════ */
+[data-skin="mario"] {
+  --brand-bg: #000000;
+  --brand-surface: #0d0f12;
+  --brand-surface-raised: #14171b;
+  --brand-border: #2b3036;
+  --brand-accent: #78dce8;
+  --brand-accent-hover: #a5e8ef;
+  --brand-muted: #a2a8af;
+  --brand-fg: #edf0f2;
+  --brand-fg-subtle: #a2a8af;
+  --brand-sidebar: #000000;
+  --brand-glow: rgba(0, 0, 0, 0.65);
+  --brand-input-bg: #090b0d;
+  --brand-success: #a6e3a1;
+  --brand-danger: #f38ba8;
+  --brand-warning: #d4d4d8;
+  --brand-soft: #111419;
+  --brand-mint: #101612;
+  --brand-cream: #0d0f12;
+  --game-cyan: #78dce8;
+  --game-amber: #f6c177;
+  --game-pink: #f38ba8;
+  --game-green: #a6e3a1;
+  /* Existing status utilities stay semantic, but their large surfaces remain dark. */
+  --color-emerald-50: #09110c;
+  --color-emerald-100: #0d1711;
+  --color-emerald-200: #1d3525;
+  --color-emerald-300: #31573d;
+  --color-emerald-700: #a6e3a1;
+  --color-emerald-800: #b7e9b3;
+  --color-emerald-900: #c8efc5;
+  --color-amber-50: #151006;
+  --color-amber-100: #1c1609;
+  --color-amber-200: #443417;
+  --color-amber-300: #6a5224;
+  --color-amber-700: #f6c177;
+  --color-amber-800: #f8cf95;
+  --color-amber-900: #fadeb0;
+  --color-red-50: #15090d;
+  --color-red-100: #1d0d13;
+  --color-red-200: #44202b;
+  --color-red-300: #693143;
+  --color-red-600: #f38ba8;
+  --color-red-700: #f49ab3;
+  --color-red-800: #f6adc1;
+  --color-red-900: #f8c0d0;
+  --color-sky-50: #071115;
+  --color-sky-100: #0a171c;
+  --color-sky-200: #193641;
+  --color-sky-300: #285563;
+  --color-sky-700: #78dce8;
+  --color-sky-800: #94e4ed;
+  --color-sky-900: #afeaf1;
+  --ui-radius: 0px;
+  --ui-radius-card: 0px;
+  --ui-radius-btn: 0px;
+  --ui-shadow: 2px 2px 0 #000000;
+  --ui-shadow-lg: 2px 2px 0 #000000;
+  --ui-content-pad: 1.5rem;
+  --ui-nav-active-bg: #111419;
+  --ui-nav-active-border: 0;
+  --ui-letter: 0;
+  --ui-blur: 0px;
+}
+
+[data-skin="mario"] [data-testid="app-shell"],
+[data-skin="mario"] [data-testid="app-main"] {
+  background: var(--brand-bg);
+}
+
+[data-skin="mario"] [data-testid="app-sidebar"] {
+  background: var(--brand-bg) !important;
+  border-right: 1px solid var(--brand-border) !important;
+}
+
+[data-skin="mario"] header {
+  background: var(--brand-bg) !important;
+  border-bottom: 1px solid var(--brand-border) !important;
+  color: var(--brand-fg);
+}
+
+[data-skin="mario"] .alpha-wordmark,
+[data-skin="mario"] .type-title,
+[data-skin="mario"] [data-testid="app-title"],
+[data-skin="mario"] [data-testid="page-title"] {
+  font-family: "Press Start 2P", "JetBrains Mono", ui-monospace, monospace !important;
+  letter-spacing: 0 !important;
+  color: var(--brand-fg) !important;
+  text-shadow: 2px 2px 0 #000000;
+}
+
+[data-skin="mario"] nav button[aria-current="page"] {
+  background: var(--ui-nav-active-bg) !important;
+  color: var(--brand-fg) !important;
+  border: 1px solid var(--brand-border);
+  border-left: 3px solid var(--game-cyan);
+  box-shadow: 2px 2px 0 #000000;
+}
+
+[data-skin="mario"] nav button[aria-current="page"] svg {
+  color: var(--game-cyan) !important;
+}
+
+[data-skin="mario"] .ui-card,
+[data-skin="mario"] .ui-card-flat,
+[data-skin="mario"] .bg-brand-surface.border {
+  background: var(--brand-surface) !important;
+  border: 1px solid var(--brand-border) !important;
+  box-shadow: 2px 2px 0 #000000 !important;
+}
+
+[data-skin="mario"] .ui-btn-primary,
+[data-skin="mario"] .bg-brand-accent,
+[data-skin="mario"] button.bg-brand-accent,
+[data-skin="mario"] .agent-studio .agent-send,
+[data-skin="mario"] .agent-studio .agent-primary-action {
+  background: var(--brand-surface-raised) !important;
+  color: var(--game-cyan) !important;
+  border: 1px solid var(--game-cyan) !important;
+  box-shadow: 2px 2px 0 #000000;
+}
+
+[data-skin="mario"] .ui-btn-primary:hover,
+[data-skin="mario"] .bg-brand-accent:hover,
+[data-skin="mario"] button.bg-brand-accent:hover,
+[data-skin="mario"] .agent-studio .agent-send:hover,
+[data-skin="mario"] .agent-studio .agent-primary-action:hover {
+  background: #182025 !important;
+}
+
+[data-skin="mario"] button[class~="bg-violet-600"],
+[data-skin="mario"] button[class~="bg-indigo-500"],
+[data-skin="mario"] button[class~="bg-[var(--brand-accent)]"] {
+  background: var(--brand-surface-raised) !important;
+  color: var(--game-cyan) !important;
+  border: 1px solid var(--game-cyan) !important;
+  box-shadow: 2px 2px 0 #000000;
+}
+
+[data-skin="mario"] button[class~="bg-amber-600"] {
+  background: var(--brand-surface-raised) !important;
+  color: var(--game-amber) !important;
+  border: 1px solid var(--game-amber) !important;
+  box-shadow: 2px 2px 0 #000000;
+}
+
+[data-skin="mario"] button[class~="bg-red-600"] {
+  background: var(--brand-surface-raised) !important;
+  color: var(--game-pink) !important;
+  border: 1px solid var(--game-pink) !important;
+  box-shadow: 2px 2px 0 #000000;
+}
+
+[data-skin="mario"] input:focus,
+[data-skin="mario"] textarea:focus,
+[data-skin="mario"] select:focus,
+[data-skin="mario"] button:focus-visible {
+  outline: 2px solid var(--game-cyan) !important;
+  outline-offset: 2px;
+}
+
+[data-skin="mario"] .skin-swatch {
+  border-radius: 0 !important;
+  border: 1px solid var(--brand-border) !important;
+  box-shadow: 2px 2px 0 #000000;
+}
+
+[data-skin="mario"] [class~="bg-white/50"],
+[data-skin="mario"] [class~="bg-white/70"],
+[data-skin="mario"] [class~="bg-white/80"],
+[data-skin="mario"] [class~="bg-gray-100"] {
+  background: var(--brand-surface) !important;
+}
+
+[data-skin="mario"] .agent-studio {
+  background: var(--brand-bg);
+}
+
+[data-skin="mario"] .agent-studio .claude-desk-aside,
+[data-skin="mario"] .agent-studio .agent-composer {
+  background: var(--brand-surface) !important;
+  color: var(--brand-fg);
+  border: 1px solid var(--brand-border);
+  box-shadow: 2px 2px 0 #000000;
+}
+
+[data-skin="mario"] .agent-studio .agent-message-user {
+  border-left: 3px solid var(--game-cyan);
+  padding-left: 12px;
+}
+
+/* ════════════════════════════════════════
+   ANIME — 动漫软萌
+   ════════════════════════════════════════ */
+[data-skin="anime"] {
+  --brand-bg: #fff0f5;
+  --brand-surface: #ffffff;
+  --brand-surface-raised: #fff8fb;
+  --brand-border: rgba(200, 80, 130, 0.14);
+  --brand-accent: #e86a9b;
+  --brand-accent-hover: #d45588;
+  --brand-muted: #a07890;
+  --brand-fg: #3a2030;
+  --brand-fg-subtle: #7a5068;
+  --brand-sidebar: #ffe4ef;
+  --brand-glow: rgba(232, 106, 155, 0.28);
+  --brand-input-bg: #fff8fb;
+  --brand-success: #6bbf8a;
+  --brand-danger: #e85d6a;
+  --brand-soft: #ffd6e8;
+  --brand-mint: #d4f0e0;
+  --brand-cream: #fff5f8;
+  --ui-radius: 20px;
+  --ui-radius-card: 24px;
+  --ui-radius-btn: 999px;
+  --ui-shadow: 0 8px 24px rgba(200, 80, 130, 0.1);
+  --ui-shadow-lg: 0 16px 40px rgba(200, 80, 130, 0.14);
+  --ui-content-pad: 1.5rem;
+  --ui-nav-active-bg: rgba(232, 106, 155, 0.12);
+  --ui-nav-active-border: 3px solid var(--brand-accent);
+  --ui-letter: -0.005em;
+}
+
+/* meishi 兼容 */
+[data-skin="meishi"] {
+  --brand-bg: #fbf4ec;
+  --brand-surface: #fff9f3;
+  --brand-surface-raised: #fffdf9;
+  --brand-border: rgba(120, 72, 48, 0.12);
+  --brand-accent: #e86f5c;
+  --brand-accent-hover: #d45a48;
+  --brand-muted: #9a7b6a;
+  --brand-fg: #3d2c24;
+  --brand-fg-subtle: #7a5c4e;
+  --brand-sidebar: #f7ebe0;
+  --brand-glow: rgba(232, 111, 92, 0.28);
+  --brand-input-bg: #fffdf9;
+  --brand-success: #6a9b7a;
+  --brand-danger: #d4564a;
+  --brand-soft: #ffe8df;
+  --brand-mint: #c8e6d0;
+  --brand-cream: #fff3e6;
+  --ui-radius: 18px;
+  --ui-radius-card: 22px;
+  --ui-radius-btn: 999px;
+  --ui-shadow: 0 2px 0 rgba(120, 72, 48, 0.06), 0 10px 28px rgba(120, 72, 48, 0.08);
+  --ui-shadow-lg: 0 16px 48px rgba(120, 72, 48, 0.12);
+  --ui-nav-active-bg: rgba(232, 111, 92, 0.12);
+  --ui-nav-active-border: 3px solid var(--brand-accent);
+}
+
+[data-skin="alpha"] {
+  --brand-bg: #050505;
+  --brand-surface: #0c0c0e;
+  --brand-surface-raised: #141418;
+  --brand-border: rgba(255, 255, 255, 0.08);
+  --brand-accent: #8b5cf6;
+  --brand-on-accent: #111111;
+  --brand-accent-hover: #a78bfa;
+  --brand-muted: #a1a1aa;
+  --brand-fg: #fafafa;
+  --brand-fg-subtle: #a1a1aa;
+  --brand-sidebar: #08080a;
+  --brand-glow: rgba(139, 92, 246, 0.4);
+  --brand-input-bg: #121216;
+  --brand-success: #34d399;
+  --brand-danger: #f87171;
+  --brand-warning: #d4d4d8;
+  --ui-radius: 12px;
+  --ui-radius-card: 16px;
+  --ui-radius-btn: 10px;
+  --ui-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 8px 24px rgba(0, 0, 0, 0.4);
+  --ui-shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.55);
+  --ui-nav-active-bg: rgba(139, 92, 246, 0.12);
+}
+
+/* ── 全站统一卡片 / 壳 ── */
+[data-testid="app-shell"] {
+  background: var(--brand-bg);
+}
+[data-testid="app-sidebar"] {
+  background: var(--brand-sidebar) !important;
+  border-color: var(--brand-border) !important;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+/* 侧栏环境光晕：为液态玻璃控件提供可折射的内容层次（纯黑白，不用品牌色） */
+[data-testid="app-sidebar"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(60% 22% at 22% 6%, color-mix(in srgb, var(--brand-fg) 7%, transparent), transparent 68%),
+    radial-gradient(48% 16% at 78% 34%, color-mix(in srgb, var(--brand-fg) 4.5%, transparent), transparent 70%),
+    radial-gradient(55% 20% at 30% 88%, color-mix(in srgb, var(--brand-fg) 5%, transparent), transparent 72%);
+}
+
+/* Agent 区域 — 跟随皮肤 token */
+.agent-studio {
+  background:
+    radial-gradient(ellipse 70% 45% at 0% 0%, color-mix(in srgb, var(--brand-accent) 12%, transparent), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 100% 100%, color-mix(in srgb, var(--brand-accent) 8%, transparent), transparent 50%),
+    var(--brand-bg);
+}
+.agent-studio .agent-panel {
+  background: var(--brand-surface);
+  border: 1.5px solid var(--brand-border);
+  box-shadow: var(--ui-shadow);
+  border-radius: var(--ui-radius-card);
+}
+.agent-studio .agent-sticker {
+  border: 1.5px solid var(--brand-border);
+  background: var(--brand-soft, var(--brand-surface-raised));
+  border-radius: var(--ui-radius);
+}
+.agent-studio .agent-bubble-user {
+  background: var(--brand-accent);
+  color: #fff;
+  border-radius: calc(var(--ui-radius-card) + 4px) calc(var(--ui-radius-card) + 4px) 4px calc(var(--ui-radius-card) + 4px);
+  box-shadow: var(--ui-shadow);
+}
+.agent-studio .agent-bubble-bot {
+  background: var(--brand-surface-raised);
+  color: var(--brand-fg);
+  border: 1.5px solid var(--brand-border);
+  border-radius: calc(var(--ui-radius-card) + 4px) calc(var(--ui-radius-card) + 4px) calc(var(--ui-radius-card) + 4px) 4px;
+}
+.agent-studio .agent-composer {
+  background: var(--brand-input-bg);
+  border: 1.5px solid var(--brand-border);
+  border-radius: var(--ui-radius-card);
+  box-shadow: var(--ui-shadow);
+}
+.agent-studio .agent-pill {
+  border: 1.5px solid var(--brand-border);
+  background: var(--brand-cream, var(--brand-surface-raised));
+  border-radius: var(--ui-radius-btn);
+  font-weight: 600;
+  color: var(--brand-fg);
+}
+.agent-studio .agent-send {
+  background: var(--brand-accent);
+  color: #fff;
+  border-radius: var(--ui-radius-btn);
+}
+.agent-studio .agent-session-on {
+  background: color-mix(in srgb, var(--brand-accent) 12%, var(--brand-surface));
+  border: 1.5px solid color-mix(in srgb, var(--brand-accent) 40%, transparent);
+}
+
+[data-skin="pixel"] .agent-studio .agent-panel,
+[data-skin="pixel"] .agent-studio .agent-composer,
+[data-skin="pixel"] .agent-studio .agent-bubble-user,
+[data-skin="pixel"] .agent-studio .agent-bubble-bot {
+  border: 2px solid #fff !important;
+  border-radius: 0 !important;
+  box-shadow: 4px 4px 0 #ffd700;
+  background: #121212;
+}
+[data-skin="pixel"] .agent-studio .agent-bubble-user {
+  background: #1a1800 !important;
+  border-color: #ffd700 !important;
+  color: #ffd700;
+}
+[data-skin="pixel"] .agent-studio .agent-bubble-bot {
+  background: #080808 !important;
+  border-color: #444 !important;
+  color: #fff;
+}
+[data-skin="pixel"] .agent-studio .agent-send {
+  border-radius: 0 !important;
+  background: #ffd700 !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+  font-weight: 700;
+  box-shadow: 3px 3px 0 #666;
+}
+[data-skin="pixel"] .agent-studio .agent-session-on {
+  background: #1a1800 !important;
+  border: 2px solid #ffd700 !important;
+  color: #ffd700;
+}
+[data-skin="hermes"] .agent-studio .agent-bubble-user {
+  background: color-mix(in srgb, var(--brand-accent) 22%, #1a1a1a);
+  color: var(--brand-fg);
+  border: 1px solid color-mix(in srgb, var(--brand-accent) 35%, transparent);
+}
+[data-skin="hermes"] .alpha-wordmark {
+  letter-spacing: -0.03em;
+  color: var(--brand-accent);
+}
+
+/* Runtime role-split fonts (applyFont) + text hierarchy */
+:root {
+  --font-display-runtime: "Syne", "Space Grotesk", sans-serif;
+  --font-ui-runtime: "DM Sans", "Manrope", sans-serif;
+  --font-sans-runtime: "DM Sans", "Manrope", sans-serif;
+  --font-body-runtime: "DM Sans", "Manrope", sans-serif;
+  --font-mono-runtime: "JetBrains Mono", "IBM Plex Mono", monospace;
+  --font-ui-weight: 450;
+  --display-letter: -0.035em;
+  /* Text layers — never flat single black/white.
+     层级用「与底色的不透明混合」表达，而不是 alpha：
+     alpha 在浅色主题下会把文字冲淡成半透明灰，10px 小字直接跌破 WCAG AA
+     （实测 text-gray-400 在 #ffffff 上只有 3.07:1）。改为向 --brand-bg 混合，
+     浅色主题往白靠、深色主题往黑靠，两个方向都保持不透明的可读色。 */
+  --text-1: var(--brand-fg);
+  --text-2: color-mix(in srgb, var(--brand-fg) 86%, var(--brand-muted));
+  --text-3: var(--brand-muted);
+  --text-4: color-mix(in srgb, var(--brand-muted) 94%, var(--brand-bg));
+  --text-5: color-mix(in srgb, var(--brand-muted) 88%, var(--brand-bg));
+}
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+  }
+
+  html {
+    font-family: var(--font-body-runtime) !important;
+    font-optical-sizing: auto;
+    text-rendering: optimizeLegibility;
+  }
+
+  body,
+  #root {
+    background-color: var(--brand-bg);
+    color: var(--text-2);
+    font-family: var(--font-body-runtime) !important;
+    font-weight: 400;
+    font-feature-settings: "ss01" on, "kern" on, "liga" on;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: var(--ui-letter);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition:
+      background-color var(--motion-slow) var(--motion-ease-standard),
+      color var(--motion-base) var(--motion-ease-standard);
+  }
+
+  /* Body surfaces inherit body face */
+  #root p,
+  #root li,
+  #root td,
+  #root div {
+    font-family: var(--font-body-runtime);
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--brand-accent) 35%, transparent);
+  }
+
+  /* ── DISPLAY: titles / brand ── */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  .alpha-wordmark,
+  [data-testid="app-title"],
+  [data-testid="page-title"],
+  [data-display],
+  .font-display,
+  .type-display,
+  .type-title {
+    font-family: var(--font-display-runtime) !important;
+    letter-spacing: var(--display-letter);
+    font-weight: 650;
+    color: var(--text-1);
+    line-height: 1.2;
+  }
+
+  h1 {
+    font-weight: 700;
+    font-size: 1.375rem;
+  }
+  h2 {
+    font-weight: 650;
+    font-size: 1.125rem;
+  }
+  h3 {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  h4,
+  h5 {
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  .alpha-wordmark {
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 0.95;
+  }
+
+  /* ── UI chrome: nav / buttons / controls ── */
+  #root button,
+  #root input,
+  #root select,
+  #root textarea,
+  #root label,
+  #root nav,
+  #root aside,
+  .type-ui {
+    font-family: var(--font-ui-runtime) !important;
+  }
+
+  #root button {
+    font-weight: 560;
+    letter-spacing: -0.01em;
+  }
+
+  #root button,
+  #root input,
+  #root select,
+  #root textarea {
+    transition-duration: var(--motion-fast);
+    transition-timing-function: var(--motion-ease-standard);
+  }
+
+  #root input,
+  #root select,
+  #root textarea {
+    font-weight: 450;
+    color: var(--text-1);
+  }
+
+  #root input::placeholder,
+  #root textarea::placeholder {
+    color: var(--text-4);
+    font-weight: 400;
+  }
+
+  /* ── Micro labels (uppercase sections) ── */
+  .type-label,
+  [data-label] {
+    font-family: var(--font-ui-runtime) !important;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-4);
+  }
+
+  /* ── Mono ── */
+  code,
+  kbd,
+  pre,
+  .font-mono,
+  [data-mono],
+  .font-mono * {
+    font-family: var(--font-mono-runtime) !important;
+    letter-spacing: 0 !important;
+    font-feature-settings: "liga" 0, "calt" 1;
+    font-weight: 500;
+  }
+
+  .font-sans {
+    font-family: var(--font-body-runtime) !important;
+  }
+  .font-display {
+    font-family: var(--font-display-runtime) !important;
+  }
+  .font-mono {
+    font-family: var(--font-mono-runtime) !important;
+  }
+
+  .ui-lining-nums {
+    font-family: var(--font-ui-runtime) !important;
+    font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings: "lnum" 1, "tnum" 1;
+    letter-spacing: 0;
+  }
+
+  /* Weight ladder — real contrast, not all looking “medium” */
+  .font-light {
+    font-weight: 300 !important;
+  }
+  .font-normal {
+    font-weight: 400 !important;
+  }
+  .font-medium {
+    font-weight: 500 !important;
+  }
+  .font-semibold {
+    font-weight: 600 !important;
+  }
+  .font-bold {
+    font-weight: 700 !important;
+  }
+  .font-extrabold {
+    font-weight: 800 !important;
+  }
+}
+
+/* ── Text color hierarchy (layered, not flat) ── */
+body {
+  .text-gray-900 {
+    color: var(--text-1) !important;
+    font-weight: 600;
+  }
+  .text-gray-800 {
+    color: var(--text-1) !important;
+  }
+  .text-gray-750,
+  .text-gray-700 {
+    color: var(--text-2) !important;
+  }
+  .text-gray-650 {
+    color: color-mix(in srgb, var(--text-2) 90%, var(--text-3)) !important;
+  }
+  .text-gray-600 {
+    color: var(--text-3) !important;
+  }
+  .text-gray-550,
+  .text-gray-500 {
+    color: var(--text-3) !important;
+    font-weight: 450;
+  }
+  .text-gray-450,
+  .text-gray-400 {
+    color: var(--text-4) !important;
+  }
+  .text-gray-300 {
+    color: var(--text-5) !important;
+  }
+  /* 950 / 455 / 505 是项目自定义档位，漏登记会在深色主题下退化成
+     Tailwind 默认近黑色（#030712），落到深底上直接不可见。 */
+  .text-gray-950 {
+    color: var(--text-1) !important;
+  }
+  .text-gray-505 {
+    color: var(--text-3) !important;
+  }
+  .text-gray-455 {
+    color: var(--text-4) !important;
+  }
+
+  .bg-white,
+  .bg-brand-surface {
+    background-color: var(--brand-surface) !important;
+  }
+  .bg-brand-bg {
+    background-color: var(--brand-bg) !important;
+  }
+  .bg-black\/5 {
+    background-color: color-mix(in srgb, var(--brand-fg) 4%, transparent) !important;
+  }
+  .hover\:bg-black\/5:hover {
+    background-color: color-mix(in srgb, var(--brand-fg) 7%, transparent) !important;
+  }
+
+  .border-brand-border,
+  .border-gray-200,
+  .border-gray-100 {
+    border-color: var(--brand-border) !important;
+  }
+  .divide-brand-border > * + *,
+  .divide-gray-200 > * + * {
+    border-color: var(--brand-border) !important;
+  }
+
+  .text-brand-accent {
+    color: var(--brand-accent) !important;
+  }
+  /* 不要给 .bg-brand-accent 加 !important：它会让 disabled:/hover: 变体
+     全部失效（发送按钮就曾因此变成实心圆、没有箭头）。变体的透明度由
+     Tailwind 自己的 color-mix 规则处理。 */
+  .border-brand-accent {
+    border-color: var(--brand-accent) !important;
+  }
+
+  /* Structural language per skin */
+  .rounded-lg,
+  .rounded-xl {
+    border-radius: var(--ui-radius-card) !important;
+  }
+  .rounded-full {
+    border-radius: 9999px !important;
+  }
+  button.rounded-lg,
+  button.rounded-xl {
+    border-radius: var(--ui-radius-btn) !important;
+  }
+
+  /* The Bot rail is one column of cards: inbox, main agent and every persona
+     share one radius. Buttons elsewhere keep the tighter control radius. */
+  .bot-rail-card {
+    border-radius: var(--ui-radius-card) !important;
+  }
+
+  aside {
+    background-color: var(--brand-sidebar) !important;
+    border-right-color: var(--brand-border) !important;
+    backdrop-filter: blur(var(--ui-blur));
+    -webkit-backdrop-filter: blur(var(--ui-blur));
+  }
+  header {
+    background-color: var(--brand-surface) !important;
+    border-bottom-color: var(--brand-border) !important;
+    box-shadow: none;
+    backdrop-filter: blur(var(--ui-blur));
+    -webkit-backdrop-filter: blur(var(--ui-blur));
+  }
+
+  [data-testid="app-sidebar"] nav button {
+    min-height: 2.5rem;
+  }
+  [data-testid="app-main"] > header {
+    min-height: var(--ui-header-h);
+  }
+
+  /* Explicit elevation only; ordinary bordered surfaces stay flat. */
+  .shadow-xs {
+    box-shadow: var(--ui-shadow) !important;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="password"],
+  select,
+  textarea {
+    background-color: var(--brand-input-bg) !important;
+    color: var(--brand-fg) !important;
+    border-color: var(--brand-border) !important;
+    border-radius: var(--ui-radius) !important;
+  }
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: var(--brand-accent) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-accent) 22%, transparent) !important;
+  }
+
+  #root textarea.feedback-draft-input {
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+  #root textarea.feedback-draft-input:focus {
+    border: 0 !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--brand-fg) 14%, transparent);
+    border-radius: 9999px;
+  }
+}
+
+/* ── 深档位灰中性化（两个主题都要，不只深色主题）──
+   Tailwind 默认 gray/slate 是冷灰（色相 264，色度 .028~.034），
+   深色主题下压暗后会露出蓝调（实测 bg-gray-900 → rgb(16,24,40)），
+   浅色主题里的深色代码块同样带蓝。按档位统一换成中性黑，明度不变。 */
+.bg-gray-700, .bg-slate-700, .bg-zinc-700, .bg-neutral-700, .bg-stone-700 {
+  background-color: #1f1f1f !important;
+}
+.bg-gray-800, .bg-slate-800, .bg-zinc-800, .bg-neutral-800, .bg-stone-800 {
+  background-color: #171717 !important;
+}
+.bg-gray-900, .bg-slate-900, .bg-zinc-900, .bg-neutral-900, .bg-stone-900 {
+  background-color: #101010 !important;
+}
+.bg-gray-950, .bg-slate-950, .bg-zinc-950, .bg-neutral-950, .bg-stone-950 {
+  background-color: #0a0a0a !important;
+}
+
+/* ── 深色主题：把硬编码的浅色语义底压暗，保留色相含义 ──
+   组件里常见的 bg-{tone}-50/100/200 在白底主题下成立，
+   深色主题下会变成刺眼白块。这里统一混入深色底。 */
+[data-skin="hermes"],
+[data-skin="alpha"],
+[data-skin="pixel"],
+[data-skin="mario"] {
+  /* Tailwind 默认 gray/slate 是冷灰（oklch 色度 .028~.034，色相 264），
+     深色主题下压暗后会露出明显蓝调（实测 bg-gray-900 → rgb(16,24,40)）。
+     统一换成同明度的中性黑，保持层级不变、去掉色相。 */
+  .bg-gray-50, .bg-slate-50, .bg-zinc-50, .bg-neutral-50, .bg-stone-50 {
+    background-color: color-mix(in srgb, #0a0a0a 60%, var(--brand-surface)) !important;
+  }
+  .bg-gray-100, .bg-slate-100, .bg-zinc-100, .bg-neutral-100, .bg-stone-100 {
+    background-color: color-mix(in srgb, #0a0a0a 70%, var(--brand-surface)) !important;
+  }
+  .bg-gray-200, .bg-slate-200, .bg-zinc-200, .bg-neutral-200, .bg-stone-200 {
+    background-color: color-mix(in srgb, #0a0a0a 80%, var(--brand-surface)) !important;
+  }
+  /* 深档位（代码块 / 深色胶囊）同明度中性化 */
+  .bg-gray-300, .bg-slate-300, .bg-zinc-300, .bg-neutral-300 {
+    background-color: color-mix(in srgb, #0a0a0a 88%, var(--brand-surface)) !important;
+  }
+  .bg-gray-400, .bg-slate-400, .bg-zinc-400, .bg-neutral-400,
+  .bg-gray-500, .bg-slate-500, .bg-zinc-500, .bg-neutral-500,
+  .bg-gray-600, .bg-slate-600, .bg-zinc-600, .bg-neutral-600 {
+    background-color: color-mix(in srgb, #0a0a0a 94%, var(--brand-surface)) !important;
+  }
+  .bg-red-50, .bg-rose-50 { background-color: color-mix(in srgb, #ef4444 14%, var(--brand-surface)) !important; }
+  .bg-red-100, .bg-rose-100 { background-color: color-mix(in srgb, #ef4444 22%, var(--brand-surface)) !important; }
+  .bg-emerald-50, .bg-green-50, .bg-teal-50 { background-color: color-mix(in srgb, #10b981 14%, var(--brand-surface)) !important; }
+  .bg-emerald-100, .bg-green-100, .bg-teal-100 { background-color: color-mix(in srgb, #10b981 22%, var(--brand-surface)) !important; }
+  .bg-amber-50, .bg-yellow-50, .bg-orange-50 { background-color: color-mix(in srgb, #f59e0b 15%, var(--brand-surface)) !important; }
+  .bg-amber-100, .bg-yellow-100, .bg-orange-100 { background-color: color-mix(in srgb, #f59e0b 23%, var(--brand-surface)) !important; }
+  .bg-blue-50, .bg-sky-50, .bg-cyan-50, .bg-indigo-50 { background-color: color-mix(in srgb, #3b82f6 14%, var(--brand-surface)) !important; }
+  .bg-blue-100, .bg-sky-100, .bg-cyan-100, .bg-indigo-100 { background-color: color-mix(in srgb, #3b82f6 22%, var(--brand-surface)) !important; }
+  .bg-purple-50, .bg-violet-50, .bg-fuchsia-50, .bg-pink-50 { background-color: color-mix(in srgb, #a855f7 14%, var(--brand-surface)) !important; }
+  .bg-purple-100, .bg-violet-100, .bg-fuchsia-100, .bg-pink-100 { background-color: color-mix(in srgb, #a855f7 22%, var(--brand-surface)) !important; }
+  .bg-lime-50, .bg-cyan-200 { background-color: color-mix(in srgb, #84cc16 14%, var(--brand-surface)) !important; }
+
+  /* ── 带透明度修饰的浅色底（bg-red-50/70 等）──
+     Tailwind 会生成独立类名 .bg-red-50\/70，上面的 .bg-red-50 匹配不到；
+     深色下这类近不透明浅底会残留成亮块，配合同样被压亮的文字直接消失。 */
+  .bg-red-50\/70, .bg-red-50\/60, .bg-red-100\/70,
+  .bg-rose-50\/70, .bg-rose-50\/60, .bg-rose-100\/70 {
+    background-color: color-mix(in srgb, #ef4444 14%, var(--brand-surface)) !important;
+  }
+  .bg-emerald-50\/70, .bg-emerald-50\/60, .bg-emerald-100\/70,
+  .bg-green-50\/70, .bg-teal-50\/70 {
+    background-color: color-mix(in srgb, #10b981 14%, var(--brand-surface)) !important;
+  }
+  .bg-amber-50\/70, .bg-yellow-50\/70, .bg-orange-50\/70 {
+    background-color: color-mix(in srgb, #f59e0b 15%, var(--brand-surface)) !important;
+  }
+  .bg-blue-50\/70, .bg-sky-50\/70, .bg-cyan-50\/70, .bg-indigo-50\/70,
+  .bg-purple-50\/70, .bg-violet-50\/70, .bg-pink-50\/70 {
+    background-color: color-mix(in srgb, var(--brand-fg) 10%, var(--brand-surface)) !important;
+  }
+  .bg-white\/50, .bg-white\/60, .bg-white\/70, .bg-white\/80, .bg-white\/90,
+  .bg-gray-50\/60, .bg-gray-50\/70, .bg-gray-50\/80 {
+    background-color: color-mix(in srgb, var(--brand-fg) 6%, var(--brand-surface)) !important;
+  }
+
+  /* ── hover / focus / group-hover / file 变体同样需要压暗 ──
+     Tailwind 为变体生成独立类名（.hover\:bg-gray-100），上面的 .bg-gray-100
+     选择器匹配不到，深色下悬停会闪出亮白块、文字变黑消失。 */
+  .hover\:bg-white:hover,
+  .hover\:bg-gray-50:hover,
+  .hover\:bg-gray-100:hover,
+  .hover\:bg-gray-200:hover {
+    background-color: color-mix(in srgb, var(--brand-fg) 9%, transparent) !important;
+  }
+  .hover\:text-gray-600:hover,
+  .hover\:text-gray-700:hover,
+  .hover\:text-gray-800:hover,
+  .hover\:text-gray-900:hover,
+  .hover\:text-gray-950:hover,
+  .hover\:text-gray-200:hover,
+  .group-hover\:text-gray-600,
+  .group:hover .group-hover\:text-gray-600,
+  .group:hover .group-hover\:text-gray-700,
+  .group:hover .group-hover\:text-gray-800,
+  .group:hover .group-hover\:text-gray-900 {
+    color: var(--brand-fg) !important;
+  }
+  .hover\:border-gray-300:hover,
+  .hover\:border-gray-400:hover,
+  .hover\:border-gray-500:hover {
+    border-color: color-mix(in srgb, var(--brand-fg) 32%, var(--brand-border)) !important;
+  }
+  .border-gray-300,
+  .border-gray-400,
+  .border-gray-500,
+  .border-zinc-300 {
+    border-color: color-mix(in srgb, var(--brand-fg) 24%, var(--brand-border)) !important;
+  }
+  .focus\:border-gray-950:focus {
+    border-color: var(--brand-accent) !important;
+  }
+  .file\:text-gray-700::file-selector-button {
+    color: var(--brand-fg) !important;
+  }
+
+  /* ── 语义文字色抬亮（成功 / 危险 / 警告）──
+     Tailwind 的 red-600/700、emerald-600/700、rose-600/700/800 是为白底设计的深色，
+     落在 #1a1a1a 一类深底上只有 2.6~3.7:1，10px 小字直接跌破 WCAG AA。
+     只覆盖 text-* 工具类，不动 --color-* 变量，
+     否则 bg-red-600 实心按钮会一起被压亮、白字失效。 */
+  .text-emerald-600, .text-emerald-700, .text-emerald-800,
+  .hover\:text-emerald-600:hover, .hover\:text-emerald-700:hover,
+  .group:hover .group-hover\:text-emerald-600,
+  .group:hover .group-hover\:text-emerald-700 {
+    color: #6ee7b7 !important;
+  }
+  .text-green-600, .text-green-700, .text-green-800,
+  .text-teal-600, .text-teal-700, .text-teal-800 {
+    color: #5eead4 !important;
+  }
+  .text-red-600, .text-red-700, .text-red-800,
+  .hover\:text-red-600:hover, .hover\:text-red-700:hover, .hover\:text-red-800:hover,
+  .group:hover .group-hover\:text-red-600,
+  .group:hover .group-hover\:text-red-700 {
+    color: #f87171 !important;
+  }
+  .text-rose-600, .text-rose-700, .text-rose-800,
+  .hover\:text-rose-600:hover, .hover\:text-rose-700:hover,
+  .group:hover .group-hover\:text-rose-600,
+  .group:hover .group-hover\:text-rose-700 {
+    color: #fb7185 !important;
+  }
+  .text-amber-600, .text-amber-700, .text-amber-800,
+  .text-yellow-600, .text-yellow-700, .text-yellow-800,
+  .text-orange-600, .text-orange-700, .text-orange-800 {
+    color: #fbbf24 !important;
+  }
+}
+
+/* ── 浅色主题：语义文字色压深 ──
+   红/绿语义保留，只是把 Tailwind 为「大号粗体」调过的 500/600 档
+   换成在白底与淡色底上都能过 AA 的深色档（实测 text-emerald-600
+   在 bg-emerald-50 上仅 3.65:1，10px 状态文案读不清）。 */
+[data-skin="claude"],
+[data-skin="anime"],
+[data-skin="meishi"] {
+  .text-emerald-500, .text-emerald-600,
+  .hover\:text-emerald-600:hover {
+    color: #047857 !important;
+  }
+  .text-red-500, .text-red-600,
+  .hover\:text-red-600:hover {
+    color: #b91c1c !important;
+  }
+  .text-rose-500, .text-rose-600,
+  .hover\:text-rose-600:hover {
+    color: #be123c !important;
+  }
+  .text-amber-500, .text-amber-600,
+  .text-yellow-500, .text-yellow-600,
+  .text-orange-500, .text-orange-600 {
+    color: #b45309 !important;
+  }
+}
+
+/* 黑白工作台保持纯白底，不叠加暖色纹理。 */
+[data-skin="claude"] body {
+  background-image: none;
+}
+
+/* αI wordmark — 纯黑白文字 + 液态玻璃质感 */
+.alpha-wordmark {
+  font-family: var(--font-display-runtime, var(--font-display));
+  letter-spacing: -0.03em;
+  color: var(--brand-fg);
+}
+
+/* 液态玻璃字标：多层高光 + 折射边缘 + 背景模糊，纯黑白无金色 */
+.alpha-glass-mark {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  padding: 0.34rem 1rem 0.34rem 0.9rem;
+  border-radius: 9999px;
+  color: var(--brand-fg);
+  isolation: isolate;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--brand-fg) 7%, transparent),
+    color-mix(in srgb, var(--brand-fg) 2%, transparent) 45%,
+    color-mix(in srgb, var(--brand-fg) 5%, transparent)
+  );
+  backdrop-filter: blur(12px) saturate(180%) brightness(1.06);
+  -webkit-backdrop-filter: blur(12px) saturate(180%) brightness(1.06);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--brand-fg) 22%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--brand-fg) 8%, transparent),
+    inset 1px 0 0 color-mix(in srgb, var(--brand-fg) 10%, transparent),
+    inset -1px 0 0 color-mix(in srgb, var(--brand-fg) 10%, transparent),
+    0 2px 10px color-mix(in srgb, #000 12%, transparent);
+  transition: box-shadow 220ms ease, transform 220ms ease;
+}
+/* 整体受光面：顶部弧面高光。必须 inset:0 + border-radius:inherit，
+   否则高光块会在胶囊中间切出一条硬边接缝（旧版按词宽 inset 就露了缝）。 */
+.alpha-glass-mark::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--brand-fg) 12%, transparent),
+    transparent 62%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+/* 顶部弧面高光（玻璃受光面） */
+.alpha-glass-mark__word,
+.alpha-glass-mark__sub {
+  position: relative;
+  z-index: 1;
+}
+/* 斜向折射扫光 */
+.alpha-glass-mark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    transparent 28%,
+    color-mix(in srgb, var(--brand-fg) 10%, transparent) 45%,
+    transparent 60%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+.alpha-glass-mark:hover {
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--brand-fg) 30%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--brand-fg) 10%, transparent),
+    inset 1px 0 0 color-mix(in srgb, var(--brand-fg) 14%, transparent),
+    inset -1px 0 0 color-mix(in srgb, var(--brand-fg) 14%, transparent),
+    0 3px 14px color-mix(in srgb, #000 18%, transparent);
+}
+
+/* ── 方形液态玻璃字标块：卡片图标位复用，替代位图 logo ── */
+.alpha-glass-tile {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 0.75rem;
+  color: var(--brand-fg);
+  isolation: isolate;
+  font-family: var(--font-display-runtime, var(--font-display));
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--brand-fg) 7%, transparent),
+    color-mix(in srgb, var(--brand-fg) 2%, transparent) 45%,
+    color-mix(in srgb, var(--brand-fg) 5%, transparent)
+  );
+  backdrop-filter: blur(12px) saturate(180%) brightness(1.06);
+  -webkit-backdrop-filter: blur(12px) saturate(180%) brightness(1.06);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--brand-fg) 22%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--brand-fg) 8%, transparent),
+    inset 1px 0 0 color-mix(in srgb, var(--brand-fg) 10%, transparent),
+    inset -1px 0 0 color-mix(in srgb, var(--brand-fg) 10%, transparent),
+    0 2px 10px color-mix(in srgb, #000 12%, transparent);
+}
+.alpha-glass-tile::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    transparent 28%,
+    color-mix(in srgb, var(--brand-fg) 10%, transparent) 45%,
+    transparent 60%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ── 通用液态玻璃容器：侧栏分段控件等复用 ── */
+.alpha-glass-track {
+  position: relative;
+  isolation: isolate;
+  border-radius: 0.6rem;
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--brand-fg) 6%, transparent),
+    color-mix(in srgb, var(--brand-fg) 2%, transparent) 50%,
+    color-mix(in srgb, var(--brand-fg) 4%, transparent)
+  );
+  backdrop-filter: blur(12px) saturate(170%);
+  -webkit-backdrop-filter: blur(12px) saturate(170%);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--brand-fg) 20%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--brand-fg) 7%, transparent),
+    inset 1px 0 0 color-mix(in srgb, var(--brand-fg) 9%, transparent),
+    inset -1px 0 0 color-mix(in srgb, var(--brand-fg) 9%, transparent),
+    0 1px 6px color-mix(in srgb, #000 10%, transparent);
+}
+.alpha-glass-track::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    transparent 32%,
+    color-mix(in srgb, var(--brand-fg) 7%, transparent) 47%,
+    transparent 60%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* 玻璃轨道里被选中的分段：实心玻璃块 + 顶部受光 */
+.alpha-glass-thumb {
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--brand-surface) 92%, var(--brand-fg)),
+    var(--brand-surface)
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--brand-fg) 16%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, #000 6%, transparent),
+    0 1px 3px color-mix(in srgb, #000 14%, transparent);
+}
+/* 深色轨道里选中块要比轨道亮一档，否则「深色」段看起来像没选中。 */
+html.dark .alpha-glass-thumb,
+.dark .alpha-glass-thumb {
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--brand-surface-raised) 86%, var(--brand-fg)),
+    var(--brand-surface-raised)
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .alpha-glass-track { transition: none; }
+  .ui-workspace-stage { animation: none !important; }
+  .animate-pulse, .animate-spin, .omb-status-pulse { animation: none !important; }
+}
+.alpha-glass-mark__word {
+  font-family: var(--font-display-runtime, var(--font-display));
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.alpha-glass-mark__sub {
+  font-size: 0.5rem;
+  font-weight: 500;
+  /* 参考图里 INTELLIGENCE 是明显的宽字距，0.16em 显得挤，抬到 0.26em */
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--brand-muted);
+  line-height: 1;
+  transform: translateY(0.08em);
+}
+@media (prefers-reduced-motion: reduce) {
+  .alpha-glass-mark { transition: none; }
+}
+
+[data-skin="claude"] .alpha-wordmark,
+[data-skin="hermes"] .alpha-wordmark {
+  color: var(--brand-fg);
+  filter: none;
+}
+[data-skin="pixel"] .alpha-wordmark {
+  filter: none;
+  color: #ffd700;
+}
+
+/* Claude 主区留白更像桌面 App；Hermes 纯黑画布 */
+[data-skin="claude"] [data-testid="app-main"],
+[data-skin="hermes"] [data-testid="app-main"] {
+  background: var(--brand-bg);
+}
+[data-skin="claude"] [data-testid="app-main"] > header,
+[data-skin="hermes"] [data-testid="app-main"] > header {
+  background: color-mix(in srgb, var(--brand-surface) 88%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+/* Claude Desktop 对话布局 */
+.claude-desk {
+  background: var(--brand-bg);
+}
+.claude-desk-aside {
+  background: var(--brand-sidebar);
+}
+[data-skin="claude"] .claude-desk-aside {
+  background: color-mix(in srgb, var(--brand-sidebar) 92%, #fff);
+}
+[data-skin="hermes"] .claude-desk {
+  background: var(--brand-bg);
+}
+
+/* ── Unified surface primitives（全站卡片/按钮一致） ── */
+.ui-card {
+  background: var(--brand-surface);
+  border: 1px solid var(--brand-card-border);
+  border-radius: var(--ui-radius-card);
+  box-shadow: var(--ui-card-shadow);
+}
+.ui-card-flat {
+  background: var(--brand-surface);
+  border: 1px solid var(--brand-card-border);
+  border-radius: var(--ui-radius-card);
+}
+/* 极简：深色主题去掉卡片描边，仅靠背景层次区分 */
+[data-skin="hermes"] .ui-card,
+[data-skin="hermes"] .ui-card-flat,
+[data-skin="alpha"] .ui-card,
+[data-skin="alpha"] .ui-card-flat,
+[data-skin="pixel"] .ui-card,
+[data-skin="pixel"] .ui-card-flat,
+[data-skin="mario"] .ui-card,
+[data-skin="mario"] .ui-card-flat {
+  border-color: transparent;
+}
+[data-skin="hermes"] .ui-section,
+[data-skin="alpha"] .ui-section,
+[data-skin="pixel"] .ui-section,
+[data-skin="mario"] .ui-section {
+  border-color: transparent;
+}
+.ui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-height: 2.25rem;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: var(--ui-radius-btn);
+  border: 1px solid color-mix(in srgb, var(--brand-border) 55%, transparent);
+  background: var(--brand-surface);
+  color: var(--brand-fg);
+  transition:
+    background-color var(--motion-fast) var(--motion-ease-standard),
+    border-color var(--motion-fast) var(--motion-ease-standard),
+    color var(--motion-fast) var(--motion-ease-standard),
+    opacity var(--motion-fast) var(--motion-ease-standard),
+    transform var(--motion-fast) var(--motion-ease-standard);
+}
+.ui-btn:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--brand-accent) 35%, transparent);
+  outline-offset: 2px;
+}
+.ui-btn:hover {
+  background: color-mix(in srgb, var(--brand-fg) 4%, var(--brand-surface));
+  border-color: color-mix(in srgb, var(--brand-border) 90%, transparent);
+}
+.ui-btn:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--brand-accent) 35%, transparent);
+  outline-offset: 2px;
+}
+.ui-btn:hover {
+  background: color-mix(in srgb, var(--brand-fg) 4%, var(--brand-surface));
+}
+.ui-btn:not(:disabled):active {
+  transform: translateY(1px);
+}
+.ui-btn-primary {
+  border-color: transparent;
+  background: var(--brand-accent);
+  color: var(--brand-on-accent, #fff);
+}
+.ui-btn-primary:hover {
+  background: var(--brand-accent-hover);
+  opacity: 0.95;
+}
+.ui-btn-danger {
+  border-color: color-mix(in srgb, var(--brand-danger) 28%, var(--brand-border));
+  color: var(--brand-danger);
+}
+.ui-btn-danger:hover {
+  background: color-mix(in srgb, var(--brand-danger) 7%, var(--brand-surface));
+}
+.ui-icon-button {
+  display: inline-flex;
+  height: 2rem;
+  width: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ui-radius-btn);
+  color: var(--brand-muted);
+  transition:
+    background-color var(--motion-fast) var(--motion-ease-standard),
+    color var(--motion-fast) var(--motion-ease-standard),
+    transform var(--motion-fast) var(--motion-ease-standard);
+}
+.ui-icon-button:hover {
+  background: color-mix(in srgb, var(--brand-fg) 5%, transparent);
+  color: var(--brand-fg);
+}
+.ui-icon-button:not(:disabled):active {
+  transform: translateY(1px);
+}
+.ui-section {
+  background: var(--brand-surface);
+  border: 1px solid color-mix(in srgb, var(--brand-border) 40%, transparent);
+  border-radius: var(--ui-radius-card);
+  box-shadow: none;
+}
+.ui-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid var(--brand-border);
+}
+.ui-row {
+  min-height: 3.5rem;
+  border-bottom: 1px solid var(--brand-border);
+  transition: background-color var(--motion-fast) var(--motion-ease-standard);
+}
+.ui-row:last-child {
+  border-bottom: 0;
+}
+.ui-row:hover {
+  background: color-mix(in srgb, var(--brand-fg) 2.25%, var(--brand-surface));
+}
+.ui-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1;
+}
+.ui-status::before {
+  content: "";
+  height: 0.375rem;
+  width: 0.375rem;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: currentColor;
+}
+.ui-status-success { color: var(--brand-success); }
+.ui-status-danger { color: var(--brand-danger); }
+.ui-status-warning { color: #a16207; }
+.ui-status-muted { color: var(--brand-muted); }
+.ui-empty {
+  display: flex;
+  min-height: 10rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 2rem;
+  border: 1px dashed var(--brand-border);
+  border-radius: var(--ui-radius-card);
+  color: var(--brand-muted);
+  text-align: center;
+}
+.ui-utility-toolbar {
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid var(--brand-border);
+  border-radius: var(--ui-radius-btn);
+  background: var(--brand-surface);
+}
+.ui-utility-toolbar > button {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.65rem;
+  border-right: 1px solid var(--brand-border);
+  color: var(--brand-fg-subtle);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  transition:
+    background-color var(--motion-fast) var(--motion-ease-standard),
+    color var(--motion-fast) var(--motion-ease-standard),
+    transform var(--motion-fast) var(--motion-ease-standard);
+}
+.ui-utility-toolbar > button:last-child {
+  border-right: 0;
+}
+.ui-utility-toolbar > button:hover {
+  background: var(--brand-surface-raised);
+  color: var(--brand-fg);
+}
+.ui-utility-toolbar > button:not(:disabled):active {
+  transform: translateY(1px);
+}
+.ui-data-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid var(--brand-border);
+  border-radius: var(--ui-radius-card);
+  background: var(--brand-surface);
+}
+.ui-data-strip > * {
+  min-width: 0;
+  padding: 0.9rem 1rem;
+  border-right: 1px solid var(--brand-border);
+}
+.ui-data-strip > *:last-child {
+  border-right: 0;
+}
+.ui-page-title {
+  font-family: var(--font-display-runtime, var(--font-display));
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: var(--display-letter, -0.02em);
+  color: var(--brand-fg);
+  line-height: 1.25;
+}
+
+@media (max-width: 720px) {
+  .ui-data-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ui-data-strip > *:nth-child(2) {
+    border-right: 0;
+  }
+  .ui-data-strip > *:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--brand-border);
+  }
+}
+.ui-page-sub {
+  font-size: 0.75rem;
+  color: var(--brand-muted);
+  margin-top: 0.2rem;
+}
+.ui-stat-icon {
+  padding: 0.6rem;
+  border-radius: var(--ui-radius);
+  background: color-mix(in srgb, var(--brand-accent) 12%, transparent);
+  color: var(--brand-accent);
+}
+
+.skin-swatch {
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 9999px;
+  border: 1.5px solid color-mix(in srgb, var(--brand-fg) 18%, transparent);
+}
+/* VibeCafé：色卡也硬边方块 */
+[data-skin="pixel"] .skin-swatch {
+  border-radius: 0 !important;
+  border: 2px solid #fff !important;
+  box-shadow: 2px 2px 0 #ffd700;
+}
+
+/* Motion language: short, quiet and compositor-friendly. */
+.ui-nav-item {
+  transition:
+    background-color var(--motion-fast) var(--motion-ease-standard),
+    color var(--motion-fast) var(--motion-ease-standard),
+    box-shadow var(--motion-fast) var(--motion-ease-standard),
+    transform var(--motion-fast) var(--motion-ease-standard);
+}
+.ui-nav-item:not(:disabled):active {
+  transform: translateY(1px);
+}
+
+.ui-thin-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.ui-thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.ui-thin-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 9999px;
+}
+.ui-thin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.16);
+}
+
+#root .transition,
+#root .transition-all {
+  transition-property: color, background-color, border-color, opacity, box-shadow, transform;
+  transition-duration: var(--motion-fast);
+  transition-timing-function: var(--motion-ease-standard);
+}
+#root .transition-colors,
+#root .transition-opacity,
+#root .transition-transform {
+  transition-duration: var(--motion-fast);
+  transition-timing-function: var(--motion-ease-standard);
+}
+
+@keyframes workspaceEnter {
+  from {
+    opacity: 0.94;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.ui-workspace-stage {
+  animation: workspaceEnter var(--motion-slow) var(--motion-ease-enter) both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in {
+  animation: fadeIn var(--motion-base) var(--motion-ease-enter) forwards;
+}
+.animate-slide-up {
+  animation: fadeIn var(--motion-slow) var(--motion-ease-enter) forwards;
+}
+
+/* 归档进行中且总量未知时的滑动条：移动的条本身说明「还在跑」，
+   不用伪造一个百分比。 */
+@keyframes archiveSlide {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(320%);
+  }
+}
+.animate-archive-slide {
+  animation: archiveSlide 1.15s var(--motion-ease-standard) infinite;
+}
+
+.local-loading-state {
+  display: flex;
+  min-height: 11rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  padding: 1.5rem;
+  text-align: left;
+}
+.local-loading-state-compact {
+  min-height: 0;
+  justify-content: flex-start;
+  padding: 0.75rem 0;
+}
+.local-loading-mark {
+  display: inline-flex;
+  height: 2.5rem;
+  width: 2.5rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  border: 1px solid color-mix(in srgb, var(--brand-accent) 20%, var(--brand-border));
+  border-radius: 0.8rem;
+  background: color-mix(in srgb, var(--brand-accent) 7%, var(--brand-surface));
+}
+.local-loading-mark > span {
+  display: block;
+  width: 0.22rem;
+  border-radius: 999px;
+  background: var(--brand-accent);
+  animation: localLoadingConverge 1.15s ease-in-out infinite;
+}
+.local-loading-mark > span:nth-child(1) {
+  height: 0.7rem;
+  opacity: 0.45;
+  animation-delay: -0.22s;
+}
+.local-loading-mark > span:nth-child(2) {
+  height: 1.15rem;
+  animation-delay: -0.11s;
+}
+.local-loading-mark > span:nth-child(3) {
+  height: 0.7rem;
+  opacity: 0.45;
+}
+@keyframes localLoadingConverge {
+  0%,
+  100% {
+    transform: translateY(0) scaleY(0.72);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateY(0) scaleY(1);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .ui-workspace-stage,
+  .animate-fade-in,
+  .animate-slide-up,
+  .animate-archive-slide {
+    animation: none !important;
+  }
+}
+
+/* Bot 页面主题：跟随皮肤明暗。
+   浅色皮肤下是极简白；深色皮肤下必须是同一层次的深灰，而不是硬顶白——
+   否则原生控件、浮层、hover 会在深色里发白发花。 */
+/* 切换皮肤时先关掉过渡：整页变量同时变化，逐元素补间会让文字在浅色底上
+   短暂保留深色值（深色→浅色时会闪一下近白文字）。 */
+html[data-skin-switching] *,
+html[data-skin-switching] *::before,
+html[data-skin-switching] *::after {
+  transition: none !important;
+  animation-duration: 0.01ms !important;
+}
+
+.bot-theme {
+  --brand-bg: #ffffff;
+  --brand-surface: #ffffff;
+  --brand-surface-raised: #f4f4f4;
+  --brand-fg: #111111;
+  --brand-muted: #6f6f6f;
+  --brand-border: #e3e3e3;
+  --brand-accent: #111111;
+  --brand-accent-hover: #000000;
+  --brand-on-accent: #ffffff;
+  --brand-sidebar: #ffffff;
+  --brand-success: #16a34a;
+  --brand-warning: #d97706;
+  --brand-danger: #dc2626;
+  /* themes.ts 把 colorScheme 写成 html 的 inline style，类选择器压不过 inline。 */
+  color-scheme: light !important;
+}
+
+html.dark .bot-theme,
+.dark .bot-theme {
+  --brand-bg: #111111;
+  --brand-surface: #171717;
+  --brand-surface-raised: #222222;
+  --brand-fg: #f3f4f6;
+  --brand-muted: #a3a8b0;
+  --brand-border: rgba(255, 255, 255, 0.14);
+  --brand-accent: #f3f4f6;
+  --brand-accent-hover: #ffffff;
+  --brand-on-accent: #111111;
+  --brand-sidebar: #0c0c0c;
+  --brand-success: #34d399;
+  --brand-warning: #d4d4d8;
+  --brand-danger: #f87171;
+  color-scheme: dark !important;
+}
+
+/* 主题覆盖只作用于 Bot 列表与详情面板，避免误伤聊天区的卡片/输入框。 */
+.bot-theme [data-testid="bot-rail"] .ui-card,
+.bot-theme [data-testid="bot-rail"] .ui-nav-item,
+.bot-theme [data-testid="bot-detail-panel"] .ui-card {
+  background: var(--brand-surface-raised);
+  border-color: var(--brand-border);
+}
+
+.bot-theme [data-testid="bot-rail"] .ui-btn,
+.bot-theme [data-testid="bot-detail-panel"] .ui-btn {
+  border-color: var(--brand-border);
+  color: var(--brand-fg);
+}
+
+.bot-theme [data-testid="bot-rail"] .ui-btn:hover,
+.bot-theme [data-testid="bot-detail-panel"] .ui-btn:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.bot-theme [data-testid="bot-rail"] input,
+.bot-theme [data-testid="bot-rail"] textarea,
+.bot-theme [data-testid="bot-rail"] select,
+.bot-theme [data-testid="bot-detail-panel"] input,
+.bot-theme [data-testid="bot-detail-panel"] textarea,
+.bot-theme [data-testid="bot-detail-panel"] select {
+  background: var(--brand-surface-raised);
+  border-color: var(--brand-border);
+  color: var(--brand-fg);
+}
+
+.bot-theme [data-testid="bot-rail"] input::placeholder,
+.bot-theme [data-testid="bot-rail"] textarea::placeholder,
+.bot-theme [data-testid="bot-detail-panel"] input::placeholder,
+.bot-theme [data-testid="bot-detail-panel"] textarea::placeholder {
+  color: #a3a3a3;
+}
+
+/* 对话双方用不同表面层次；token 让它在浅色/深色下都成立。 */
+.bot-theme .agent-message-assistant {
+  background: var(--brand-surface-raised);
+  color: var(--brand-fg);
+}
+
+.bot-theme .agent-message-user {
+  background: color-mix(in srgb, var(--brand-fg) 9%, var(--brand-surface));
+  color: var(--brand-fg);
+  border-radius: 18px;
+}
+
+.bot-theme .agent-message-assistant a {
+  color: var(--brand-fg);
+  text-decoration-color: color-mix(in srgb, var(--brand-fg) 30%, transparent);
+}
+
+/* hover/激活底色：浅色是压暗、深色是提亮，统一用 fg 混合。 */
+.bot-theme [data-testid="bot-rail"] button[aria-current="true"],
+.bot-theme [data-testid="bot-rail"] .ui-btn:hover,
+.bot-theme [data-testid="bot-detail-panel"] .ui-btn:hover {
+  background: color-mix(in srgb, var(--brand-fg) 7%, transparent);
+}
+
+.bot-theme [data-testid="bot-rail"] {
+  background: var(--brand-bg);
+}
+
+.bot-theme [data-testid="bot-rail"] button[aria-current="true"] {
+  background: rgba(0, 0, 0, 0.045);
+}
+
+.bot-theme [data-testid="bot-rail"] span[aria-hidden="true"] {
+  background: #111111;
+}
+
+/* ---- 圆角规范（全站） ----------------------------------------------------
+   之前大量元素是直角，视觉偏"方正"。这里统一到一套半径：
+     卡片/面板 14px · 按钮/输入 10px · 胶囊/标签 999px · 气泡 18px
+   只改圆角与极轻微的内阴影，不动配色。 */
+.ui-card,
+.ui-panel {
+  border-radius: 14px;
+}
+
+.ui-btn,
+.ui-icon-button,
+.ui-input,
+.ui-nav-item,
+.ui-tab {
+  border-radius: 10px;
+}
+
+.ui-btn,
+.ui-nav-item {
+  transition: background-color 120ms ease, border-color 120ms ease, border-radius 120ms ease;
+}
+
+/* 输入类：圆角 + 轻微内阴影，边界更柔和 */
+input:not([type='checkbox']):not([type='radio']),
+select,
+textarea {
+  border-radius: 10px;
+}
+
+/* 无边框的透明 textarea 由外层容器决定圆角 */
+textarea.bg-transparent {
+  border-radius: 0;
+}
+
+input:not([type='checkbox']):not([type='radio']):focus,
+select:focus,
+textarea:focus {
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+/* 表格式的直角块统一收圆角 */
+.ui-table,
+.ui-row {
+  border-radius: 12px;
+}
+
+/* 对话气泡（Agent 区共用） */
+.agent-message-user,
+.agent-message-assistant {
+  border-radius: 18px;
+}
+
+/* 弹层 / 抽屉 / 下拉 */
+.ui-popover,
+.ui-menu,
+.ui-sheet {
+  border-radius: 14px;
+}
+
+/* ---- 方角兜底：没有显式 rounded-* 的按钮/标签也收成圆角 ---------------
+   逐组件加类容易漏，这里给「没声明圆角」的元素一个默认值；
+   已写 rounded-* 的元素优先级更高，不受影响。 */
+button:not([class*='rounded']),
+a[role='button']:not([class*='rounded']) {
+  border-radius: 10px;
+}
+
+/* 纯图标按钮（含 aria-label 且没有文字）做成圆形，和参考图一致 */
+button[aria-label]:not([class*='rounded'])[class*='h-9'][class*='w-9'],
+button[aria-label]:not([class*='rounded'])[class*='h-8'][class*='w-8'],
+button[aria-label]:not([class*='rounded'])[class*='h-7'][class*='w-7'] {
+  border-radius: 9999px;
+}
+
+/* 带边框的直角容器统一收圆角 */
+[class*='border'][class*='divide-y']:not([class*='rounded']),
+[class*='border'][class*='bg-brand-surface']:not([class*='rounded']),
+[class*='border'][class*='bg-white']:not([class*='rounded']) {
+  border-radius: 12px;
+}

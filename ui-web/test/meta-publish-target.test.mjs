@@ -1,0 +1,42 @@
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { test } from 'node:test';
+
+test('Meta account cards stay compact while publishing still routes verified assets', async () => {
+  const view = await readFile(new URL('../src/components/AccountsView.tsx', import.meta.url), 'utf8');
+  const api = await readFile(new URL('../src/api.ts', import.meta.url), 'utf8');
+  const publish = await readFile(new URL('../src/components/PublishView.tsx', import.meta.url), 'utf8');
+  const publishAssets = await readFile(new URL('../src/publishAssets.ts', import.meta.url), 'utf8');
+
+  assert.doesNotMatch(view, /account-target-\$\{acct\.id\}/);
+  assert.doesNotMatch(view, /account-discover-targets-\$\{acct\.id\}/);
+	assert.doesNotMatch(view, /account-target-list-\$\{acct\.id\}/);
+  assert.doesNotMatch(view, /关联 Meta|Meta 关联/);
+  assert.doesNotMatch(view, /发现目标|发布目标|补公开 ID/);
+  assert.doesNotMatch(view, /setInterval/);
+  assert.match(api, /createMetaPublishTarget/);
+  assert.match(api, /`\/api\/accounts\/\$\{accountId\}\/assets`/);
+  assert.match(api, /discoverMetaPublishTargets/);
+  assert.match(api, /`\/api\/accounts\/\$\{accountId\}\/assets\/discover`/);
+  assert.match(publish, /isControlledPrepareAccountAsset/);
+  assert.match(publish, /asset_id: asset\.id/);
+  assert.match(publish, /facebook/);
+  assert.match(publish, /instagram/);
+	assert.match(publish, /supportsPublishContentType/);
+  assert.match(publish, /selectableFamilyAssets/);
+  assert.match(publish, /buildMetaPublishGroups/);
+  assert.match(publish, /publish-meta-group-\$\{group\.key\}/);
+  assert.match(publish, /publish-meta-platform-\$\{group\.key\}-\$\{platformCode\}/);
+  assert.match(publish, /publish-meta-avatar-\$\{group\.key\}/);
+  assert.match(publish, /publish-meta-platform-badges-\$\{group\.key\}/);
+  assert.match(publish, /api\.getEgoSpaces/);
+  assert.match(publish, /isEgoSpaceAvailableForExplicitPublish/);
+  assert.match(publish, /❗ Ego Space 未就绪，暂不可发布/);
+  assert.doesNotMatch(publish, /metaPublishingPaused/);
+  assert.doesNotMatch(publish, /❗ 当前测试暂不可发布/);
+  assert.doesNotMatch(publish, /Meta 暂停发布，暂不可勾选/);
+  assert.match(publish, /disabled/);
+  assert.match(publishAssets, /未配置发布目标/);
+  assert.match(publishAssets, /缺少公开 ID/);
+  assert.doesNotMatch(publish, /未接入受控填写/);
+});

@@ -1,0 +1,62 @@
+name: CI
+
+# 只守三件会真正让改动失效的事：后端能不能编译、vet 干不干净、前端测试过不过。
+# 不做打包（release 由 build.sh 本地产出），也不跑 E2E（需要真机浏览器）。
+on:
+  push:
+    branches: [main, 'feat/**', 'codex/**', 'radar-**']
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  go:
+    name: Go 编译与静态检查
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: 编译
+        run: go build ./...
+
+      - name: vet
+        run: go vet ./internal/...
+
+      # 串行跑：ui 包会开 SQLite 与子进程，并行容易互相干扰。
+      - name: 测试
+        run: go test -p 1 ./internal/... -count=1
+
+  frontend:
+    name: 前端构建与测试
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ui-web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: ui-web/pnpm-lock.yaml
+
+      - name: 安装依赖
+        run: pnpm install --frozen-lockfile
+
+      - name: 构建
+        run: pnpm run build
+
+      - name: 测试
+        run: node --test test/*.test.mjs

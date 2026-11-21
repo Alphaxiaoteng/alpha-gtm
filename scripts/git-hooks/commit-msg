@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# commit-msg: require an informative commit message (subject + optional body).
+# Installed via scripts/install-git-hooks.sh (core.hooksPath = scripts/git-hooks).
+set -euo pipefail
+
+msg_file="${1:-}"
+if [[ -z "$msg_file" || ! -f "$msg_file" ]]; then
+  echo "commit-msg: missing message file" >&2
+  exit 1
+fi
+
+# Drop comment lines and blank-only content for validation.
+filtered="$(grep -vE '^\s*#' "$msg_file" | sed -e 's/[[:space:]]*$//' | sed -e '/^$/d' || true)"
+if [[ -z "${filtered// }" ]]; then
+  cat >&2 <<'EOF'
+commit-msg: empty commit message rejected.
+
+Write a short subject that says why the change exists, for example:
+  feat(tools): wire meta.login and meta.discover to live CDP
+
+Optional body can explain scope and limits. Use scripts/auto-commit.sh
+to generate a draft from the staged diff when needed.
+EOF
+  exit 1
+fi
+
+subject="$(printf '%s\n' "$filtered" | head -n1)"
+# Reject placeholder / trivial subjects.
+if printf '%s' "$subject" | grep -qiE '^(wip|tmp|temp|update|fix|.\s*$|test)$'; then
+  echo "commit-msg: subject looks like a placeholder: '$subject'" >&2
+  echo "Use a Conventional Commit style subject (feat|fix|docs|chore|refactor|test|perf|ci)." >&2
+  exit 1
+fi
+
+# Prefer type(scope): summary when subject is long enough to be useful.
+if [[ ${#subject} -lt 12 ]]; then
+  echo "commit-msg: subject too short (${#subject} chars). Describe the change." >&2
+  exit 1
+fi
+
+if [[ ${#subject} -gt 100 ]]; then
+  echo "commit-msg: subject too long (${#subject} chars). Keep it under 100." >&2
+  exit 1
+fi
+
+exit 0

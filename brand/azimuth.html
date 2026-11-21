@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Azimuth · logo variants</title>
+<style>
+  :root {
+    --bg: #fbfbf9;
+    --surface: #ffffff;
+    --fg: #111111;
+    --muted: #6f6f6f;
+    --line: #e4e4df;
+    --dark-bg: #0b0b0c;
+    --dark-surface: #151517;
+    --dark-fg: #f5f5f2;
+    --dark-muted: #a3a3a3;
+    --dark-line: #2a2a2c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 40px 32px 64px;
+    font-family: ui-sans-serif, system-ui, -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
+    background: var(--bg); color: var(--fg);
+  }
+  header { max-width: 1120px; margin: 0 auto 32px; display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+  h1 { margin: 0; font-size: 22px; letter-spacing: -.02em; }
+  header p { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+  .switch { display: flex; gap: 4px; padding: 3px; border: 1px solid var(--line); border-radius: 999px; }
+  .switch button { border: 0; background: transparent; padding: 6px 14px; border-radius: 999px; font: inherit; font-size: 12px; color: var(--muted); cursor: pointer; }
+  .switch button[aria-pressed="true"] { background: var(--fg); color: var(--surface); }
+  main { max-width: 1120px; margin: 0 auto; display: grid; gap: 16px; }
+  section { border: 1px solid var(--line); border-radius: 18px; background: var(--surface); padding: 24px; }
+  section h2 { margin: 0 0 4px; font-size: 14px; letter-spacing: .01em; }
+  section p.note { margin: 0 0 20px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+  .row { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+  .mark { color: var(--fg); display: inline-flex; }
+  .mark svg { width: 100%; height: 100%; display: block; }
+  .s16 { width: 16px; height: 16px; }
+  .s24 { width: 24px; height: 24px; }
+  .s32 { width: 32px; height: 32px; }
+  .s48 { width: 48px; height: 48px; }
+  .s96 { width: 96px; height: 96px; }
+  .lockup { display: flex; align-items: center; gap: 14px; }
+  .lockup .word { font-size: 28px; letter-spacing: .18em; font-weight: 600; }
+  .lockup .sub { display: block; margin-top: 3px; font-size: 9px; letter-spacing: .32em; color: var(--muted); font-weight: 500; }
+  .icon-card { width: 128px; height: 128px; border-radius: 28px; background: var(--dark-bg); display: grid; place-items: center; }
+  .icon-card svg { width: 128px; height: 128px; display: block; }
+  .caption { font-size: 11px; color: var(--muted); margin-top: 10px; }
+  .dark { background: var(--dark-bg); border-color: var(--dark-line); color: var(--dark-fg); }
+  .dark h2 { color: var(--dark-fg); }
+  .dark p.note, .dark .caption { color: var(--dark-muted); }
+  .dark .mark { color: var(--dark-fg); }
+  body.dark-mode { --bg: var(--dark-bg); --surface: var(--dark-surface); --fg: var(--dark-fg); --muted: var(--dark-muted); --line: var(--dark-line); }
+  body.dark-mode .switch button[aria-pressed="true"] { color: var(--dark-bg); }
+  body.dark-mode .icon-card { background: #f5f5f2; }
+  body.dark-mode .icon-card svg rect { fill: #f5f5f2; }
+  body.dark-mode .icon-card svg g { color: #0b0b0c; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Azimuth · GTM Harness</h1>
+    <p>三个方向标记，同一套几何：方向角、方位线、中心点。单色可缩放，16px 仍可辨认。</p>
+  </div>
+  <div class="switch" role="group" aria-label="切换明暗">
+    <button type="button" data-theme="light" aria-pressed="true">浅色</button>
+    <button type="button" data-theme="dark" aria-pressed="false">深色</button>
+  </div>
+</header>
+<main>
+  <section>
+    <h2>A · 方位 A（推荐）</h2>
+    <p class="note">字母 A 与方位角共用同一条斜线；右上弧线表示“从 A 点到目标的角度”。最适合做主标。</p>
+    <div class="row">
+      <span class="mark s16" data-src="azimuth-mark-a.svg"></span>
+      <span class="mark s24" data-src="azimuth-mark-a.svg"></span>
+      <span class="mark s32" data-src="azimuth-mark-a.svg"></span>
+      <span class="mark s48" data-src="azimuth-mark-a.svg"></span>
+      <span class="mark s96" data-src="azimuth-mark-a.svg"></span>
+      <span class="lockup">
+        <span class="mark s48" data-src="azimuth-mark-a.svg"></span>
+        <span><span class="word">AZIMUTH</span><span class="sub">GTM HARNESS</span></span>
+      </span>
+    </div>
+    <p class="caption">16 / 24 / 32 / 48 / 96 px · 横向组合</p>
+  </section>
+
+  <section>
+    <h2>B · 罗盘</h2>
+    <p class="note">最直白的“方位”：双环 + 指针 + 四向刻度。识别快，但更像通用仪表盘图标。</p>
+    <div class="row">
+      <span class="mark s16" data-src="azimuth-mark-b.svg"></span>
+      <span class="mark s24" data-src="azimuth-mark-b.svg"></span>
+      <span class="mark s32" data-src="azimuth-mark-b.svg"></span>
+      <span class="mark s48" data-src="azimuth-mark-b.svg"></span>
+      <span class="mark s96" data-src="azimuth-mark-b.svg"></span>
+    </div>
+  </section>
+
+  <section>
+    <h2>C · 角</h2>
+    <p class="note">两条斜线与一段弧，最抽象、最克制；适合作为辅助图形，不适合独立识别。</p>
+    <div class="row">
+      <span class="mark s16" data-src="azimuth-mark-c.svg"></span>
+      <span class="mark s24" data-src="azimuth-mark-c.svg"></span>
+      <span class="mark s32" data-src="azimuth-mark-c.svg"></span>
+      <span class="mark s48" data-src="azimuth-mark-c.svg"></span>
+      <span class="mark s96" data-src="azimuth-mark-c.svg"></span>
+    </div>
+  </section>
+
+  <section class="dark">
+    <h2>A · 深色与 App 图标</h2>
+    <p class="note">单色标记跟随 currentColor；App 图标使用 22% 圆角与近黑底。</p>
+    <div class="row">
+      <span class="mark s16" data-src="azimuth-mark-a.svg"></span>
+      <span class="mark s24" data-src="azimuth-mark-a.svg"></span>
+      <span class="mark s48" data-src="azimuth-mark-a.svg"></span>
+      <span class="icon-card" data-src="azimuth-app-icon.svg"></span>
+      <span class="lockup">
+        <span class="mark s48" data-src="azimuth-mark-a.svg"></span>
+        <span><span class="word">AZIMUTH</span><span class="sub">GTM HARNESS</span></span>
+      </span>
+    </div>
+  </section>
+</main>
+<script>
+  // SVG 通过内联注入，保证 currentColor 与尺寸都受页面控制。
+  const nodes = Array.from(document.querySelectorAll('[data-src]'));
+  Promise.all(nodes.map(async (node) => {
+    const src = node.getAttribute('data-src');
+    const text = await (await fetch(src)).text();
+    node.innerHTML = text;
+    const svg = node.querySelector('svg');
+    if (svg) { svg.removeAttribute('width'); svg.removeAttribute('height'); }
+  }));
+  document.querySelectorAll('.switch button').forEach((button) => {
+    button.addEventListener('click', () => {
+      const dark = button.dataset.theme === 'dark';
+      document.body.classList.toggle('dark-mode', dark);
+      document.querySelectorAll('.switch button').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+    });
+  });
+</script>
+</body>
+</html>

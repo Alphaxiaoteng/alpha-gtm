@@ -1,0 +1,21 @@
+# Alpha-Nexus creation-workflow plugin (minimal skeleton).
+#
+# `package.json` -> dsh.bundle.patch points here, so this file is the
+# bundle-layer patch that `dsh plugin --profile <p> add file:<this dir>`
+# mounts automatically.
+#
+# `insert` is the bundle-layer form (add entries). A bare `- id: ...` row is the
+# user/profile-layer form used to OVERRIDE an existing entry; using both for the
+# same id is what triggers dsh's "duplicate loader entry id" crash.
+- insert:
+    - id: alpha-nexus-creation
+      name: '@alpha-nexus/dsh-plugin-creation'
+      # Values only. The authoritative schema is the `Config` export (a
+      # StandardSchemaV1 validator) in index.js; cordis validates before apply().
+      config:
+        # Alpha-Nexus ui_port default is 17421 (internal/config/config.go).
+        # Use 17321 only if you deliberately started `ui serve --port 17321`.
+        base_url: http://127.0.0.1:17421
+        # Must stay false unless base_url points at another machine.
+        allow_remote: false
+        # auth_token: '...'  # optional; sent as `Authorization: Bearer <token>`

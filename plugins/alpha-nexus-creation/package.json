@@ -1,0 +1,33 @@
+{
+  "name": "@alpha-nexus/dsh-plugin-creation",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Minimal DSH plugin skeleton that exposes one Alpha-Nexus creation-workflow tool over plain HTTP",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test test/local.test.mjs"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "*",
+    "@deepseek-ai/dsh-tools": "*"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

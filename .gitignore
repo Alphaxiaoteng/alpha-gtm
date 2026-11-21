@@ -1,0 +1,110 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Binaries / local builds
+/alpha-nexus
+/unibuy-aimedia
+*.exe
+*.test
+*.out
+
+# Build / release artifacts
+# NOTE: /dist/ and /cmd/wails-app/dist/ are NOT ignored: main.go and
+# cmd/wails-app/main.go both use `go:embed all:dist`, so a clean clone must
+# contain them or `go build ./...` fails with "pattern all:dist: no matching
+# files found".
+/release/
+/.alpha-nexus-egolite-run/
+/.e2e-data/
+/build/bin/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package.json.md5
+
+# Frontend intermediate (keep internal/ui/dist for go:embed if present)
+ui-web/dist/
+e2e/playwright-report/
+e2e/test-results/
+e2e/blob-report/
+
+# IDE / env
+.idea/
+.vscode/
+*.swp
+.env
+.env.*
+!.env.example
+
+# Runtime / local data (never commit profiles or cookies)
+.alpha-nexus/
+.alpha-nexus-run/
+.e2e-data/
+*.db
+*.db-journal
+runtime.json
+config.local.json
+!.!*/
+**/.[!]*
+
+# Temp / junk
+**/.[!.]*hero.png
+**/.\!*
+
+.venv/
+*.dmg
+*.msi
+
+# Oversized files (>45MB)
+/.alpha-nexus-egolite-run/Alpha-Nexus EgoLite Dev.app/Contents/Frameworks/Electron Framework.framework/Electron Framework
+/.alpha-nexus-egolite-run/Alpha-Nexus EgoLite Dev.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework
+
+# AI Skills & Local Agents
+.agents/
+.agents
+
+# Exclude AI Skills
+skills/
+
+# Security Guardrails
+.env.local
+*.pem
+*.key
+
+# Oversized files (>45MB)
+/.alpha-nexus-egolite-run/Alpha-Nexus EgoLite Dev.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework
+
+# Oversized files (>45MB)
+/.alpha-nexus-egolite-run/Alpha-Nexus EgoLite Dev.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework
+
+# Oversized files (>45MB)
+/.alpha-nexus-egolite-run/Alpha-Nexus EgoLite Dev.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework
+
+# Oversized files (>45MB)
+/.alpha-nexus-egolite-run/Alpha-Nexus EgoLite Dev.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework
+
+# Oversized files (>45MB)
+/.alpha-nexus-egolite-run/Alpha-Nexus EgoLite Dev.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework
+
+# Oversized files (>45MB)
+/.alpha-nexus-egolite-run/Alpha-Nexus EgoLite Dev.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework
+
+# Oversized files (>45MB)
+/.alpha-nexus-egolite-run/Alpha-Nexus EgoLite Dev.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework
+
+# Oversized files (>45MB)
+/.alpha-nexus-egolite-run/Alpha-Nexus EgoLite Dev.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework
+
+# Oversized files (>45MB)
+/.alpha-nexus-egolite-run/Alpha-Nexus EgoLite Dev.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework
+
+# Local build artifacts (compiled Go binaries, ~34MB each)
+/alpha-nexus-egolite
+/bin/
+
+# Hackathon large PDF materials (kept locally, excluded from git)
+hackathon/materials/*.pdf

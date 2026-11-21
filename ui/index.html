@@ -1,0 +1,970 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unibuy · 本地控制台</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0b0e;
+  --surface: #121216;
+  --surface-raised: #18181e;
+  --surface-hover: #1e1e26;
+  --border: #22222a;
+  --border-subtle: #1a1a20;
+  --text: #eeeff2;
+  --text-2: #7a7a8e;
+  --text-3: #5c5c6e;
+  --accent: #5e6ad2;
+  --accent-hover: #7079d9;
+  --accent-active: #4d56b8;
+  --accent-glow: rgba(94,106,210,.15);
+  --accent-faint: rgba(94,106,210,.06);
+  --green: #22a36b;
+  --green-bg: rgba(34,163,107,.12);
+  --green-text: #4ade91;
+  --red: #c03535;
+  --red-bg: rgba(209,69,69,.12);
+  --red-text: #f87171;
+  --red-hover: #dc5a5a;
+  --amber: #d49b1a;
+  --amber-bg: rgba(212,155,26,.12);
+  --amber-text: #f5c842;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-full: 999px;
+  --ease: cubic-bezier(.22,1,.36,1);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro", "Segoe UI", Roboto, sans-serif;
+  background:var(--bg); color:var(--text);
+  min-height:100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-size:12.5px; line-height:1.45;
+  font-weight:450;
+}
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+:focus:not(:focus-visible) { outline:none; }
+::selection { background:var(--accent-glow); color:var(--text); }
+::placeholder { color:var(--text-3); }
+code, .mono { font-family: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, Consolas, monospace; white-space: nowrap; }
+
+.layout { display:flex; height:100vh; overflow:hidden; }
+
+.sidebar { width:210px; background:var(--surface); border-right:1px solid var(--border-subtle); display:flex; flex-direction:column; flex-shrink:0; }
+.sidebar .brand { padding:16px 16px 12px; border-bottom:1px solid var(--border-subtle); }
+.sidebar .brand-inner { display:flex; align-items:center; gap:10px; }
+.sidebar .brand-mark { width:28px; height:28px; border-radius:7px; background:linear-gradient(135deg, var(--accent), var(--accent-hover)); display:flex; align-items:center; justify-content:center; font-size:13px; color:#fff; font-weight:700; flex-shrink:0; box-shadow:0 2px 12px var(--accent-glow); transition:box-shadow .2s var(--ease); }
+.sidebar .brand-mark:hover { box-shadow:0 4px 20px var(--accent-glow); }
+.sidebar .brand-text { flex:1; }
+.sidebar .brand-text h1 { font-size:13px; font-weight:700; letter-spacing:-.3px; line-height:1.2; }
+.sidebar .brand-text span { font-size:9px; color:var(--text-3); letter-spacing:.08em; text-transform:uppercase; font-weight:500; }
+.sidebar .nav-group { padding:10px 6px; flex:1; overflow-y:auto; }
+.sidebar .nav-group-label { font-size:9px; color:var(--text-3); letter-spacing:.08em; text-transform:uppercase; padding:6px 10px 4px; font-weight:600; }
+.nav-item {
+  display:flex; align-items:center; gap:8px; padding:7px 10px; width:100%;
+  border-radius:var(--radius); font-size:11.5px; font-weight:500;
+  color:var(--text-2); cursor:pointer;
+  border:none; background:none; text-align:left;
+  transition:all .16s var(--ease); white-space:nowrap;
+}
+.nav-item:hover { color:var(--text); background:rgba(255,255,255,.04); }
+.nav-item:active { transform:scale(.97); }
+.nav-item.active { color:var(--accent); background:var(--accent-faint); font-weight:600; }
+.nav-item .nav-ico { width:18px; text-align:center; font-size:13px; flex-shrink:0; opacity:.7; }
+.nav-item.active .nav-ico { opacity:1; }
+
+.main { flex:1; display:flex; flex-direction:column; min-width:0; }
+
+.topbar { padding:0 20px; height:42px; border-bottom:1px solid var(--border-subtle); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+.topbar-left { display:flex; align-items:center; gap:10px; }
+.topbar-left h2 { font-size:12.5px; font-weight:600; letter-spacing:-.15px; }
+.topbar-badge { font-size:10px; padding:2px 8px; border-radius:var(--radius-full); background:var(--accent-faint); color:var(--accent); font-weight:500; letter-spacing:-.01em; }
+.topbar-right { display:flex; align-items:center; gap:6px; }
+
+.status-bar {
+  height:28px; padding:0 20px; display:flex; align-items:center; gap:14px;
+  background:var(--surface); border-bottom:1px solid var(--border-subtle);
+  font-size:10px; color:var(--text-3); letter-spacing:.01em;
+  overflow-x:auto; flex-shrink:0;
+}
+.status-bar .s-item { display:flex; align-items:center; gap:4px; white-space:nowrap; padding:0 2px; }
+.status-bar .s-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+.status-bar .s-dot.ok { background:var(--green-text); }
+.status-bar .s-dot.warn { background:var(--amber-text); }
+.status-bar .s-dot.err { background:var(--red-text); }
+.status-bar .s-dot.muted { background:var(--text-3); }
+.status-bar .sep { width:1px; height:12px; background:var(--border); }
+
+.content { flex:1; overflow-y:auto; padding:14px 20px 20px; }
+
+.toolbar {
+  display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap; align-items:center;
+  padding:8px 12px; background:var(--surface); border-radius:var(--radius-lg);
+  border:1px solid var(--border-subtle);
+}
+.toolbar .search-wrap { position:relative; flex:1; min-width:120px; max-width:180px; }
+.toolbar .search-wrap svg { position:absolute; left:9px; top:50%; transform:translateY(-50%); width:12px; height:12px; color:var(--text-3); pointer-events:none; }
+.toolbar input { width:100%; padding:5px 8px 5px 24px; height:28px; border-radius:var(--radius); border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:11.5px; font-family:"Inter",-apple-system,system-ui,sans-serif; transition:border-color .16s ease; }
+.toolbar input:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-glow); }
+.toolbar .sep { width:1px; height:18px; background:var(--border); margin:0 3px; flex-shrink:0; }
+.toolbar select {
+  padding:3px 20px 3px 8px; height:28px; border-radius:var(--radius); border:1px solid var(--border);
+  background:var(--bg); color:var(--text); font-size:11.5px; font-weight:500; font-family:"Inter",-apple-system,system-ui,sans-serif;
+  cursor:pointer; transition:border-color .16s ease; appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpath fill='%234a4a58' d='M1 2.5l3 3 3-3'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 6px center;
+}
+.toolbar select:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-glow); }
+.toolbar select option { background:var(--surface-raised); color:var(--text); }
+
+.btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:5px;
+  padding:0 11px; height:28px; border-radius:var(--radius); border:none;
+  font-size:11px; font-weight:500; cursor:pointer; white-space:nowrap;
+  flex-shrink:0; transition:all .16s var(--ease); letter-spacing:-.01em;
+}
+.btn:active { transform:scale(.96); }
+.btn-primary { background:var(--accent); color:#fff; }
+.btn-primary:hover { background:var(--accent-hover); box-shadow:0 4px 16px var(--accent-glow); }
+.btn-danger { background:var(--red); color:#fff; }
+.btn-danger:hover { background:var(--red-hover); }
+.btn-ghost { background:transparent; color:var(--text-2); border:1px solid var(--border); }
+.btn-ghost:hover { background:rgba(255,255,255,.05); color:var(--text); border-color:var(--text-3); }
+.btn-soft { background:var(--surface-raised); color:var(--text); border:1px solid var(--border); }
+.btn-soft:hover { background:var(--surface-hover); }
+.btn-icon { width:28px; padding:0; }
+.btn-sm { height:24px; font-size:10px; padding:0 8px; font-weight:500; }
+
+.view { display:none; }
+.view.active { display:block; }
+
+.cli-block {
+  display:flex; align-items:center; gap:6px;
+  padding:6px 10px 6px 12px; margin-bottom:12px;
+  background:var(--bg); border:1px solid var(--border-subtle);
+  border-left:2px solid var(--accent);
+  border-radius:var(--radius); font-family:"JetBrains Mono","SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  font-size:10.5px; color:var(--text-2);
+}
+.cli-block .cli-cmd { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.cli-block .cli-label { font-family:"Inter",-apple-system,system-ui,sans-serif; font-size:9px; color:var(--text-3); letter-spacing:.08em; text-transform:uppercase; font-weight:600; flex-shrink:0; }
+.cli-block .btn { height:22px; font-size:10px; padding:0 7px; }
+
+.table-wrap { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; font-size:11.5px; }
+table th { text-align:left; padding:6px 8px; font-size:10px; font-weight:600; color:var(--text-3); letter-spacing:.07em; text-transform:uppercase; border-bottom:1px solid var(--border); white-space:nowrap; }
+table td { padding:6px 8px; border-bottom:1px solid var(--border-subtle); white-space:nowrap; }
+table tr:hover td { background:rgba(255,255,255,.04); }
+table tr:focus-within td { background:var(--accent-faint); }
+table td .badge {
+  display:inline-flex; align-items:center; gap:3px;
+  padding:1px 7px; height:18px; border-radius:var(--radius-full);
+  font-size:9.5px; font-weight:500; letter-spacing:.01em;
+}
+table td .badge-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+.badge-ok { background:var(--green-bg); color:var(--green-text); }
+.badge-ok .badge-dot { background:var(--green-text); }
+.badge-err { background:var(--red-bg); color:var(--red-text); }
+.badge-err .badge-dot { background:var(--red-text); }
+.badge-warn { background:var(--amber-bg); color:var(--amber-text); }
+.badge-warn .badge-dot { background:var(--amber-text); }
+.badge-running { background:var(--accent-faint); color:var(--accent); }
+.badge-running .badge-dot { background:var(--accent); }
+.badge-muted { background:var(--surface-hover); color:var(--text-3); }
+.badge-muted .badge-dot { background:var(--text-3); }
+table td .btn-sm { height:22px; font-size:10px; padding:0 7px; font-weight:500; }
+table td .actions { display:flex; gap:3px; }
+table td .mono { font-size:10.5px; color:var(--text-2); letter-spacing:-.015em; }
+
+.dash-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:8px; margin-bottom:14px; }
+.dash-card { background:var(--surface-raised); border:1px solid var(--border); border-radius:var(--radius-lg); padding:12px 14px; }
+.dash-card .dash-label { font-size:9.5px; color:var(--text-3); letter-spacing:.07em; text-transform:uppercase; font-weight:600; }
+.dash-card .dash-value { font-size:23px; font-weight:600; letter-spacing:-.04em; margin-top:3px; line-height:1.1; font-feature-settings:"tnum"; }
+.dash-card .dash-sub { font-size:11px; color:var(--text-2); margin-top:3px; }
+.dash-card .dash-bar { display:flex; gap:6px; margin-top:6px; }
+.dash-card .dash-bar .seg { height:4px; border-radius:2px; flex:1; }
+.dash-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+@media(max-width:900px){ .dash-row { grid-template-columns:1fr; } }
+.dash-panel { background:var(--surface-raised); border:1px solid var(--border); border-radius:var(--radius-lg); padding:12px 14px; }
+.dash-panel h3 { font-size:10px; color:var(--text-3); letter-spacing:.07em; text-transform:uppercase; font-weight:600; margin-bottom:8px; }
+.dash-panel .list-item { display:flex; align-items:center; gap:8px; padding:5px 0; border-bottom:1px solid var(--border-subtle); font-size:12px; }
+.dash-panel .list-item:last-child { border:none; }
+.dash-panel .list-item .stat { margin-left:auto; font-weight:600; font-size:11px; }
+.dash-panel .fail-item { color:var(--red-text); font-size:11px; padding:4px 0; }
+.dash-panel .hint-item { color:var(--text-2); font-family:"JetBrains Mono","SF Mono",ui-monospace,Menlo,Consolas,monospace; font-size:10.5px; padding:4px 0; }
+
+.add-section { background:var(--surface-raised); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; max-width:480px; }
+.add-section h2 { font-size:14px; font-weight:600; margin-bottom:14px; letter-spacing:-.2px; }
+.add-section .field { margin-bottom:10px; }
+.add-section label { display:block; font-size:9.5px; color:var(--text-2); margin-bottom:3px; letter-spacing:.07em; font-weight:600; text-transform:uppercase; }
+.add-section input, .add-section select { width:100%; padding:7px 10px; height:32px; border-radius:var(--radius); border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:12px; font-family:"Inter",-apple-system,system-ui,sans-serif; appearance:none; transition:border-color .16s ease; }
+.add-section select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%237a7a8e' d='M2 3.5l3 3 3-3'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 8px center; }
+.add-section input:focus, .add-section select:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-glow); }
+.add-section .hint { font-size:10px; color:var(--text-3); margin-top:10px; line-height:1.5; padding:8px 10px; background:var(--surface); border-radius:var(--radius); border:1px solid var(--border-subtle); }
+
+.empty-state { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 20px; text-align:center; }
+.empty-state .empty-ico { width:40px; height:40px; border-radius:10px; background:var(--surface-raised); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:18px; margin-bottom:10px; }
+.empty-state h3 { font-size:14px; font-weight:600; letter-spacing:-.15px; margin-bottom:4px; }
+.empty-state p { font-size:11.5px; color:var(--text-2); max-width:240px; line-height:1.5; }
+.empty-state .btn { margin-top:12px; }
+
+.toast {
+  position:fixed; bottom:24px; right:24px; background:var(--surface-raised);
+  border:1px solid var(--border); border-radius:var(--radius-lg);
+  padding:10px 15px; display:flex; align-items:center; gap:8px;
+  font-size:11.5px; font-weight:500;
+  transform:translateX(120%) scale(.92); opacity:0;
+  transition:all .32s var(--ease); z-index:999; max-width:360px;
+  pointer-events:none; box-shadow:0 8px 28px rgba(0,0,0,.35);
+}
+.toast.show { transform:translateX(0) scale(1); opacity:1; pointer-events:auto; }
+.toast.success { border-color:rgba(34,163,107,.3); }
+.toast.error { border-color:rgba(209,69,69,.3); }
+.toast .toast-ico { font-size:14px; flex-shrink:0; }
+
+@keyframes shimmer { 0%{background-position:-300% 0} 100%{background-position:300% 0} }
+.skeleton-table { padding:8px 0; }
+.skeleton-row { height:34px; border-bottom:1px solid var(--border-subtle); display:flex; align-items:center; gap:8px; padding:0 10px; }
+.skeleton-cell { height:10px; border-radius:3px; background:linear-gradient(90deg,var(--border-subtle) 25%,var(--border) 50%,var(--border-subtle) 75%); background-size:300% 100%; animation:shimmer 2s ease-in-out infinite; }
+
+/* ── Detail Drawer ── */
+.detail-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:500; cursor:pointer; }
+.detail-overlay.show { display:block; }
+.detail-drawer {
+  position:fixed; top:0; right:-420px; width:420px; height:100vh;
+  background:var(--surface); border-left:1px solid var(--border);
+  z-index:501; transition:right .28s var(--ease);
+  display:flex; flex-direction:column;
+  box-shadow:-8px 0 40px rgba(0,0,0,.3);
+}
+.detail-drawer.open { right:0; }
+.detail-drawer .dd-header { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--border-subtle); flex-shrink:0; }
+.detail-drawer .dd-header h3 { font-size:13px; font-weight:600; }
+.detail-drawer .dd-body { overflow-y:auto; flex:1; padding:14px 16px; }
+.detail-drawer .dd-field { margin-bottom:10px; }
+.detail-drawer .dd-field .dd-label { font-size:9.5px; color:var(--text-3); letter-spacing:.07em; text-transform:uppercase; font-weight:600; margin-bottom:2px; }
+.detail-drawer .dd-field .dd-value { font-size:12px; word-break:break-all; }
+.detail-drawer .dd-section { margin-bottom:14px; }
+.detail-drawer .dd-section h4 { font-size:10px; color:var(--text-3); letter-spacing:.07em; text-transform:uppercase; font-weight:600; margin-bottom:6px; padding-bottom:4px; border-bottom:1px solid var(--border-subtle); }
+.detail-drawer .dd-asset { display:flex; align-items:center; gap:6px; padding:4px 0; font-size:11.5px; }
+.detail-drawer .dd-err { color:var(--red-text); font-size:11px; padding:3px 0; }
+.detail-drawer .dd-cmd { display:flex; align-items:center; gap:4px; padding:5px 8px; background:var(--bg); border-radius:var(--radius); font-size:10.5px; font-family:"JetBrains Mono","SF Mono",ui-monospace,Menlo,Consolas,monospace; color:var(--text-2); margin-top:4px; }
+.detail-drawer .dd-cmd code { flex:1; overflow:hidden; text-overflow:ellipsis; }
+.detail-drawer .dd-actions { display:flex; gap:4px; margin-top:8px; flex-wrap:wrap; }
+
+/* ── Platform SVG token container ── */
+.plat-ico { display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; flex-shrink:0; }
+.plat-ico svg { width:18px; height:18px; }
+table td .plat-ico { width:18px; height:18px; }
+table td .plat-ico svg { width:16px; height:16px; }
+.dash-panel .list-item .plat-ico { width:18px; height:18px; }
+
+@media(prefers-reduced-motion:reduce){
+  *, *::before, *::after { animation-duration:0.01ms!important; transition-duration:0.01ms!important; }
+}
+@media(max-width:768px){
+  .sidebar { display:none; }
+  .content { padding:10px; }
+  .topbar { padding:0 12px; }
+  .status-bar { padding:0 12px; gap:10px; overflow-x:auto; }
+  .toolbar { flex-wrap:wrap; padding:8px; }
+  .toolbar .search-wrap { max-width:100%; flex-basis:100%; }
+  .toolbar .sep { display:none; }
+  .dash-grid { grid-template-columns:1fr 1fr; }
+  .dash-row { grid-template-columns:1fr; }
+  .detail-drawer { width:100%; right:-100%; }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+<div class="brand">
+<div class="brand-inner">
+<div class="brand-mark">U</div>
+<div class="brand-text">
+<h1>Unibuy</h1>
+<span>本地控制台</span>
+</div>
+</div>
+</div>
+<div class="nav-group">
+<div class="nav-group-label">导航</div>
+  <button class="nav-item active" data-tab="dashboard" onclick="switchTab('dashboard',this)">
+  <svg class="nav-ico" width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5.5" height="5.5" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="7.5" y="1" width="5.5" height="5.5" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="1" y="7.5" width="5.5" height="5.5" rx="1.5" stroke="currentColor" stroke-width="1.3"/><rect x="7.5" y="7.5" width="5.5" height="5.5" rx="1.5" stroke="currentColor" stroke-width="1.3"/></svg>
+  仪表盘
+  </button>
+  <button class="nav-item" data-tab="accounts" onclick="switchTab('accounts',this)">
+  <svg class="nav-ico" width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="2.5" stroke="currentColor" stroke-width="1.3"/><path d="M2.5 12.5c0-2.5 2-4.5 4.5-4.5s4.5 2 4.5 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+  账号
+  </button>
+  <button class="nav-item" data-tab="batches" onclick="switchTab('batches',this)">
+  <svg class="nav-ico" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 4.5h9M4 1.5v2M10 1.5v2M3.5 7.5h7M3.5 10h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+  批量任务
+  </button>
+  <button class="nav-item" data-tab="content" onclick="switchTab('content',this)">
+  <svg class="nav-ico" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 2.5h9a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-9a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 5.5h5M4.5 7.5h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+  内容
+  </button>
+  <button class="nav-item" data-tab="logs" onclick="switchTab('logs',this)">
+  <svg class="nav-ico" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2.5h10M2 5h6M2 7.5h10M2 10h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+  日志
+  </button>
+  <button class="nav-item" data-tab="settings" onclick="switchTab('settings',this)">
+  <svg class="nav-ico" width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M7 1v1M7 12v1M13 7h-1M2 7H1M11.3 2.7l-.7.7M3.4 10.6l-.7.7M11.3 11.3l-.7-.7M3.4 3.4l-.7-.7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+  设置
+  </button>
+</div>
+</aside>
+<div class="main">
+<div class="topbar">
+<div class="topbar-left">
+<h2 id="page-title">仪表盘</h2>
+<span class="topbar-badge" id="page-badge"></span>
+</div>
+<div class="topbar-right">
+<button class="btn btn-ghost btn-icon" onclick="location.reload()" title="刷新" aria-label="刷新页面">
+<svg width="12" height="12" viewBox="0 0 13 13" fill="none"><path d="M1.5 6.5a5 5 0 0 1 8.6-3.4M11.5 6.5a5 5 0 0 1-8.6 3.4M2.5 1.5v3.5h3.5M10.5 11.5V8H7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+</div>
+</div>
+<div class="status-bar" id="status-bar">
+<div class="s-item"><span class="s-dot ok" id="s-db"></span> DB</div>
+<div class="sep"></div>
+<div class="s-item"><span class="s-dot muted" id="s-cdp"></span> CDP</div>
+<div class="sep"></div>
+<div class="s-item"><span class="s-dot muted" id="s-browser"></span> 浏览器</div>
+<div class="sep"></div>
+<div class="s-item">运行中: <strong id="s-running" style="color:var(--accent)">—</strong></div>
+<div class="s-item">失败: <strong id="s-failed" style="color:var(--red-text)">—</strong></div>
+</div>
+<div class="content">
+
+<!-- Dashboard -->
+<div id="view-dashboard" class="view active">
+<div class="dash-grid" id="dash-cards"></div>
+<div class="dash-row">
+<div class="dash-panel" id="panel-platforms">
+<h3>平台状态</h3>
+<div id="platform-list"></div>
+</div>
+<div class="dash-panel" id="panel-failures">
+<h3>最近失败</h3>
+<div id="failure-list"></div>
+</div>
+</div>
+<div class="dash-row">
+<div class="dash-panel" id="panel-batches-active">
+<h3>运行中任务</h3>
+<div id="active-batch-list"></div>
+</div>
+<div class="dash-panel" id="panel-hints">
+<h3>助手提示</h3>
+<div id="hint-list"></div>
+</div>
+</div>
+</div>
+
+<!-- Accounts -->
+<div id="view-accounts" class="view">
+<div class="toolbar">
+<div class="search-wrap">
+<svg viewBox="0 0 13 13" fill="none"><circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.3"/><path d="M9 9l3.5 3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+<input id="search-input" placeholder="搜索账号名或平台..." oninput="renderAccounts()" />
+</div>
+<select id="filter-platform" onchange="renderAccounts()">
+<option value="all">全部平台</option>
+<option value="instagram">Instagram</option>
+<option value="facebook">Facebook</option>
+<option value="xhs">小红书</option>
+<option value="douyin">抖音</option>
+<option value="wechat_video">视频号</option>
+<option value="kuaishou">快手</option>
+</select>
+<select id="filter-state" onchange="renderAccounts()">
+<option value="all">全部状态</option>
+<option value="logged_in">已登录</option>
+<option value="logged_out">未登录</option>
+<option value="manual_required">待接管</option>
+</select>
+<span class="sep"></span>
+<button class="btn btn-primary btn-sm" onclick="document.querySelector('[data-tab=add]').click()">+ 添加</button>
+<button class="btn btn-soft btn-sm" onclick="batchCheck()">批量检查</button>
+</div>
+<div id="accounts-section"></div>
+</div>
+
+<!-- Add Account -->
+<div id="view-add" class="view">
+<div class="cli-block">
+<span class="cli-label">命令</span>
+<span class="cli-cmd" id="add-cli-cmd">alpha-nexus account add --platform instagram</span>
+<button class="btn btn-ghost btn-sm" onclick="copyCmd('add-cli-cmd')">复制</button>
+</div>
+<div class="add-section">
+<h2>添加新账号</h2>
+<div class="field">
+<label>平台</label>
+<select id="add-platform" onchange="updateAddCli()">
+<option value="instagram">Instagram</option>
+<option value="facebook">Facebook</option>
+<option value="xhs">小红书</option>
+<option value="douyin">抖音</option>
+<option value="wechat_video">视频号</option>
+<option value="kuaishou">快手</option>
+</select>
+</div>
+<div class="field">
+<label>显示名称</label>
+<input id="add-name" placeholder="留空自动生成" oninput="updateAddCli()" />
+</div>
+<div class="field">
+<label>配置文件</label>
+<input id="add-profile" placeholder="例如 xhs-1" oninput="updateAddCli()" />
+</div>
+<div class="field">
+<label>备注</label>
+<input id="add-remark" placeholder="用途、地区..." />
+</div>
+<button class="btn btn-primary" onclick="addAccount()" style="width:100%">
+<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 2.5v7M2.5 6h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+添加账号
+</button>
+<div class="hint">添加后点击「启动浏览器」打开创作者后台登录页面，登录完成后点击「验证」保存账号。</div>
+</div>
+</div>
+
+<!-- Batches -->
+<div id="view-batches" class="view">
+<div class="toolbar">
+<button class="btn btn-soft btn-sm" onclick="renderBatches()">刷新</button>
+</div>
+<div class="table-wrap">
+<table>
+<thead><tr>
+<th scope="col">批次 ID</th><th scope="col">操作</th><th scope="col">平台</th><th scope="col">总数</th><th scope="col">成功</th><th scope="col">失败</th><th scope="col">等待</th><th scope="col">运行中</th><th scope="col">状态</th><th scope="col">创建时间</th><th scope="col">操作</th>
+</tr></thead>
+<tbody id="batches-body"></tbody>
+</table>
+</div>
+<div class="empty-state" id="batches-empty" style="display:none">
+<div class="empty-ico">&#9776;</div>
+<h3>暂无批量任务</h3>
+<p>从账号页面选择多个账号后触发批量检查，或通过 CLI 提交批量发布任务。</p>
+</div>
+</div>
+
+<!-- Content -->
+<div id="view-content" class="view">
+<div class="cli-block">
+<span class="cli-label">命令</span>
+<span class="cli-cmd">alpha-nexus content import --file ./contents.csv</span>
+<button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText('alpha-nexus content import --file ./contents.csv').then(()=>toast('已复制','success'))">复制</button>
+</div>
+<div class="toolbar">
+<button class="btn btn-soft btn-sm" onclick="toast('请通过 CLI 导入 CSV: alpha-nexus content import --file path.csv','success')">导入 CSV</button>
+<span class="sep"></span>
+<select id="content-platform-filter" onchange="renderContent()">
+<option value="all">全部平台</option>
+</select>
+</div>
+<div class="table-wrap">
+<table>
+<thead><tr>
+<th scope="col">ID</th><th scope="col">标题</th><th scope="col">平台</th><th scope="col">类型</th><th scope="col">状态</th><th scope="col">创建时间</th><th scope="col">操作</th>
+</tr></thead>
+<tbody id="content-body"></tbody>
+</table>
+</div>
+</div>
+
+<!-- Logs -->
+<div id="view-logs" class="view">
+<div class="toolbar">
+<select id="log-level" onchange="renderLogs()">
+<option value="all">全部</option>
+<option value="error">错误</option>
+<option value="warn">警告</option>
+<option value="info">信息</option>
+</select>
+<select id="log-platform" onchange="renderLogs()">
+<option value="all">全部平台</option>
+</select>
+<button class="btn btn-ghost btn-sm" onclick="renderLogs()">刷新</button>
+</div>
+<div class="table-wrap">
+<table>
+<thead><tr>
+<th scope="col">时间</th><th scope="col">级别</th><th scope="col">来源</th><th scope="col">消息</th>
+</tr></thead>
+<tbody id="logs-body"></tbody>
+</table>
+</div>
+</div>
+
+<!-- Settings -->
+<div id="view-settings" class="view">
+<div class="cli-block">
+<span class="cli-label">命令</span>
+<span class="cli-cmd" id="settings-cli-cmd">alpha-nexus config show</span>
+<button class="btn btn-ghost btn-sm" onclick="copyCmd('settings-cli-cmd')">复制</button>
+</div>
+<div class="add-section" style="max-width:520px">
+<h2>系统配置</h2>
+<div class="field">
+<label>数据目录</label>
+<input id="set-datadir" placeholder="~/.alpha-nexus" />
+</div>
+<div class="field">
+<label>浏览器路径</label>
+<input id="set-browser" placeholder="/path/to/fingerprint-chromium" />
+</div>
+<div class="field">
+<label>默认 CDP 端口</label>
+<input id="set-cdpport" placeholder="15101" />
+</div>
+<div class="field">
+<label>UI 端口</label>
+<input id="set-uiport" placeholder="17321" />
+</div>
+<div class="field">
+<label>默认并发数</label>
+<input id="set-concurrency" placeholder="3" />
+</div>
+<div class="field">
+<label>截图目录</label>
+<input id="set-screenshots" placeholder="~/.alpha-nexus/screenshots" />
+</div>
+<div class="field">
+<label>日志目录</label>
+<input id="set-logsdir" placeholder="~/.alpha-nexus/logs" />
+</div>
+<button class="btn btn-primary" onclick="saveSettings()" style="width:100%">保存配置</button>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- Detail Drawer -->
+<div class="detail-overlay" id="detail-overlay" onclick="closeDetail()"></div>
+<div class="detail-drawer" id="detail-drawer">
+<div class="dd-header">
+<h3 id="detail-title">账号详情</h3>
+<button class="btn btn-ghost btn-sm" onclick="closeDetail()" aria-label="关闭详情面板">关闭</button>
+</div>
+<div class="dd-body" id="detail-body"></div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+<span class="toast-ico" id="toast-ico">&#10003;</span>
+<span id="toast-msg"></span>
+</div>
+
+<script>
+// ── Platform config ──
+const PLATFORMS = {
+  instagram:   {name:'Instagram', logo:'<svg viewBox="0 0 24 24"><rect x="0" y="0" width="24" height="24" rx="5.5" fill="url(#ig-g)"/><circle cx="12" cy="12" r="5" fill="none" stroke="#fff" stroke-width="1.2"/><circle cx="12" cy="12" r="2.5" fill="none" stroke="#fff" stroke-width=".8"/><circle cx="17.5" cy="6.5" r="1.2" fill="#fff"/><defs><linearGradient id="ig-g" x1="0" y1="0" x2="24" y2="24"><stop offset="0" stop-color="#FEDA77"/><stop offset=".25" stop-color="#F58529"/><stop offset=".45" stop-color="#DD2A7B"/><stop offset=".7" stop-color="#8134AF"/><stop offset="1" stop-color="#515BD4"/></linearGradient></defs></svg>'},
+  facebook:    {name:'Facebook', logo:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#1877F2"/><path d="M15.75 8.75H14V7.5c0-.4.33-.5.56-.5h.94V4.5l-1.52-.02c-2 0-2.48 1.27-2.48 2.22v1.05H10v2h1.25V17h2V10.75h1.6l.22-2H13.3v-.86c0-.27.37-.48.71-.48h.87l-.44-1.42" fill="#fff"/></svg>'},
+  xhs:         {name:'小红书', logo:'<svg viewBox="0 0 24 24"><rect x="0" y="0" width="24" height="24" rx="5.5" fill="#ff2442"/><rect x="4.5" y="7.5" width="15" height="10" rx="2.5" fill="none" stroke="#fff" stroke-width="1.3"/><circle cx="14" cy="13" r="3.5" fill="none" stroke="#fff" stroke-width="1.3"/><circle cx="14" cy="13" r="1.2" fill="#fff"/><circle cx="7.5" cy="10.5" r=".7" fill="#fff"/></svg>'},
+  douyin:      {name:'抖音', logo:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11.5" fill="#161823"/><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" fill="#fff"/></svg>'},
+  wechat_video:{name:'视频号', logo:'<svg viewBox="0 0 24 24"><rect x="0" y="0" width="24" height="24" rx="5" fill="#07c160"/><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.89c-.135-.01-.27-.027-.407-.03zm-2.53 3.274c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.97-.982zm4.844 0c.535 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.434-.982.969-.982z" fill="#fff"/></svg>'},
+  kuaishou:    {name:'快手', logo:'<svg viewBox="0 0 24 24"><rect x="0" y="0" width="24" height="24" rx="5.5" fill="url(#kwai-g)"/><rect x="4.5" y="7" width="15" height="10.5" rx="2.5" fill="none" stroke="#fff" stroke-width="1.25"/><rect x="9" y="4" width="6" height="2.5" rx="1.25" fill="#fff"/><circle cx="14" cy="12.5" r="3.5" fill="none" stroke="#fff" stroke-width="1.25"/><polygon points="12.2,10.7 16,12.5 12.2,14.3" fill="#fff"/><circle cx="7.5" cy="10" r=".7" fill="#fff"/><defs><linearGradient id="kwai-g" x1="0" y1="0" x2="24" y2="24"><stop offset="0" stop-color="#FF8000"/><stop offset="1" stop-color="#FF2A00"/></linearGradient></defs></svg>'}
+};
+const STATE_LABELS = {logged_in:'已登录', logged_out:'未登录', manual_required:'待接管', disabled:'已禁用'};
+let ALL_ACCOUNTS = [];
+
+function toast(msg, type) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-ico').textContent = type === 'error' ? '\u2715' : '\u2713';
+  document.getElementById('toast-msg').textContent = msg;
+  t.className = 'toast show ' + (type||'');
+  setTimeout(() => t.className = 'toast', 3500);
+}
+
+function copyCmd(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent).then(() => toast('已复制', 'success')).catch(() => {});
+}
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const target = document.getElementById('view-'+name);
+  if (target) target.classList.add('active');
+  if (btn) btn.classList.add('active');
+  const titles = {dashboard:'仪表盘', accounts:'账号', add:'添加账号', batches:'批量任务', content:'内容', logs:'日志', settings:'设置'};
+  document.getElementById('page-title').textContent = titles[name] || name;
+  document.getElementById('page-badge').textContent = '';
+  if (name === 'dashboard') { renderDashboard(); updateStatusBar(); }
+  if (name === 'accounts') renderAccounts();
+  if (name === 'batches') renderBatches();
+  if (name === 'content') renderContent();
+  if (name === 'logs') renderLogs();
+  if (name === 'settings') loadSettings();
+}
+
+async function fetchJSON(url, opts) {
+  const res = await fetch(url, opts);
+  if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+function renderSkeleton(rows) {
+  return '<div class="skeleton-table">' + Array.from({length:rows},()=>'<div class="skeleton-row"><div class="skeleton-cell" style="width:80px"></div><div class="skeleton-cell" style="width:120px"></div><div class="skeleton-cell" style="width:60px"></div><div class="skeleton-cell" style="width:40px"></div></div>').join('') + '</div>';
+}
+
+function badgeHtml(state) {
+  const map = {logged_in:['badge-ok','已登录'], logged_out:['badge-err','未登录'], manual_required:['badge-warn','待接管'], disabled:['badge-muted','已禁用'], success:['badge-ok','成功'], failed:['badge-err','失败'], running:['badge-running','运行中'], pending:['badge-muted','等待'], paused:['badge-warn','暂停'], error:['badge-err','错误'], warn:['badge-warn','警告'], info:['badge-running','信息'], draft:['badge-muted','草稿'], published:['badge-ok','已发布']};
+  const m = map[state] || ['badge-muted', state];
+  return '<span class="badge ' + m[0] + '"><span class="badge-dot"></span>' + m[1] + '</span>';
+}
+
+function platformIco(code) {
+  const p = PLATFORMS[code] || {name:code, logo:''};
+  return '<span class="plat-ico">' + p.logo + '</span>';
+}
+
+function platformName(code) {
+  return (PLATFORMS[code] || {name:code}).name;
+}
+
+// ── Detail Drawer ──
+function openDetail(acc) {
+  document.getElementById('detail-overlay').classList.add('show');
+  document.getElementById('detail-drawer').classList.add('open');
+  document.getElementById('detail-title').textContent = acc.name;
+  const assets = acc.assets || [];
+  const errors = acc.recentErrors || [];
+  const body = document.getElementById('detail-body');
+  body.innerHTML =
+    '<div class="dd-section">' +
+      '<div class="dd-field"><div class="dd-label">平台</div><div class="dd-value">' + platformIco(acc.platformCode) + ' ' + platformName(acc.platformCode) + '</div></div>' +
+      '<div class="dd-field"><div class="dd-label">配置文件</div><div class="dd-value mono">' + (acc.profileName || '—') + '</div></div>' +
+      '<div class="dd-field"><div class="dd-label">登录状态</div><div class="dd-value">' + badgeHtml(acc.loginState) + '</div></div>' +
+      '<div class="dd-field"><div class="dd-label">备注</div><div class="dd-value">' + (acc.remark || '—') + '</div></div>' +
+      (acc.fingerprintSeed ? '<div class="dd-field"><div class="dd-label">指纹 Seed</div><div class="dd-value mono">' + acc.fingerprintSeed + '</div></div>' : '') +
+      (acc.lastCheckAt ? '<div class="dd-field"><div class="dd-label">最后检查</div><div class="dd-value mono">' + new Date(acc.lastCheckAt).toLocaleString('zh-CN') + '</div></div>' : '') +
+    '</div>' +
+    (acc.profileDir ? '<div class="dd-field"><div class="dd-label">Profile 目录</div><div class="dd-value mono" style="font-size:10px">' + acc.profileDir + '</div></div>' : '') +
+    (assets.length ? '<div class="dd-section"><h4>绑定资产 (' + assets.length + ')</h4>' + assets.map(a => '<div class="dd-asset">' + platformIco(a.platformCode) + '<span>' + a.name + '</span><span class="mono" style="color:var(--text-3);font-size:10px;margin-left:auto">' + a.assetType + '</span></div>').join('') + '</div>' : '') +
+    (errors.length ? '<div class="dd-section"><h4>最近错误</h4>' + errors.map(e => '<div class="dd-err">' + e.message + (e.step ? ' (' + e.step + ')' : '') + '</div>').join('') + '</div>' : '') +
+    '<div class="dd-section"><h4>CLI 命令</h4>' +
+      '<div class="dd-cmd"><code>alpha-nexus account check --id ' + acc.id + '</code><button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText(\'alpha-nexus account check --id ' + acc.id + '\').then(()=>toast(\'已复制\',\'success\'))">复制</button></div>' +
+      '<div class="dd-cmd"><code>alpha-nexus-egolite browser start --profile ' + (acc.profileName||'') + '</code><button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText(\'alpha-nexus-egolite browser start --profile ' + (acc.profileName||'') + '\').then(()=>toast(\'已复制\',\'success\'))">复制</button></div>' +
+    '</div>' +
+    '<div class="dd-actions">' +
+      (acc.browserRunning
+        ? '<button class="btn btn-sm btn-danger" onclick="browserStop(' + acc.id + ')">停止浏览器</button>'
+        : '<button class="btn btn-sm btn-soft" onclick="browserStart(' + acc.id + ')">启动浏览器</button>') +
+      '<button class="btn btn-sm btn-ghost" onclick="verifyAccount(' + acc.id + ')">验证登录</button>' +
+      '<button class="btn btn-sm btn-ghost" onclick="deleteAccount(' + acc.id + ')">删除账号</button>' +
+    '</div>';
+}
+
+function closeDetail() {
+  document.getElementById('detail-overlay').classList.remove('show');
+  document.getElementById('detail-drawer').classList.remove('open');
+}
+
+// ── Status Bar ──
+async function updateStatusBar() {
+  const s = {db:'ok', cdp:'muted', browser:'muted', running:'—', failed:'—'};
+  try {
+    const ov = await fetchJSON('/api/overview');
+    s.cdp = 'ok'; s.browser = ov.browserState === 'ready' ? 'ok' : 'warn';
+    s.running = ov.runningBrowsers || 0; s.failed = ov.failedJobs || 0;
+  } catch(_) { s.db = 'err'; }
+  document.getElementById('s-db').className = 's-dot ' + s.db;
+  document.getElementById('s-cdp').className = 's-dot ' + s.cdp;
+  document.getElementById('s-browser').className = 's-dot ' + s.browser;
+  document.getElementById('s-running').textContent = s.running;
+  document.getElementById('s-failed').textContent = s.failed;
+}
+
+// ── Dashboard ──
+async function renderDashboard() {
+  const cardEl = document.getElementById('dash-cards');
+  cardEl.innerHTML = renderSkeleton(3);
+  document.getElementById('platform-list').innerHTML = renderSkeleton(3);
+  document.getElementById('failure-list').innerHTML = '<div style="padding:8px 0;font-size:11px;color:var(--text-2)">加载中...</div>';
+  document.getElementById('active-batch-list').innerHTML = '';
+  document.getElementById('hint-list').innerHTML = '';
+  let stats = {total:0, loggedIn:0, loggedOut:0, manual:0, failed:0, runningBrowsers:0};
+  try { const ov = await fetchJSON('/api/overview'); Object.assign(stats, ov); } catch(_) {}
+  try { const accs = await fetchJSON('/api/accounts'); ALL_ACCOUNTS = accs; } catch(_) {}
+  const total = ALL_ACCOUNTS.length;
+  const li = ALL_ACCOUNTS.filter(a => a.loginState === 'logged_in').length;
+  const lo = ALL_ACCOUNTS.filter(a => a.loginState === 'logged_out').length;
+  const mr = ALL_ACCOUNTS.filter(a => a.loginState === 'manual_required').length;
+  const run = ALL_ACCOUNTS.filter(a => a.browserRunning).length;
+  const fcnt = stats.failed || 0;
+  cardEl.innerHTML =
+    '<div class="dash-card"><div class="dash-label">总账号</div><div class="dash-value">' + total + '</div></div>' +
+    '<div class="dash-card"><div class="dash-label">已登录</div><div class="dash-value" style="color:var(--green-text)">' + li + '</div><div class="dash-sub">' + (total ? Math.round(li/total*100) + '%' : '—') + '</div></div>' +
+    '<div class="dash-card"><div class="dash-label">未登录</div><div class="dash-value" style="color:var(--red-text)">' + lo + '</div></div>' +
+    '<div class="dash-card"><div class="dash-label">待接管</div><div class="dash-value" style="color:var(--amber-text)">' + mr + '</div></div>' +
+    '<div class="dash-card"><div class="dash-label">运行中</div><div class="dash-value" style="color:var(--accent)">' + run + '</div></div>' +
+    '<div class="dash-card"><div class="dash-label">失败任务</div><div class="dash-value" style="color:var(--red-text)">' + fcnt + '</div></div>';
+  const platList = document.getElementById('platform-list');
+  platList.innerHTML = Object.entries(PLATFORMS).map(([code, p]) => {
+    const cnt = ALL_ACCOUNTS.filter(a => a.platformCode === code).length;
+    const ok = ALL_ACCOUNTS.filter(a => a.platformCode === code && a.loginState === 'logged_in').length;
+    return '<div class="list-item">' + platformIco(code) + '<span>' + p.name + '</span><span class="stat">' + ok + '/' + cnt + '</span></div>';
+  }).join('');
+  const fList = document.getElementById('failure-list');
+  const fails = ALL_ACCOUNTS.filter(a => a.lastError).slice(0, 5);
+  fList.innerHTML = fails.length ? fails.map(a => '<div class="fail-item">' + a.name + ': ' + a.lastError + '</div>').join('') : '<div style="padding:8px 0;font-size:11px;color:var(--text-2)">暂无失败</div>';
+  const bList = document.getElementById('active-batch-list');
+  bList.innerHTML = '<div style="padding:8px 0;font-size:11px;color:var(--text-2)">暂无运行中的任务</div>';
+  const hList = document.getElementById('hint-list');
+  const hints = ALL_ACCOUNTS.length === 0 ? ['alpha-nexus account add --platform instagram', 'alpha-nexus account add --platform xhs'] : ['alpha-nexus account check --all', 'alpha-nexus batch list', 'alpha-nexus config show'];
+  hList.innerHTML = hints.map(h => '<div class="hint-item">$ ' + h + '<button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText(\'' + h + '\').then(()=>toast(\'已复制\',\'success\'))" style="margin-left:6px">复制</button></div>').join('');
+}
+
+// ── Accounts ──
+function renderAccounts() {
+  const kw = document.getElementById('search-input').value.trim().toLowerCase();
+  const pf = document.getElementById('filter-platform').value;
+  const sf = document.getElementById('filter-state').value;
+  const filtered = ALL_ACCOUNTS.filter(a => {
+    if (pf !== 'all' && a.platformCode !== pf) return false;
+    if (sf !== 'all' && a.loginState !== sf) return false;
+    if (kw && !(a.name.toLowerCase().includes(kw) || a.platformCode.toLowerCase().includes(kw))) return false;
+    return true;
+  });
+  document.getElementById('page-badge').textContent = filtered.length + ' / ' + ALL_ACCOUNTS.length + ' 个';
+  const section = document.getElementById('accounts-section');
+  if (ALL_ACCOUNTS.length === 0) {
+    section.innerHTML = '<div class="empty-state"><div class="empty-ico">&#9742;</div><h3>还没有账号</h3><p>添加社交媒体账号后，它们会显示在这里。</p><button class="btn btn-primary btn-sm" onclick="switchTab(\'add\',document.querySelector(\'[data-tab=add]\'))">添加第一个账号</button></div>';
+    return;
+  }
+  if (filtered.length === 0) {
+    section.innerHTML = '<div class="empty-state"><div class="empty-ico">&#128270;</div><h3>没有匹配的账号</h3><p>尝试修改搜索或筛选条件</p></div>';
+    return;
+  }
+  section.innerHTML = '<div class="table-wrap"><table><thead><tr><th scope="col" style="width:28px"><input type="checkbox" onchange="toggleAll(this.checked)" aria-label="全选" /></th><th scope="col">平台</th><th scope="col">名称</th><th scope="col">配置文件</th><th scope="col">状态</th><th scope="col">资产</th><th scope="col">最后检查</th><th scope="col">操作</th></tr></thead><tbody>' +
+    filtered.map(a => {
+      return '<tr><td><input type="checkbox" class="row-check" value="' + a.id + '" /></td>' +
+        '<td>' + platformIco(a.platformCode) + '</td>' +
+        '<td><strong>' + a.name + '</strong></td>' +
+        '<td class="mono">' + (a.profileName || '—') + '</td>' +
+        '<td>' + badgeHtml(a.loginState) + '</td>' +
+        '<td>' + ((a.assetCount ?? a.assets?.length) ?? '—') + '</td>' +
+        '<td class="mono">' + (a.lastCheckAt ? new Date(a.lastCheckAt).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}) : '—') + '</td>' +
+        '<td><div class="actions">' +
+        (a.browserRunning
+          ? '<button class="btn btn-sm btn-danger" onclick="browserStop(' + a.id + ')">停止</button>'
+          : '<button class="btn btn-sm btn-soft" onclick="browserStart(' + a.id + ')">启动</button>') +
+        '<button class="btn btn-sm btn-ghost" onclick="viewDetail(' + a.id + ')">详情</button>' +
+        '<button class="btn btn-sm btn-ghost" onclick="deleteAccount(' + a.id + ')">删除</button>' +
+        '</div></td></tr>';
+    }).join('') + '</tbody></table></div>';
+}
+
+function toggleAll(checked) {
+  document.querySelectorAll('.row-check').forEach(c => c.checked = checked);
+}
+
+async function batchCheck() {
+  const ids = [...document.querySelectorAll('.row-check:checked')].map(c => c.value);
+  if (!ids.length) { toast('请先选择账号', 'error'); return; }
+  toast('批量检查 ' + ids.length + ' 个账号...', 'success');
+  for (const id of ids) {
+    try { await fetchJSON('/api/accounts/verify', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({accountId: parseInt(id)})}); }
+    catch(e) { toast('检查 #' + id + ' 失败', 'error'); }
+  }
+  toast('批量检查完成', 'success');
+  loadData();
+}
+
+async function browserStart(id) {
+  try { await fetchJSON('/api/browser/start', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({accountId:id})}); toast('浏览器已启动', 'success'); loadData(); }
+  catch(e) { toast('启动失败: ' + e.message, 'error'); }
+}
+async function browserStop(id) {
+  try { await fetchJSON('/api/browser/stop', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({accountId:id})}); toast('浏览器已停止', 'success'); loadData(); }
+  catch(e) { toast('停止失败: ' + e.message, 'error'); }
+}
+async function deleteAccount(id) {
+  if (!confirm('确定删除此账号？')) return;
+  try { await fetchJSON('/api/accounts/delete', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id:id})}); toast('已删除', 'success'); loadData(); }
+  catch(e) { toast('删除失败: ' + e.message, 'error'); }
+}
+async function viewDetail(id) {
+  try {
+    const a = await fetchJSON('/api/accounts/detail?id=' + id);
+    openDetail(a);
+  } catch(e) {
+    const a = ALL_ACCOUNTS.find(x => x.id === id);
+    if (a) openDetail(a);
+    else toast('加载失败: ' + e.message, 'error');
+  }
+}
+async function verifyAccount(id) {
+  try {
+    await fetchJSON('/api/accounts/verify', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({accountId:id})});
+    toast('验证完成', 'success');
+    closeDetail();
+    loadData();
+  } catch(e) { toast('验证失败: ' + e.message, 'error'); }
+}
+
+function updateAddCli() {
+  const p = document.getElementById('add-platform').value;
+  const n = document.getElementById('add-name').value;
+  let cmd = 'alpha-nexus account add --platform ' + p;
+  if (n) cmd += ' --name "' + n + '"';
+  document.getElementById('add-cli-cmd').textContent = cmd;
+}
+
+async function addAccount() {
+  const platform = document.getElementById('add-platform').value;
+  const name = document.getElementById('add-name').value;
+  const profile = document.getElementById('add-profile').value;
+  const remark = document.getElementById('add-remark').value;
+  try {
+    await fetchJSON('/api/accounts/add', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({platform, name, profileName:profile, remark})});
+    toast('账号添加成功', 'success');
+    ['add-name','add-profile','add-remark'].forEach(id => document.getElementById(id).value = '');
+    switchTab('accounts', document.querySelector('[data-tab=accounts]'));
+    loadData();
+  } catch(e) { toast('添加失败: ' + e.message, 'error'); }
+}
+
+// ── Batches ──
+async function renderBatches() {
+  const body = document.getElementById('batches-body');
+  const empty = document.getElementById('batches-empty');
+  body.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:24px;color:var(--text-2)">加载中...</td></tr>';
+  let data;
+  try {
+    data = await fetchJSON('/api/batches');
+  } catch(_) { data = []; }
+  if (!data.length) {
+    body.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  body.innerHTML = data.map(b => '<tr>' +
+    '<td class="mono">' + (b.id || '—') + '</td>' +
+    '<td>' + (b.operation || '—') + '</td>' +
+    '<td>' + (b.platform || '—') + '</td>' +
+    '<td>' + (b.total ?? '—') + '</td>' +
+    '<td style="color:var(--green-text)">' + (b.success ?? '—') + '</td>' +
+    '<td style="color:var(--red-text)">' + (b.failed ?? '—') + '</td>' +
+    '<td>' + (b.pending ?? '—') + '</td>' +
+    '<td style="color:var(--accent)">' + (b.running ?? '—') + '</td>' +
+    '<td>' + badgeHtml(b.status) + '</td>' +
+    '<td class="mono">' + (b.createdAt ? new Date(b.createdAt).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}) : '—') + '</td>' +
+    '<td><div class="actions">' +
+    (b.status === 'failed' ? '<button class="btn btn-sm btn-soft" onclick="batchRetry(\''+b.id+'\')">重试</button>' : '') +
+    (b.status === 'paused' ? '<button class="btn btn-sm btn-soft" onclick="batchResume(\''+b.id+'\')">继续</button>' : '') +
+    (b.status === 'running' ? '<button class="btn btn-sm btn-danger" onclick="batchStop(\''+b.id+'\')">停止</button>' : '') +
+    '</div></td></tr>').join('');
+}
+
+async function batchRetry(id) {
+  try { await fetchJSON('/api/batches/retry', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({batchId:id})}); toast('已触发重试', 'success'); renderBatches(); }
+  catch(e) { toast('操作失败', 'error'); }
+}
+async function batchResume(id) {
+  try { await fetchJSON('/api/batches/resume', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({batchId:id})}); toast('已恢复', 'success'); renderBatches(); }
+  catch(e) { toast('操作失败', 'error'); }
+}
+async function batchStop(id) {
+  try { await fetchJSON('/api/batches/stop', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({batchId:id})}); toast('已停止', 'success'); renderBatches(); }
+  catch(e) { toast('操作失败', 'error'); }
+}
+
+// ── Content ──
+async function renderContent() {
+  const body = document.getElementById('content-body');
+  body.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-2)">加载中...</td></tr>';
+  let data;
+  try { data = await fetchJSON('/api/contents'); } catch(_) { data = []; }
+  if (!data.length) {
+    body.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-2)">暂无内容。通过 CLI 导入 CSV：<code style="display:block;margin-top:6px;color:var(--text);white-space:nowrap">alpha-nexus content import --file path.csv</code></td></tr>';
+    return;
+  }
+  body.innerHTML = data.map(c => '<tr>' +
+    '<td class="mono">' + (c.id || '—') + '</td>' +
+    '<td>' + (c.title || '—') + '</td>' +
+    '<td>' + (c.platform || '—') + '</td>' +
+    '<td>' + (c.contentType || '—') + '</td>' +
+    '<td>' + badgeHtml(c.status) + '</td>' +
+    '<td class="mono">' + (c.createdAt ? new Date(c.createdAt).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}) : '—') + '</td>' +
+    '<td><div class="actions"><button class="btn btn-sm btn-ghost">查看</button></div></td></tr>').join('');
+}
+
+// ── Logs ──
+async function renderLogs() {
+  const body = document.getElementById('logs-body');
+  body.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--text-2)">加载中...</td></tr>';
+  let data;
+  try { data = await fetchJSON('/api/logs'); } catch(_) { data = []; }
+  if (!data.length) {
+    body.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--text-2)">暂无日志</td></tr>';
+    return;
+  }
+  body.innerHTML = data.slice(0, 100).map(l => '<tr>' +
+    '<td class="mono" style="font-size:10px">' + (l.time ? new Date(l.time).toLocaleTimeString('zh-CN') : '—') + '</td>' +
+    '<td>' + badgeHtml(l.level) + '</td>' +
+    '<td class="mono" style="font-size:10.5px">' + (l.source || '—') + '</td>' +
+    '<td style="max-width:300px;overflow:hidden;text-overflow:ellipsis">' + (l.message || '—') + '</td></tr>').join('');
+}
+
+// ── Settings ──
+function loadSettings() {
+  const defaults = {datadir:'', browser:'', cdpport:'15101', uiport:'17321', concurrency:'3', screenshots:'', logsdir:''};
+  try { Object.assign(defaults, JSON.parse(localStorage.getItem('unibuy:settings') || '{}')); } catch(_) {}
+  document.getElementById('set-datadir').value = defaults.datadir;
+  document.getElementById('set-browser').value = defaults.browser;
+  document.getElementById('set-cdpport').value = defaults.cdpport;
+  document.getElementById('set-uiport').value = defaults.uiport;
+  document.getElementById('set-concurrency').value = defaults.concurrency;
+  document.getElementById('set-screenshots').value = defaults.screenshots;
+  document.getElementById('set-logsdir').value = defaults.logsdir;
+}
+function saveSettings() {
+  const s = {
+    datadir: document.getElementById('set-datadir').value,
+    browser: document.getElementById('set-browser').value,
+    cdpport: document.getElementById('set-cdpport').value,
+    uiport: document.getElementById('set-uiport').value,
+    concurrency: document.getElementById('set-concurrency').value,
+    screenshots: document.getElementById('set-screenshots').value,
+    logsdir: document.getElementById('set-logsdir').value
+  };
+  try { localStorage.setItem('unibuy:settings', JSON.stringify(s)); toast('配置已保存（本地）', 'success'); } catch(_) { toast('保存失败', 'error'); }
+  const cmd = Object.entries(s).filter(([_,v])=>v).map(([k,v]) => '--' + k + ' "' + v + '"').join(' ');
+  document.getElementById('settings-cli-cmd').textContent = 'alpha-nexus config set ' + cmd;
+}
+
+// ── Init ──
+async function loadData() {
+  updateStatusBar();
+  try {
+    const accs = await fetchJSON('/api/accounts');
+    ALL_ACCOUNTS = accs;
+  } catch(_) { ALL_ACCOUNTS = []; }
+  const activeTab = document.querySelector('.nav-item.active');
+  if (activeTab) switchTab(activeTab.dataset.tab, activeTab);
+}
+
+loadData();
+setInterval(loadData, 8000);
+</script>
+</body>
+</html>

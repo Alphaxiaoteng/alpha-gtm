@@ -1,0 +1,13 @@
+{
+  "name": "@alpha-nexus/dsh-tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "*",
+    "@deepseek-ai/dsh-agent": "*",
+    "@deepseek-ai/dsh-tools": "*",
+    "@deepseek-ai/schemastery": "*"
+  }
+}

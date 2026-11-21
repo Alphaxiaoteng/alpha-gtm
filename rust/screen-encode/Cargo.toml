@@ -1,0 +1,15 @@
+[package]
+name = "screen-encode"
+version = "0.1.0"
+edition = "2021"
+description = "Shrink one live screen frame so the UI polls far less data"
+
+[dependencies]
+image = { version = "0.25", default-features = false, features = ["jpeg"] }
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"

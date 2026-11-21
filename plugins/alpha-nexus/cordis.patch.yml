@@ -1,0 +1,15 @@
+# Alpha-Nexus DSH plugin — one proxy tool for the local business surface.
+#
+# `package.json` -> dsh.bundle.patch points here, so
+#   dsh plugin --profile <p> add file:<this dir>
+# mounts this row automatically.
+- insert:
+    - id: alpha-nexus
+      name: '@alpha-nexus/dsh-plugin'
+      # Values only; the authoritative schema is the `Config` export in index.js.
+      config:
+        # Alpha-Nexus default UI port (internal/config/config.go).
+        base_url: http://127.0.0.1:17421
+        # Keep false unless base_url points at another machine.
+        allow_remote: false
+        # auth_token: ''  # optional bearer token for a reverse proxy

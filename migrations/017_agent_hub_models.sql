@@ -1,0 +1,2 @@
+ALTER TABLE agent_conversations ADD COLUMN model_id TEXT NOT NULL DEFAULT '';
+ALTER TABLE agent_runs ADD COLUMN model_id TEXT NOT NULL DEFAULT '';

@@ -1,0 +1,17 @@
+{
+  "manager_url": "https://business.facebook.com/latest/content_calendar",
+  "target_name": "chenpaiteng",
+  "target_external_id": "17841416733781085",
+  "items": [
+    {
+      "status": "Published",
+      "title": "αgamer｜阿尔法玩家，正式入驻",
+      "caption": "你好，这里是 αgamer｜阿尔法玩家。\n本条封面与动态视觉由 AI 生成。",
+      "media_sha256": "2bb09bbfa4307ce3b6bf5d3e74800d0c43270b05a64347469cbb80014ab0f45e",
+      "thumbnail_sha256": "1a1b84869bbcab7b0354b24dda5409c25b4ffe252bd46663926a381187cdce37",
+      "published_at": "2026-07-26T09:01:00Z",
+      "post_url": "https://www.instagram.com/p/DExample01/",
+      "external_post_id": "DExample01"
+    }
+  ]
+}

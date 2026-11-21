@@ -1,0 +1,14 @@
+{
+  "platforms": {
+    "douyin": { "max_caption": 500, "strategy": "browser", "priority": "P0" },
+    "xhs": { "max_caption": 1000, "strategy": "browser", "priority": "P0" },
+    "wechat_video": { "max_caption": 500, "strategy": "browser", "priority": "P0" },
+    "wechat_mp": { "max_caption": 20000, "strategy": "hybrid", "priority": "P0" },
+    "youtube": { "max_caption": 5000, "strategy": "api", "priority": "P0" },
+    "tiktok": { "max_caption": 2200, "strategy": "api", "priority": "P0" },
+    "instagram": { "max_caption": 2200, "strategy": "browser", "priority": "P1" },
+    "facebook": { "max_caption": 5000, "strategy": "browser", "priority": "P1" },
+    "x": { "max_caption": 280, "strategy": "api", "priority": "P1" },
+    "kuaishou": { "max_caption": 500, "strategy": "browser", "priority": "P2" }
+  }
+}

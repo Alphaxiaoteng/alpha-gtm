@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Minimal shell capability. The window loads the local control plane UI over HTTP and is granted no remote IPC surface.",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}

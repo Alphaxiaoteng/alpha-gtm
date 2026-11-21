@@ -1,0 +1,28 @@
+[package]
+name = "alpha-nexus-desktop"
+version = "0.2.0"
+description = "Alpha-Nexus desktop shell (Tauri 2) hosting the local Go control plane UI"
+authors = ["Alpha Intelligence"]
+edition = "2021"
+rust-version = "1.90"
+publish = false
+
+[[bin]]
+name = "alpha-nexus-desktop"
+path = "src/main.rs"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-single-instance = "2"
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true

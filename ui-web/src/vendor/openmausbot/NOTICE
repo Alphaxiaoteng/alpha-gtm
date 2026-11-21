@@ -1,0 +1,80 @@
+Vendored OpenMausBot components
+===============================
+
+These files are derived from OpenMausBot:
+
+  Upstream:  https://github.com/milind-soni/OpenMausBot
+  Commit:    accba5df9fd2c3d490c77cd1358cdf506a67e5e1 (see ./COMMIT)
+  Copyright: 2026 Milind Soni and OpenMausBot contributors
+  License:   Apache License, Version 2.0 (the upstream LICENSE file)
+
+The licence text that governs these files is the Apache License 2.0 shipped with
+OpenMausBot. Copy it into your distribution:
+
+  https://github.com/milind-soni/OpenMausBot/blob/main/LICENSE
+
+Nothing under upstream's `enterprise/` directory is vendored here, and neither is
+anything from `electron/`, `server/`, `relay/`, `connector/`, `companion/`,
+`cloudflare/`, `apps/`, `eval*`, `scripts/` or `deploy/` — the licence carve-out
+that directory carries therefore does not attach to this directory.
+
+Files and their provenance
+--------------------------
+
+Verbatim (only import paths rewritten so they resolve inside this directory):
+
+  mascot/CursorAvatar.tsx        <- src/components/CursorAvatar.tsx
+  mascot/mascot-motion.ts        <- src/components/mascot-motion.ts
+  mascot/mascot-clock.ts         <- src/components/mascot-clock.ts
+  mascot/cursor-face-data.ts     <- packages/phone-protocol/src/cursor-face-data.ts
+  lib/receipts.ts                <- src/lib/receipts.ts
+
+Copied and edited (each file states its own edit in a header comment):
+
+  mascot/mascot-bodies.ts        <- packages/phone-protocol/src/mascot-bodies.ts
+                                    (the zod schema export dropped)
+  mascot/mascot.ts               <- src/lib/mascot.ts
+  mascot/mascot-names.ts         <- src/lib/mascot-names.ts
+  mascot/Avatar.tsx              <- src/components/Avatar.tsx
+  lib/cn.ts                      <- src/lib/cn.ts
+  lib/clock.ts                   <- src/lib/working-time.ts + src/lib/clock-time.ts
+  lib/day.ts                     <- src/lib/transcript-derivations.ts
+  lib/bot-unread.ts              <- src/lib/bot-unread.ts
+  lib/copy-text.ts               <- src/lib/copy-text.ts
+  components/WorkingIndicator.tsx  <- src/components/WorkingIndicator.tsx
+  components/chat-bubble.ts      <- src/components/chat-bubble.ts
+  components/MessageBoundary.tsx <- src/components/MessageBoundary.tsx
+  components/NewMessagesDivider.tsx <- src/components/NewMessagesDivider.tsx
+  components/ChatEmptyState.tsx  <- src/components/ChatEmptyState.tsx
+  components/ChatMarkdown.tsx    <- src/components/ChatMarkdown.tsx
+  components/Composer.tsx        <- src/components/Composer.tsx + src/components/composer-simple.ts
+  components/Bubble.tsx          <- src/components/ChatView.tsx (the Bubble render path)
+                                    + src/components/MessageActions.tsx (class recipes)
+  components/ChatTranscript.tsx  <- src/components/ChatView.tsx (the row loop)
+                                    + src/hooks/use-transcript-viewport.ts (follow rule)
+  theme.css                      <- src/styles.css (bubble tokens, msg-in / status-pulse
+                                    keyframes, chat-text and markdown prose rules)
+  types.ts                       <- src/state/store.tsx (Message, Bot), reduced
+
+Names kept from upstream on purpose
+-----------------------------------
+
+  * `Message.from`-style field names and the `kind` union, so a row read here reads
+    the same as upstream's.
+  * The design comments ("Simple mode's message text: 15/22, the size whose cap
+    height matches the design") — they explain why a number is that number.
+  * `resolveBotAvatarOutcome` keeps upstream's note that it is mirrored by an iOS
+    function of the same name.
+
+What was deliberately left behind
+---------------------------------
+
+  * `src/state/store.tsx` (the 3,292-line reducer store), the i18n catalogue
+    (`src/locales/`), feature flags, and every hook that reads them. Components here
+    take props instead.
+  * `enterprise/`, `electron/`, `server/`, `relay/`, `connector/`, `companion/`,
+    `cloudflare/`, `apps/`, `eval*/`, `scripts/`, `deploy/` — none of it is UI.
+  * Shiki / mermaid / KaTeX rendering, mention popovers, thread-ref links, link
+    hover cards, attachment previews, dictation, call mode, approval mode: each
+    pulls a subsystem this build does not have. See the header of the file that
+    would have carried it.

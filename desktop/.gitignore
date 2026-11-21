@@ -1,0 +1,14 @@
+# Rust / Tauri build output
+/src-tauri/target/
+/src-tauri/gen/schemas/
+
+# Intermediates produced by build-desktop.sh
+/build/
+
+# Compiled Go sidecar copied into the bundle resources (see resources/README.md)
+/src-tauri/resources/alpha-nexus-egolite
+/src-tauri/resources/alpha-nexus-egolite.exe
+/src-tauri/resources/alpha-nexus-egolite-arm64
+/src-tauri/resources/alpha-nexus-egolite-amd64
+
+.DS_Store

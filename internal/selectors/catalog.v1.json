@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "catalog_version": 3,
+  "platforms": {
+    "xhs": {
+      "urls": ["https://creator.xiaohongshu.com", "https://www.xiaohongshu.com"],
+      "logged_in_cookie_names": ["web_session", "galaxy_creator_session_id", "access-token-creator.xiaohongshu.com"],
+      "login_indicators": [{"text_contains":"扫码登录"}, {"query":"[class*='login-container']"}],
+      "operations": {
+        "login_check": [{"text_contains":"扫码登录"}, {"query":"[class*='login-container']"}],
+        "publish.settings.visibility.public": [{"query":"[data-testid='visibility-public']"}, {"query":"[role='radio'][aria-label*='公开']"}, {"text_contains":"公开可见"}],
+        "publish.settings.visibility.private": [{"query":"[data-testid='visibility-private']"}, {"query":"[role='radio'][aria-label*='私密']"}, {"text_contains":"私密"}],
+        "publish.settings.comment_enabled": [{"query":"[data-testid='comment-enabled']"}, {"query":"[role='switch'][aria-label*='评论']"}, {"text_contains":"允许评论"}],
+        "publish.settings.declare_original": [{"query":"[data-testid='declare-original']"}, {"query":"[role='checkbox'][aria-label*='原创']"}, {"text_contains":"声明原创"}]
+      }
+    },
+    "douyin": {
+      "urls": ["https://creator.douyin.com", "https://www.douyin.com"],
+      "logged_in_cookie_names": ["sessionid", "sid_guard", "passport_auth_status"],
+      "login_indicators": [{"text_contains":"扫码登录"}, {"query":"[class*='login']"}],
+      "operations": {"login_check": [{"text_contains":"扫码登录"}, {"query":"[class*='login']"}]}
+    },
+    "wechat_video": {
+      "urls": ["https://channels.weixin.qq.com"],
+      "logged_in_cookie_names": ["sessionid", "token", "uin"],
+      "login_indicators": [{"text_contains":"微信扫码"}, {"query":"[class*='qrcode']"}],
+      "operations": {"login_check": [{"text_contains":"微信扫码"}, {"query":"[class*='qrcode']"}]}
+    },
+    "wechat_mp": {
+      "urls": ["https://mp.weixin.qq.com"],
+      "logged_in_cookie_names": ["slave_user", "biz_uin", "data_ticket"],
+      "login_indicators": [{"text_contains":"微信扫码"}, {"query":"[class*='login']"}],
+      "operations": {"login_check": [{"text_contains":"微信扫码"}, {"query":"[class*='login']"}]}
+    },
+    "kuaishou": {
+      "urls": ["https://cp.kuaishou.com", "https://creator.kuaishou.com", "https://www.kuaishou.com"],
+      "logged_in_cookie_names": ["passtoken", "pass_token", "kuaishou.web.cp.api_st", "kwssectoken"],
+      "login_indicators": [{"text_contains":"扫码登录"}, {"query":"[class*='login']"}],
+      "operations": {"login_check": [{"text_contains":"扫码登录"}, {"query":"[class*='login']"}]}
+    },
+    "meta": {
+      "urls": ["https://business.facebook.com", "https://www.facebook.com"],
+      "logged_in_cookie_names": ["c_user", "xs"],
+      "login_indicators": [{"text_contains":"log in"}, {"query":"input[name='email']"}],
+      "operations": {"login_check": [{"text_contains":"log in"}, {"query":"input[name='email']"}]}
+    },
+    "facebook": {
+      "urls": ["https://www.facebook.com", "https://business.facebook.com"],
+      "logged_in_cookie_names": ["c_user", "xs"],
+      "login_indicators": [{"text_contains":"log in"}, {"query":"input[name='email']"}],
+      "operations": {"login_check": [{"text_contains":"log in"}, {"query":"input[name='email']"}]}
+    },
+    "instagram": {
+      "urls": ["https://www.instagram.com", "https://business.facebook.com"],
+      "logged_in_cookie_names": ["sessionid", "c_user", "xs"],
+      "login_indicators": [{"text_contains":"log in"}, {"query":"input[name='username']"}],
+      "operations": {"login_check": [{"text_contains":"log in"}, {"query":"input[name='username']"}]}
+    },
+    "youtube": {
+      "urls": ["https://studio.youtube.com", "https://www.youtube.com"],
+      "logged_in_cookie_names": ["sapisid", "sid"],
+      "login_indicators": [{"text_contains":"sign in"}, {"query":"a[href*='ServiceLogin']"}],
+      "operations": {"login_check": [{"text_contains":"sign in"}, {"query":"a[href*='ServiceLogin']"}]}
+    },
+    "tiktok": {
+      "urls": ["https://www.tiktok.com/tiktokstudio", "https://www.tiktok.com"],
+      "logged_in_cookie_names": ["sessionid", "sid_tt"],
+      "login_indicators": [{"text_contains":"log in"}, {"query":"[data-e2e*='login']"}],
+      "operations": {"login_check": [{"text_contains":"log in"}, {"query":"[data-e2e*='login']"}]}
+    },
+    "x": {
+      "urls": ["https://x.com"],
+      "logged_in_cookie_names": ["auth_token", "ct0"],
+      "login_indicators": [{"text_contains":"sign in"}, {"query":"input[name='text']"}],
+      "operations": {"login_check": [{"text_contains":"sign in"}, {"query":"input[name='text']"}]}
+    },
+    "toutiao": {
+      "urls": ["https://mp.toutiao.com", "https://www.toutiao.com"],
+      "logged_in_cookie_names": [],
+      "login_indicators": [{"query":"input[type='password']"}],
+      "operations": {"login_check": [{"query":"input[type='password']"}]}
+    },
+    "omtencent": {
+      "urls": ["https://om.qq.com"],
+      "logged_in_cookie_names": [],
+      "login_indicators": [{"query":"input[type='password']"}],
+      "operations": {"login_check": [{"query":"input[type='password']"}]}
+    },
+    "weishi": {
+      "urls": ["https://weishi.qq.com"],
+      "logged_in_cookie_names": [],
+      "login_indicators": [{"query":"input[type='password']"}],
+      "operations": {"login_check": [{"query":"input[type='password']"}]}
+    },
+    "bilibili": {
+      "urls": ["https://member.bilibili.com/platform/home", "https://www.bilibili.com"],
+      "logged_in_cookie_names": [],
+      "login_indicators": [{"query":"input[type='password']"}],
+      "operations": {"login_check": [{"query":"input[type='password']"}]}
+    },
+    "acfun": {
+      "urls": ["https://member.acfun.cn", "https://www.acfun.cn"],
+      "logged_in_cookie_names": [],
+      "login_indicators": [{"query":"input[type='password']"}],
+      "operations": {"login_check": [{"query":"input[type='password']"}]}
+    },
+    "baijiahao": {
+      "urls": ["https://baijiahao.baidu.com"],
+      "logged_in_cookie_names": [],
+      "login_indicators": [{"query":"input[type='password']"}],
+      "operations": {"login_check": [{"query":"input[type='password']"}]}
+    },
+    "sina": {
+      "urls": ["https://weibo.com"],
+      "logged_in_cookie_names": [],
+      "login_indicators": [{"query":"input[type='password']"}],
+      "operations": {"login_check": [{"query":"input[type='password']"}]}
+    },
+    "jianshu": {
+      "urls": ["https://www.jianshu.com"],
+      "logged_in_cookie_names": [],
+      "login_indicators": [{"query":"input[type='password']"}],
+      "operations": {"login_check": [{"query":"input[type='password']"}]}
+    },
+    "zhihu": {
+      "urls": ["https://www.zhihu.com/creator", "https://www.zhihu.com"],
+      "logged_in_cookie_names": [],
+      "login_indicators": [{"query":"input[type='password']"}],
+      "operations": {"login_check": [{"query":"input[type='password']"}]}
+    },
+    "juejin": {
+      "urls": ["https://juejin.cn/creator", "https://juejin.cn"],
+      "logged_in_cookie_names": [],
+      "login_indicators": [{"query":"input[type='password']"}],
+      "operations": {"login_check": [{"query":"input[type='password']"}]}
+    },
+    "csdn": {
+      "urls": ["https://mp.csdn.net", "https://www.csdn.net"],
+      "logged_in_cookie_names": [],
+      "login_indicators": [{"query":"input[type='password']"}],
+      "operations": {"login_check": [{"query":"input[type='password']"}]}
+    },
+    "pdd": {
+      "urls": ["https://mms.pinduoduo.com"],
+      "logged_in_cookie_names": [],
+      "login_indicators": [{"query":"input[type='password']"}],
+      "operations": {"login_check": [{"query":"input[type='password']"}]}
+    }
+  }
+}

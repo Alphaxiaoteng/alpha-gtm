@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# pre-push: block force-push to main/master and empty commit messages in tip.
+set -euo pipefail
+
+remote="${1:-}"
+url="${2:-}"
+
+z40=0000000000000000000000000000000000000000
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  [[ -z "${local_ref:-}" ]] && continue
+  if [[ "$local_sha" == "$z40" ]]; then
+    continue
+  fi
+
+  branch="${remote_ref##refs/heads/}"
+  # Refuse non-fast-forward / delete of protected branches via force-ish updates.
+  if [[ "$branch" == "main" || "$branch" == "master" ]]; then
+    if [[ "$remote_sha" != "$z40" ]]; then
+      if ! git merge-base --is-ancestor "$remote_sha" "$local_sha" 2>/dev/null; then
+        echo "pre-push: refusing non-fast-forward update of $branch" >&2
+        echo "pre-push: remote=$remote url=$url" >&2
+        exit 1
+      fi
+    fi
+  fi
+
+  # Tip commit must have a non-trivial subject (defense in depth with commit-msg).
+  subject="$(git log -1 --pretty=%s "$local_sha" 2>/dev/null || true)"
+  if [[ -z "$subject" || ${#subject} -lt 12 ]]; then
+    echo "pre-push: tip commit message too weak: '$subject'" >&2
+    exit 1
+  fi
+done
+
+exit 0

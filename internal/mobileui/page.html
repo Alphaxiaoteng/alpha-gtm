@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<meta name="theme-color" content="#0b0b0c" />
+<title>Alpha-Nexus · 手机端</title>
+<style>
+  :root {
+    --bg: #fbfbfa; --fg: #111; --muted: #6b7280; --line: #e5e7eb;
+    --card: #fff; --accent: #2563eb; --warn: #b45309; --ok: #047857; --bad: #b91c1c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0b0b0c; --fg:#f4f4f5; --muted:#9ca3af; --line:#27272a; --card:#141416;
+            --accent:#60a5fa; --warn:#fbbf24; --ok:#34d399; --bad:#f87171; }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background: var(--bg); color: var(--fg);
+    font: 15px/1.55 -apple-system, "SF Pro Text", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+    -webkit-text-size-adjust: 100%; }
+  body { padding: max(12px, env(safe-area-inset-top)) 14px max(20px, env(safe-area-inset-bottom)); }
+  header { display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:14px; }
+  h1 { font-size:17px; margin:0; letter-spacing:-.01em; }
+  .sub { color: var(--muted); font-size:12px; }
+  .grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:10px; }
+  .card { background: var(--card); border:1px solid var(--line); border-radius:12px; padding:13px 14px; }
+  .label { font-size:11px; color: var(--muted); letter-spacing:.02em; }
+  .value { font-size:26px; font-weight:600; letter-spacing:-.02em; font-variant-numeric: tabular-nums; margin-top:2px; }
+  .value small { font-size:12px; font-weight:400; color: var(--muted); margin-left:4px; }
+  ul { list-style:none; margin:8px 0 0; padding:0; }
+  li { display:flex; align-items:center; gap:8px; padding:9px 0; border-top:1px solid var(--line); font-size:13px; }
+  li:first-child { border-top:0; }
+  li .name { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .dot { width:7px; height:7px; border-radius:50%; flex:0 0 auto; }
+  .dot.ok { background: var(--ok); } .dot.bad { background: var(--bad); } .dot.unknown { background: var(--warn); }
+  .pill { font-size:11px; padding:2px 7px; border-radius:999px; border:1px solid var(--line); color: var(--muted); }
+  .note { font-size:12px; color: var(--muted); line-height:1.5; margin:10px 0 0; }
+  .warnbox { border:1px solid color-mix(in srgb, var(--warn) 45%, var(--line));
+    background: color-mix(in srgb, var(--warn) 9%, transparent); color: var(--warn);
+    border-radius:10px; padding:10px 12px; font-size:12px; margin-bottom:12px; }
+  #login { display:none; }
+  input { width:100%; padding:11px 12px; font-size:16px; border-radius:10px;
+    border:1px solid var(--line); background: var(--card); color: var(--fg); margin-top:8px; }
+  button { width:100%; margin-top:10px; padding:12px; font-size:15px; font-weight:600;
+    border-radius:10px; border:0; background: var(--accent); color:#fff; }
+  button:disabled { opacity:.5; }
+  button.ghost { background: transparent; color: var(--accent); border:1px solid var(--line); }
+  .footer { display:flex; gap:8px; margin-top:14px; }
+  .footer button { margin-top:0; }
+  .err { color: var(--bad); font-size:12px; margin-top:8px; min-height:16px; }
+  .kicker { display:flex; align-items:center; gap:6px; margin-bottom:6px; }
+  .kicker .dot { width:6px; height:6px; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Alpha-Nexus</h1>
+    <div class="sub" id="sub">正在读取…</div>
+  </div>
+  <span class="pill" id="fresh">—</span>
+</header>
+
+<div id="login" class="card">
+  <div class="label">本机登录</div>
+  <input id="user" autocomplete="username" placeholder="用户名" />
+  <input id="pass" type="password" autocomplete="current-password" placeholder="密码" />
+  <button id="loginBtn">登录</button>
+  <div class="err" id="loginErr"></div>
+  <p class="note">令牌只保存在这台手机上。手机端是只读窗口，发布等操作必须回到本机。</p>
+</div>
+
+<main id="app" style="display:none">
+  <div id="warning" class="warnbox" style="display:none"></div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="label">账号登录</div>
+      <div class="value" id="loggedIn">—<small id="loggedInOf"></small></div>
+      <div class="note" id="loginStateNote">—</div>
+    </div>
+    <div class="card">
+      <div class="label">内容库</div>
+      <div class="value" id="contents">—</div>
+      <div class="note" id="publishNote">—</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:10px">
+    <div class="label">平台分布</div>
+    <ul id="platforms"></ul>
+  </div>
+
+  <div class="card" style="margin-top:10px">
+    <div class="label">未读提醒 <span id="unreadCount"></span></div>
+    <ul id="notifications"></ul>
+    <p class="note" id="notificationsEmpty" style="display:none">暂无未读提醒。</p>
+  </div>
+
+  <div class="footer">
+    <button class="ghost" id="refreshBtn">刷新</button>
+    <button class="ghost" id="logoutBtn">退出登录</button>
+  </div>
+  <p class="note" id="meta"></p>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  var TOKEN_KEY = 'alpha.mobile.token';
+  var api = window.location.origin;
+
+  function token() { try { return localStorage.getItem(TOKEN_KEY) || ''; } catch (e) { return ''; } }
+  function setToken(v) { try { v ? localStorage.setItem(TOKEN_KEY, v) : localStorage.removeItem(TOKEN_KEY); } catch (e) {} }
+
+  function el(id) { return document.getElementById(id); }
+
+  function fail(status) {
+    if (status === 401) { setToken(''); showLogin('登录已过期，请重新登录。'); return true; }
+    return false;
+  }
+
+  async function get(path) {
+    var res = await fetch(api + path, {
+      headers: { 'Authorization': 'Bearer ' + token(), 'Accept': 'application/json' }
+    });
+    if (!res.ok) { if (fail(res.status)) throw new Error('unauthorized'); throw new Error('HTTP ' + res.status); }
+    return res.json();
+  }
+
+  function showLogin(message) {
+    el('app').style.display = 'none';
+    el('login').style.display = 'block';
+    el('loginErr').textContent = message || '';
+  }
+
+  function showApp() {
+    el('login').style.display = 'none';
+    el('app').style.display = 'block';
+  }
+
+  var STATE_LABEL = { logged_in: '已登录', logged_out: '已登出', unknown: '待确认' };
+  function dotClass(state) {
+    return state === 'logged_in' ? 'ok' : state === 'logged_out' ? 'bad' : 'unknown';
+  }
+
+  function render(data) {
+    var accounts = data.accounts || {};
+    el('loggedIn').textContent = String(accounts.logged_in || 0);
+    el('loggedInOf').textContent = ' / ' + (accounts.total || 0);
+    el('loginStateNote').textContent =
+      '已登出 ' + (accounts.logged_out || 0) + ' · 待确认 ' + (accounts.unknown || 0);
+
+    el('contents').textContent = String((data.contents || {}).total || 0);
+    var publish = data.publish || {};
+    var byStatus = publish.by_status || {};
+    var parts = Object.keys(byStatus).map(function (k) { return k + ' ' + byStatus[k]; });
+    el('publishNote').textContent = parts.length ? parts.join(' · ') : '还没有发布记录';
+
+    var platforms = accounts.platforms || [];
+    var list = el('platforms');
+    list.innerHTML = '';
+    if (!platforms.length) {
+      var li = document.createElement('li');
+      li.textContent = '还没有账号';
+      li.className = 'name';
+      list.appendChild(li);
+    }
+    platforms.forEach(function (item) {
+      var row = document.createElement('li');
+      var name = document.createElement('span');
+      name.className = 'name';
+      name.textContent = item.platform;
+      var count = document.createElement('span');
+      count.className = 'pill';
+      count.textContent = item.count;
+      row.appendChild(name);
+      row.appendChild(count);
+      list.appendChild(row);
+    });
+
+    // 指标新鲜度：必须能把「没采到」和「真的是 0」分开。
+    var metrics = data.metrics || {};
+    var fresh = el('fresh');
+    var warning = el('warning');
+    if (metrics.available) {
+      fresh.textContent = '数据截至 ' + metrics.latest_date;
+      warning.style.display = 'none';
+    } else {
+      fresh.textContent = '尚未采集';
+      warning.style.display = 'block';
+      warning.textContent = '账号指标还没有任何已验证快照。下面的账号数来自登录状态，不是流量数据。';
+    }
+
+    el('meta').textContent = '更新于 ' + new Date(data.generated_at).toLocaleString('zh-CN');
+  }
+
+  async function loadNotifications() {
+    var payload = await get('/api/mobile/notifications');
+    var items = (payload.notifications || []).filter(function (n) { return !n.read; });
+    el('unreadCount').textContent = items.length ? '· ' + items.length : '';
+    var list = el('notifications');
+    list.innerHTML = '';
+    el('notificationsEmpty').style.display = items.length ? 'none' : 'block';
+    items.slice(0, 8).forEach(function (n) {
+      var row = document.createElement('li');
+      var dot = document.createElement('span');
+      dot.className = 'dot ' + (n.level === 'error' ? 'bad' : n.level === 'warn' ? 'unknown' : 'ok');
+      var name = document.createElement('span');
+      name.className = 'name';
+      name.textContent = n.title || n.type;
+      var when = document.createElement('span');
+      when.className = 'pill';
+      when.textContent = (n.created_at || '').slice(5, 16).replace('T', ' ');
+      row.appendChild(dot); row.appendChild(name); row.appendChild(when);
+      list.appendChild(row);
+    });
+  }
+
+  async function refresh() {
+    var sub = el('sub');
+    sub.textContent = '正在读取…';
+    try {
+      var data = await get('/api/mobile/summary');
+      render(data);
+      sub.textContent = '只读窗口 · 发布请回到本机';
+      showApp();
+      await loadNotifications().catch(function () {});
+    } catch (e) {
+      if (e && e.message === 'unauthorized') return;
+      sub.textContent = '读取失败，下拉或点刷新重试';
+      showApp();
+    }
+  }
+
+  async function boot() {
+    try {
+      var status = await fetch(api + '/api/auth/status').then(function (r) { return r.json(); });
+      if (!status.auth_required) {
+        // 本机没设用户时 API 不鉴权；手机端仍然走同一套只读接口。
+        showApp();
+        await refresh();
+        return;
+      }
+    } catch (e) {}
+    if (!token()) { showLogin(''); return; }
+    showApp();
+    await refresh();
+  }
+
+  el('loginBtn').addEventListener('click', async function () {
+    var btn = el('loginBtn');
+    btn.disabled = true;
+    el('loginErr').textContent = '';
+    try {
+      var res = await fetch(api + '/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: el('user').value.trim(), password: el('pass').value })
+      });
+      if (!res.ok) { el('loginErr').textContent = '用户名或密码不正确。'; return; }
+      var payload = await res.json();
+      setToken(payload.token);
+      el('pass').value = '';
+      await refresh();
+    } catch (e) {
+      el('loginErr').textContent = '连不上服务，请确认本机终端仍在运行。';
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  el('refreshBtn').addEventListener('click', function () { void refresh(); });
+  el('logoutBtn').addEventListener('click', function () { setToken(''); showLogin(''); });
+
+  void boot();
+})();
+</script>
+</body>
+</html>

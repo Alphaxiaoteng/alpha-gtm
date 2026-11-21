@@ -1,0 +1,280 @@
+// Vendored from OpenMausBot `src/components/Avatar.tsx`.
+//
+// Adaptations, so the file stands alone:
+//   * CarvedAvatar and the festival dress are gone (they pull the carved-body catalogue and a
+//     per-holiday lookup); every bot draws the generated gradient body.
+//   * The chrome bodies' pre-rendered `.webp` pictures (`lib/steel-body.ts`, an
+//     `import.meta.glob` over `src/assets/mausbot-steel`) are gone; chrome draws its gradient.
+//   * `avatarCropRadius` / `clampAvatarZoom` / `clampAvatarFocus` are inlined from
+//     `shared/bot-avatar.ts` because only these four values are read here.
+// Everything else — the motion beats, the pointer gaze, the crop maths — is upstream's.
+
+import {
+  forwardRef,
+  memo,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+  type ReactNode,
+  type Ref,
+} from "react";
+import { cn } from "../lib/cn";
+import { CHROME_EYES, CHROME_GRADIENT, MAUS_COLORS, type MausColor, type MausMotion, type MausState } from "../mascot/mascot";
+import { CursorAvatar, type CursorAvatarHandle } from "../mascot/CursorAvatar";
+import { MASCOT_BODIES, type MascotBodyId } from "../mascot/mascot-bodies";
+import type { Bot } from "../types";
+
+export const EYE_SCALE = 1.12;
+export const MOUTH_WEIGHT = 11;
+
+const POINTER_GAZE = { forward: 1, authored: 0.25 };
+
+interface MotionFaces
+  extends Partial<Record<Exclude<MausMotion, "none">, { state?: MausState; blink?: boolean; spin?: number }>> {}
+
+const MOTION_FACE: MotionFaces = {
+  arrive: { state: "spawning", spin: 900 },
+  switch: { state: "waking", spin: 620 },
+  customize: { state: "proud", blink: true },
+  alert: { state: "alerting" },
+  thinking: { state: "thinking" },
+  working: { state: "working" },
+  launch: { state: "loading" },
+  success: { state: "happy", blink: true },
+  celebrate: { state: "celebrate", spin: 700 },
+  blink: { blink: true },
+  surprise: { state: "surprised", blink: true },
+  failure: { state: "sad" },
+};
+
+const MOTION_FACE_MS = 1400;
+
+function mix(hex: string, toward: string, t: number): string {
+  const a = Number.parseInt(hex.slice(1), 16);
+  const b = Number.parseInt(toward.slice(1), 16);
+  const channel = (shift: number) => {
+    const va = (a >> shift) & 0xff;
+    const vb = (b >> shift) & 0xff;
+    return Math.round(va + (vb - va) * t);
+  };
+  return `#${[channel(16), channel(8), channel(0)]
+    .map((part) => part.toString(16).padStart(2, "0"))
+    .join("")}`;
+}
+
+const gradientFor = (color: MausColor): [string, string, string] => {
+  if (color === "chrome") return CHROME_GRADIENT;
+  const fill = MAUS_COLORS[color] ?? MAUS_COLORS.green;
+  return [mix(fill, "#ffffff", 0.55), fill, mix(fill, "#000000", 0.42)];
+};
+
+export type MausAvatarHandle = CursorAvatarHandle;
+
+export type MausAvatarProps = {
+  color: MausColor;
+  state?: MausState;
+  expression?: number;
+  size?: number;
+  label?: string;
+  motion?: MausMotion;
+  motionKey?: number;
+  turn?: number;
+  gaze?: { x?: number; y?: number };
+  spring?: number;
+  eyeScale?: number;
+  showMouth?: boolean;
+  mouthStroke?: number;
+  forward?: boolean;
+  lookAround?: number;
+  trackPointer?: boolean;
+  animated?: boolean;
+  bodyId?: MascotBodyId;
+  gradient?: [string, string, string];
+};
+
+function GradientAvatarComponent(
+  {
+    color,
+    state = "idle",
+    expression,
+    size = 44,
+    label,
+    motion = "none",
+    motionKey = 0,
+    turn,
+    gaze,
+    spring,
+    eyeScale,
+    showMouth,
+    mouthStroke,
+    forward = true,
+    lookAround,
+    trackPointer = true,
+    animated = true,
+    bodyId,
+    gradient,
+  }: MausAvatarProps,
+  ref: Ref<MausAvatarHandle>,
+) {
+  const silhouette = MASCOT_BODIES[bodyId ?? "cursor"];
+  const inner = useRef<CursorAvatarHandle>(null);
+  useImperativeHandle(ref, () => ({
+    blink: () => inner.current?.blink(),
+    spin: (durationMs?: number) => inner.current?.spin(durationMs),
+    setExpression: (index: number) => inner.current?.setExpression(index),
+  }));
+
+  const [motionState, setMotionState] = useState<MausState | null>(null);
+  useEffect(() => {
+    if (motion === "none" || !animated) return;
+    const beat = MOTION_FACE[motion];
+    if (!beat) return;
+    if (beat.blink) inner.current?.blink();
+    if (beat.spin) inner.current?.spin(beat.spin);
+    if (!beat.state) return;
+    setMotionState(beat.state);
+    const timer = setTimeout(() => setMotionState(null), MOTION_FACE_MS);
+    return () => clearTimeout(timer);
+  }, [motion, motionKey, animated]);
+
+  const [pointer, setPointer] = useState({ x: 0, y: 0 });
+  const range = forward ? POINTER_GAZE.forward : POINTER_GAZE.authored;
+  const onPointerMove = (event: ReactPointerEvent<HTMLSpanElement>) => {
+    if (!trackPointer || !animated) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    setPointer({
+      x: Math.max(-1, Math.min(1, ((event.clientX - rect.left) / rect.width) * 2 - 1)) * range,
+      y: Math.max(-1, Math.min(1, ((event.clientY - rect.top) / rect.height) * 2 - 1)) * range,
+    });
+  };
+  const onPointerLeave = () => setPointer({ x: 0, y: 0 });
+
+  return (
+    <span
+      className="inline-flex shrink-0"
+      onPointerMove={trackPointer && animated ? onPointerMove : undefined}
+      onPointerLeave={trackPointer && animated ? onPointerLeave : undefined}
+    >
+      <CursorAvatar
+        ref={inner}
+        state={motionState ?? state}
+        expression={expression}
+        size={size}
+        silhouette={silhouette}
+        gradient={gradient ?? gradientFor(color)}
+        eyeColor={color === "chrome" ? CHROME_EYES : undefined}
+        title={label ?? null}
+        lookAround={lookAround ?? (forward ? 0 : 1)}
+        gaze={{ x: (gaze?.x ?? 0) + pointer.x, y: (gaze?.y ?? 0) + pointer.y }}
+        turn={turn}
+        spring={spring}
+        eyeScale={eyeScale}
+        showMouth={showMouth}
+        mouthStroke={mouthStroke}
+        paused={!animated}
+      />
+    </span>
+  );
+}
+
+export const MausAvatar = memo(forwardRef(GradientAvatarComponent));
+
+export type BotAvatarProps = Omit<MausAvatarProps, "color" | "gradient"> & {
+  bot: Pick<Bot, "name" | "color" | "avatarUrl" | "mascotBody">;
+};
+
+export type BotAvatarOutcome = "flatImage" | "gradientMascot";
+
+/** Mirrored name for name by resolveBotAvatarOutcome in ios/Sources/CompanionCore/BotAvatarRendering.swift. */
+export function resolveBotAvatarOutcome(params: { hasUrl: boolean; imageFailed: boolean }): BotAvatarOutcome {
+  const { hasUrl, imageFailed } = params;
+  if (!hasUrl) return "gradientMascot";
+  if (imageFailed) return "gradientMascot";
+  return "flatImage";
+}
+
+/** `shared/bot-avatar.ts`'s crop radius: every non-mascot crop is a circle. */
+const AVATAR_RADIUS = "50%";
+
+export function BotAvatar({ bot, size = 44, label, ...mascotProps }: BotAvatarProps) {
+  const [imageFailed, setImageFailed] = useState(false);
+
+  useEffect(() => setImageFailed(false), [bot.avatarUrl]);
+
+  const outcome = resolveBotAvatarOutcome({ hasUrl: Boolean(bot.avatarUrl), imageFailed });
+
+  if (outcome !== "flatImage") {
+    return (
+      <MausAvatar
+        bodyId={bot.mascotBody ?? "cursor"}
+        {...mascotProps}
+        color={bot.color}
+        size={size}
+        label={label ?? bot.name}
+      />
+    );
+  }
+
+  return (
+    <span
+      className={cn("relative block shrink-0 overflow-hidden bg-brand-surface-raised", "shadow-[0_0_0_1px_rgb(0_0_0/0.06)]")}
+      style={{ width: size, height: size, borderRadius: AVATAR_RADIUS }}
+    >
+      <img
+        src={bot.avatarUrl ?? ""}
+        alt={label ?? (bot.name ? `${bot.name} avatar` : "Bot avatar")}
+        width={size}
+        height={size}
+        draggable={false}
+        onError={() => setImageFailed(true)}
+        className="block size-full max-w-none object-cover"
+        style={{ width: size, height: size }}
+      />
+    </span>
+  );
+}
+
+/** The gradient face alone, for a row that has no bot record (a system notice, a person). */
+export function InitialsAvatar({
+  initials,
+  avatarUrl,
+  size = 32,
+  fallback,
+  fontSize,
+  className,
+}: {
+  initials: string;
+  avatarUrl?: string;
+  size?: number;
+  className?: string;
+  /** drawn instead of the initials, for a person with no name or email to take them from */
+  fallback?: ReactNode;
+  fontSize?: number;
+}) {
+  // A picture that is gone (a restored backup carries the address, not the file) falls back to the initials.
+  const [failed, setFailed] = useState<string | null>(null);
+  if (avatarUrl && failed !== avatarUrl) {
+    return (
+      <img
+        src={avatarUrl}
+        alt=""
+        onError={() => setFailed(avatarUrl)}
+        className={cn("shrink-0 rounded-full object-cover", className)}
+        style={{ width: size, height: size }}
+      />
+    );
+  }
+  return (
+    <div
+      className={cn(
+        "flex shrink-0 items-center justify-center rounded-full bg-brand-surface-raised font-medium text-brand-fg-subtle",
+        className,
+      )}
+      style={{ width: size, height: size, fontSize: fontSize ?? size * 0.38 }}
+    >
+      {fallback ?? initials}
+    </div>
+  );
+}

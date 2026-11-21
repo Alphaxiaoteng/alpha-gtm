@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS ego_bookmark_imports (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  version INTEGER NOT NULL UNIQUE,
+  status TEXT NOT NULL,
+  mode TEXT NOT NULL,
+  path TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+);
