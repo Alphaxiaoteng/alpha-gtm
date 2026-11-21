@@ -34,6 +34,7 @@ import (
 	"alpha-nexus-egolite/internal/errors"
 	"alpha-nexus-egolite/internal/feedback"
 	"alpha-nexus-egolite/internal/feishu"
+	"alpha-nexus-egolite/internal/guanying"
 	"alpha-nexus-egolite/internal/knowledge"
 	"alpha-nexus-egolite/internal/llm"
 	"alpha-nexus-egolite/internal/metricsschedule"
@@ -521,6 +522,12 @@ func NewServer(cfg config.Config) (*Server, error) {
 		return gateway.Complete(ctx, system, user)
 	}
 	s.deduplicateFingerprints()
+	if err := hub.EnsureGuanyingHackathonPreset(context.Background()); err != nil {
+		slog.Warn("seed guanying agent preset failed", "error", err)
+	}
+	if err := guanying.EnsureSchemaAndSeed(context.Background(), database, dataDir); err != nil {
+		slog.Warn("seed guanying data failed", "error", err)
+	}
 	s.routes()
 	s.notifier.Start(batchCtx, &s.batchWG)
 	s.resumeAIMediaGenerationJobs()
@@ -972,6 +979,12 @@ func (s *Server) routes() {
 	s.mux.HandleFunc("GET /api/desktop/screen", s.handleAPIDesktopScreen)
 	s.mux.HandleFunc("GET /api/feishu/status", s.handleAPIFeishuStatus)
 	s.mux.HandleFunc("POST /api/feishu/sync", s.handleAPIFeishuSync)
+	s.mux.HandleFunc("GET /api/guanying/overview", s.handleAPIGuanyingOverview)
+	s.mux.HandleFunc("POST /api/guanying/match-quote", s.handleAPIGuanyingMatchQuote)
+	s.mux.HandleFunc("GET /api/guanying/leads", s.handleAPIGuanyingLeads)
+	s.mux.HandleFunc("POST /api/guanying/leads", s.handleAPIGuanyingLeads)
+	s.mux.HandleFunc("GET /api/guanying/seo-pages", s.handleAPIGuanyingSEOPages)
+	s.mux.HandleFunc("POST /api/guanying/seo-pages", s.handleAPIGuanyingSEOPages)
 	s.mux.HandleFunc("GET /api/desktop/screen/permission", s.handleAPIDesktopScreenPermission)
 	s.mux.HandleFunc("POST /api/desktop/screen/permission", s.handleAPIDesktopScreenPermission)
 	s.mux.HandleFunc("POST /api/desktop/screen/reveal", s.handleAPIDesktopScreenReveal)

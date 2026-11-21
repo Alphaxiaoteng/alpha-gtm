@@ -890,6 +890,14 @@ func BotProvider(model string) ProviderID {
 	if strings.HasPrefix(model, "alpha-nexus-llm/") {
 		return ProviderCustom
 	}
+	if strings.HasPrefix(model, "openainext14/") ||
+		strings.HasPrefix(model, "b1x/") ||
+		strings.HasPrefix(model, "opencode/") ||
+		strings.HasPrefix(model, "magpie/") ||
+		strings.HasPrefix(model, "dashscope/") ||
+		strings.HasPrefix(model, "codearts/") {
+		return ProviderOpenCode
+	}
 	if _, _, ok := dshRouteFromModelID(model); ok {
 		return ProviderDsh
 	}

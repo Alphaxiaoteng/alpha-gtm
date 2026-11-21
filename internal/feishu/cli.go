@@ -48,6 +48,7 @@ func (runner ExecRunner) Run(ctx context.Context, args ...string) ([]byte, error
 		full = append([]string{"--profile", runner.Profile}, args...)
 	}
 	command := exec.CommandContext(ctx, runner.Path, full...)
+	command.Env = directFeishuEnv()
 	var stdout, stderr bytes.Buffer
 	command.Stdout = &stdout
 	command.Stderr = &stderr

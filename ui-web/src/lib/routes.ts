@@ -45,8 +45,8 @@ SEGMENT_TAB.media = 'social-media';
 // 旧地址仍然可用，避免历史书签失效。
 const LEGACY_ROUTES: Record<string, string> = {
   // Media 首页已删：/ 与 /home 落到趋势雷达（新的默认工作区）。
-  '/': 'dashboard',
-  '/home': 'dashboard',
+  '/': 'crawler',
+  '/home': 'crawler',
   '/trend': 'dashboard',
   '/trend/keywords': 'dashboard',
   '/trend/videos': 'dashboard',

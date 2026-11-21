@@ -2,10 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useUIStore, type TabType } from '../store';
 import { prefetchView } from '../lib/routePrefetch';
 import { BUILTIN_ALPHA_AGENT_ID } from '../lib/botInbox';
-import { SHOP_MODE_ENABLED, type ProductMode } from '../workspaceMode';
 import useSWR from 'swr';
 import { api, setToken } from '../api';
-import { Activity, BarChart3, BookOpen, Bot, CalendarDays, CheckCircle, ChevronDown, ChevronRight, Clapperboard, Database, Film, FolderOpen, PanelLeftOpen, Radio, Send, Settings, Sparkles, Store, UserRoundSearch, Users, XCircle, type LucideIcon } from 'lucide-react';
+import { Activity, BarChart3, BookOpen, Bot, CheckCircle, ChevronDown, ChevronRight, Database, Film, FolderOpen, PanelLeftOpen, Radio, Settings, Sparkles, UserRoundSearch, XCircle, type LucideIcon } from 'lucide-react';
 import { applySkin, getStoredSkin, type SkinId } from '../themes';
 import { LocalLoadingState } from './LocalLoadingState';
 import { AgentContextDrawer, AGENT_CONTEXT_OPEN_EVENT, type AgentContextSelection } from './AgentContextDrawer';
@@ -33,74 +32,39 @@ interface Workspace {
 
 const WORKSPACES: Workspace[] = [
   {
-    id: 'shop',
-    label: '经营总览',
-    icon: Store,
-    defaultTab: 'shop',
-    matches: ['shop'],
-  },
-  {
-    id: 'ego',
-    label: '浏览器与账号',
-    icon: Users,
-    defaultTab: 'accounts',
-    matches: ['accounts', 'fleet'],
-  },
-  {
-    id: 'social',
-    label: '内容库',
-    icon: FolderOpen,
-    defaultTab: 'social-media',
-    matches: ['social-media', 'contents', 'templates'],
+    id: 'crawler',
+    label: '产品与选型数据库',
+    icon: Database,
+    defaultTab: 'crawler',
+    matches: ['crawler'],
   },
   {
     id: 'studio',
-    label: 'Studio',
+    label: 'SEO 独立站建站',
     icon: Sparkles,
     defaultTab: 'studio',
     matches: ['studio'],
   },
   {
+    id: 'social',
+    label: '内容运营',
+    icon: FolderOpen,
+    defaultTab: 'social-media',
+    matches: ['social-media', 'contents', 'templates'],
+  },
+  {
     id: 'knowledge',
-    label: '知识库',
+    label: '品牌知识库',
     icon: BookOpen,
     defaultTab: 'knowledge',
     matches: ['knowledge'],
   },
   {
     id: 'dashboard',
-    label: '趋势雷达',
-    icon: Database,
+    label: '数据与飞书 CLI',
+    icon: BarChart3,
     defaultTab: 'dashboard',
     matches: ['dashboard'],
-  },
-  {
-    id: 'crawler',
-    label: '抓取采集',
-    icon: Radio,
-    defaultTab: 'crawler',
-    matches: ['crawler'],
-  },
-  {
-    id: 'analytics',
-    label: '账号数据',
-    icon: BarChart3,
-    defaultTab: 'xhs-data',
-    matches: ['xhs-data'],
-  },
-  {
-    id: 'publish',
-    label: '发布状态统计',
-    icon: Send,
-    defaultTab: 'records',
-    matches: ['publish', 'batch', 'records', 'metrics', 'notifications'],
-  },
-  {
-    id: 'calendar',
-    label: '内容日历',
-    icon: CalendarDays,
-    defaultTab: 'calendar',
-    matches: ['calendar'],
   },
   {
     id: 'settings',
@@ -145,7 +109,7 @@ const SkinSwitch: React.FC<{ current: SkinId; onChange: (next: SkinId) => void; 
 };
 
 export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }) => {
-  const { productMode, setProductMode, activeTab, setActiveTab, setAgentDraft, openAgentDrawer, toast, sidebarState, toggleSidebar, headerExtras, radarContentView, setRadarContentView, activeBotID, setActiveBotID } = useUIStore();
+  const { productMode, activeTab, setActiveTab, setAgentDraft, openAgentDrawer, toast, sidebarState, toggleSidebar, headerExtras, radarContentView, setRadarContentView, activeBotID, setActiveBotID } = useUIStore();
   // Bot 页右栏：收件箱与 Bot 详情二选一，位置固定在右侧栏，左侧列表不受影响。
   const botInboxOpen = useUIStore((state) => state.botInboxOpen);
   const [radarSubmenuOpen, setRadarSubmenuOpen] = useState(true);
@@ -232,9 +196,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }
     };
   }, []);
 
-  const visibleWorkspaces = productMode === 'shop'
-    ? WORKSPACES.filter((workspace) => workspace.id === 'shop' || workspace.id === 'ego' || workspace.id === 'social' || workspace.id === 'knowledge' || workspace.id === 'logs' || workspace.id === 'settings')
-    : WORKSPACES.filter((workspace) => workspace.id !== 'shop' && workspace.id !== 'monitor' && workspace.id !== 'studio');
+  const visibleWorkspaces = WORKSPACES;
   const currentWorkspace = visibleWorkspaces.find((workspace) => workspace.matches.includes(activeTab))
     ?? visibleWorkspaces[0]
     ?? WORKSPACES[0];
@@ -255,7 +217,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }
     const isActive = !agentSurfaceActive && currentWorkspace.id === workspace.id;
     const badge = workspace.id === 'ego' ? activeInstances || undefined : undefined;
     const label = workspaceLabel(workspace);
-    const isDashboard = workspace.id === 'dashboard';
+    const isDashboard = false;
 
     return (
       <div key={workspace.id} className="w-full">
@@ -370,54 +332,48 @@ export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }
       >
 
 
-        <div className={`border-b border-brand-border ${sidebarState === 'rail' ? 'px-1.5 py-2.5' : 'px-3.5 py-2.5'}`}>
+        <div className={`border-b border-brand-border ${sidebarState === 'rail' ? 'px-1.5 py-2' : 'px-3.5 py-2.5'} space-y-2.5`}>
+          <div className={`flex items-center ${sidebarState === 'rail' ? 'justify-center' : 'justify-between'}`}>
+            <img
+              src="/brand/01-lockup-dark-halftone.svg"
+              alt="AlphaGTM"
+              className={`${sidebarState === 'rail' ? 'h-6 w-8 object-cover object-left' : 'h-7 w-auto max-w-[168px] object-contain'} select-none rounded`}
+            />
+          </div>
           <div
             data-testid="workspace-mode-switch"
             role="group"
             aria-label="选择工作模式"
             className={`alpha-glass-track relative flex ${sidebarState === 'rail' ? 'flex-col gap-0.5 p-0.5' : 'items-center p-0.5'}`}
           >
-            {(['media', 'shop'] as ProductMode[]).filter((mode) => mode !== 'shop' || SHOP_MODE_ENABLED).map((mode) => {
-              const ModeIcon = mode === 'media' ? Clapperboard : Store;
-              const modeLabel = mode === 'media' ? 'Media' : 'Shop';
-              // The three segments are mutually exclusive: on the Bot page no
-              // product mode stays highlighted.
-              const isCurrent = activeTab !== 'bot' && productMode === mode;
-              return (
-                <button
-                  key={mode}
-                  type="button"
-                  data-testid={`workspace-mode-${mode}`}
-                  aria-label={`切换到 ${modeLabel} 模式`}
-                  aria-pressed={isCurrent}
-                  onClick={() => setProductMode(mode)}
-                  title={`切换到 ${modeLabel} 模式`}
-                  className={`relative flex items-center justify-center ${sidebarState === 'rail' ? 'w-full py-1.5' : 'flex-1 min-w-0 gap-1 py-1.5 px-1.5'} rounded-[6px] text-[11.5px] font-semibold transition-colors duration-200 select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent/40 ${
-                    isCurrent
-                      ? 'alpha-glass-thumb text-brand-fg'
-                      : 'text-brand-muted hover:text-brand-fg'
-                  }`}
-                >
-                  <ModeIcon
-                    aria-hidden="true"
-                    className={`h-4 w-4 transition-transform duration-200 ${
-                      isCurrent ? 'scale-105 text-brand-fg' : 'text-brand-muted'
-                    }`}
-                    strokeWidth={isCurrent ? 2 : 1.75}
-                  />
-                  {sidebarState !== 'rail' && <span className="min-w-0 truncate tracking-tight">{modeLabel}</span>}
-                </button>
-              );
-            })}
-            {/* 第三段是 Bot 页面：左侧 Bot 列表 + 右侧对话，不是抽屉。 */}
+            <button
+              type="button"
+              data-testid="workspace-mode-media"
+              aria-label="切换到 GTM 工作台"
+              aria-pressed={activeTab !== 'bot'}
+              onClick={() => setActiveTab(activeTab === 'bot' ? 'crawler' : activeTab)}
+              title="GTM 工作台"
+              className={`relative flex items-center justify-center ${sidebarState === 'rail' ? 'w-full py-1.5' : 'flex-1 min-w-0 gap-1.5 py-1.5 px-2'} rounded-[6px] text-[11.5px] font-semibold transition-colors duration-200 select-none ${
+                activeTab !== 'bot'
+                  ? 'alpha-glass-thumb text-brand-fg'
+                  : 'text-brand-muted hover:text-brand-fg'
+              }`}
+            >
+              <Database
+                aria-hidden="true"
+                className={`h-3.5 w-3.5 transition-transform duration-200 ${activeTab !== 'bot' ? 'scale-105 text-brand-fg' : 'text-brand-muted'}`}
+                strokeWidth={activeTab !== 'bot' ? 2 : 1.75}
+              />
+              {sidebarState !== 'rail' && <span className="min-w-0 truncate tracking-tight">GTM 工作台</span>}
+            </button>
             <button
               type="button"
               data-testid="workspace-mode-bot"
               aria-label="打开 Bot 页面"
               aria-pressed={activeTab === 'bot'}
               onClick={() => setActiveTab('bot')}
-              title="打开 Bot 页面"
-              className={`relative flex items-center justify-center ${sidebarState === 'rail' ? 'w-full py-1.5' : 'flex-1 gap-1.5 py-1.5 px-3'} rounded-[6px] text-[11.5px] font-semibold transition-colors duration-200 select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent/40 ${
+              title="打开 Bot 团队"
+              className={`relative flex items-center justify-center ${sidebarState === 'rail' ? 'w-full py-1.5' : 'flex-1 gap-1.5 py-1.5 px-2'} rounded-[6px] text-[11.5px] font-semibold transition-colors duration-200 select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent/40 ${
                 activeTab === 'bot'
                   ? 'alpha-glass-thumb text-brand-fg'
                   : 'text-brand-muted hover:text-brand-fg'
@@ -425,10 +381,10 @@ export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }
             >
               <Bot
                 aria-hidden="true"
-                className={`h-4 w-4 transition-transform duration-200 ${activeTab === 'bot' ? 'scale-105 text-brand-fg' : 'text-brand-muted'}`}
+                className={`h-3.5 w-3.5 transition-transform duration-200 ${activeTab === 'bot' ? 'scale-105 text-brand-fg' : 'text-brand-muted'}`}
                 strokeWidth={activeTab === 'bot' ? 2 : 1.75}
               />
-              {sidebarState !== 'rail' && <span className="tracking-tight">Bot</span>}
+              {sidebarState !== 'rail' && <span className="tracking-tight">Bot 团队</span>}
             </button>
           </div>
         </div>

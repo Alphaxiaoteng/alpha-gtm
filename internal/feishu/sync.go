@@ -138,6 +138,72 @@ func (m moduleDef) capPerRun() int {
 
 var modules = []moduleDef{
 	{
+		ID: "gtm", Label: "冠英 GTM 全链路（选型/线索/SEO）",
+		Total: "SELECT (SELECT COUNT(1) FROM guanying_leads) + (SELECT COUNT(1) FROM guanying_seo_pages)",
+		Collect: func(ctx context.Context, db *sql.DB, _ string) ([]pendingItem, error) {
+			items := make([]pendingItem, 0)
+			lRows, err := db.QueryContext(ctx, `SELECT id, company, country, channel, buyer_type, confidence, matched_code, status, created_at FROM guanying_leads ORDER BY created_at DESC LIMIT 100`)
+			if err == nil {
+				for lRows.Next() {
+					var id, company, country, channel, buyerType, matchedCode, status, at string
+					var conf int
+					if scanErr := lRows.Scan(&id, &company, &country, &channel, &buyerType, &conf, &matchedCode, &status, &at); scanErr == nil {
+						stage := "信号"
+						feishuStatus := "进行中"
+						if status == "已出报价单" {
+							stage = "渠道"
+							feishuStatus = "已完成"
+						} else if status == "已过滤噪音" {
+							feishuStatus = "阻塞"
+						}
+						items = append(items, pendingItem{
+							key: "lead_" + id,
+							fields: map[string]any{
+								"GTM 任务": "[线索] " + company + " (" + buyerType + ")",
+								"阶段":     stage,
+								"市场":     country,
+								"负责人":    "跨时差询盘捕手 / 终端猎手",
+								"状态":     feishuStatus,
+								"渠道":     channel,
+								"关键指标":   "终端置信度(%) / 匹配:" + matchedCode,
+								"目标值":    85,
+								"当前值":    conf,
+								"下一步":    "核对尺寸/换桥风险并发送双语报价单",
+							},
+						})
+					}
+				}
+				_ = lRows.Close()
+			}
+			sRows, err := db.QueryContext(ctx, `SELECT id, title, target_market, lang, inquiry_count FROM guanying_seo_pages ORDER BY created_at DESC LIMIT 50`)
+			if err == nil {
+				for sRows.Next() {
+					var id, title, market, lang string
+					var cnt int
+					if scanErr := sRows.Scan(&id, &title, &market, &lang, &cnt); scanErr == nil {
+						items = append(items, pendingItem{
+							key: "seo_" + id,
+							fields: map[string]any{
+								"GTM 任务": "[SEO建站] " + title,
+								"阶段":     "内容",
+								"市场":     market,
+								"负责人":    "外贸独立站建站师",
+								"状态":     "已完成",
+								"渠道":     "Kooying 独立站 (" + lang + ")",
+								"关键指标":   "着陆页直接询盘数",
+								"目标值":    10,
+								"当前值":    cnt,
+								"下一步":    "持续扩展长尾 WVA 与车桥着陆页",
+							},
+						})
+					}
+				}
+				_ = sRows.Close()
+			}
+			return items, nil
+		},
+	},
+	{
 		ID: "accounts", Label: "账号",
 		Query: `SELECT id, platform_code, name, account_identifier, login_state, COALESCE(last_check_at,'') FROM accounts ORDER BY updated_at DESC LIMIT 300`,
 		Total: "SELECT COUNT(1) FROM accounts",
@@ -374,6 +440,7 @@ func batchUpdate(ctx context.Context, binary, appToken, tableID string, records 
 	callCtx, cancel := context.WithTimeout(ctx, 45*time.Second)
 	defer cancel()
 	cmd := exec.CommandContext(callCtx, binary, "api", "POST", path, "--data", "-")
+	cmd.Env = directFeishuEnv()
 	cmd.Stdin = bytes.NewReader(body)
 	output, err := cmd.CombinedOutput()
 	if err != nil {
@@ -424,6 +491,7 @@ func batchCreate(ctx context.Context, binary, appToken, tableID string, records 
 	callCtx, cancel := context.WithTimeout(ctx, 45*time.Second)
 	defer cancel()
 	cmd := exec.CommandContext(callCtx, binary, "api", "POST", path, "--data", "-")
+	cmd.Env = directFeishuEnv()
 	cmd.Stdin = bytes.NewReader(body)
 	output, err := cmd.CombinedOutput()
 	if err != nil {
@@ -748,4 +816,19 @@ func SyncStatusFor(ctx context.Context, db *sql.DB, dataDir string) SyncStatus {
 		})
 	}
 	return status
+}
+
+func directFeishuEnv() []string {
+	raw := os.Environ()
+	filtered := make([]string, 0, len(raw))
+	for _, kv := range raw {
+		key, _, _ := strings.Cut(kv, "=")
+		switch strings.ToLower(strings.TrimSpace(key)) {
+		case "http_proxy", "https_proxy", "all_proxy":
+			continue
+		default:
+			filtered = append(filtered, kv)
+		}
+	}
+	return filtered
 }

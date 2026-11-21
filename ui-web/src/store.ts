@@ -160,8 +160,8 @@ const SIDEBAR_STATE_KEY = 'alpha-nexus-egolite-sidebar-state-v2';
 const SIDEBAR_HIDDEN_KEY = 'alpha-nexus-egolite-sidebar-hidden-v1';
 // v3 keeps the product Agent on the DSH harness without overwriting the
 // user's historical provider preference key.
-const AGENT_PRIMARY_PROVIDER_KEY = 'alpha-nexus-egolite-agent-primary-provider-v3';
-const DEFAULT_AGENT_PROVIDER = 'dsh';
+const AGENT_PRIMARY_PROVIDER_KEY = 'alpha-nexus-egolite-agent-primary-provider-v4';
+const DEFAULT_AGENT_PROVIDER = 'opencode';
 export const AGENT_PANEL_MIN_WIDTH = 320;
 export const AGENT_PANEL_MAX_WIDTH = 560;
 const AGENT_PANEL_DEFAULT_WIDTH = 420;
@@ -358,8 +358,8 @@ export const useUIStore = create<UIStore>((set) => ({
   // URL 优先：直接访问 /trend/creators 等深链时必须落在该页面，
   // 只有 URL 无有效路由时才回退到 window.name 的恢复状态。
   activeTab: (!SHOP_MODE_ENABLED && initialRoute?.mode === 'shop')
-    ? 'dashboard'
-    : (initialRoute?.tab as TabType) || recoveryState.activeTab || 'dashboard',
+    ? 'crawler'
+    : (initialRoute?.tab as TabType) || recoveryState.activeTab || 'crawler',
   setActiveTab: (tab) => set((state) => {
     const requestedTab = tab === 'terminal' ? 'settings' : tab;
     const nextTab = isTabAvailableForMode(state.productMode, requestedTab)

@@ -148,10 +148,8 @@ const PROVIDER_DISPLAY: Partial<Record<AgentHubProviderID, ProviderDisplay>> = {
   claude: { name: 'Claude Code', src: '/agent-providers/claude-code.ico', alt: 'Claude Code' },
   kimi: { name: 'Kimi Code', src: '/agent-providers/kimi-code.png', alt: 'Kimi Code' },
   codebuddy: { name: 'CodeBuddy Code', src: '/agent-providers/codebuddy.svg', alt: 'CodeBuddy Code' },
-  opencode: { name: 'OpenCode', src: '/brand/opencode-logo.png', alt: 'OpenCode' },
-  // `custom` 是 openainext14（next）供应商的 alpha-nexus-llm/* 模型。它和真正的
-  // OpenCode agent 不是一回事，分组名不能叫 OpenCode，否则用户分不清是哪个 harness。
-  custom: { name: 'next', badge: 'N', alt: 'next 供应商' },
+  opencode: { name: 'NEXT · DeepSeek', src: '/agent-providers/deepseek-logo.svg', alt: 'DeepSeek' },
+  custom: { name: 'next', src: '/agent-providers/deepseek-logo.svg', alt: 'next 供应商' },
   dsh: { name: 'DSH', badge: 'D' },
   alpha: { name: 'Alpha Agent', badge: 'A' },
 };
@@ -441,10 +439,12 @@ export function AgentDrawer({ displayMode = 'drawer' }: { displayMode?: 'drawer'
     () => new Map((providers?.probes || []).map((probe) => [probe.provider_id, probe] as const)),
     [providers],
   );
-  const modelGroups = useMemo(() => (providers?.providers || []).map((provider) => ({
-    id: provider.id,
-    models: providerModels(provider.id, providers?.probes.find((item) => item.provider_id === provider.id)?.models),
-  })), [providers]);
+  const modelGroups = useMemo(() => (providers?.providers || [])
+    .filter((provider) => provider.id === 'opencode')
+    .map((provider) => ({
+      id: provider.id,
+      models: providerModels(provider.id, providers?.probes.find((item) => item.provider_id === provider.id)?.models),
+    })), [providers]);
   const selectedModelID = modelID.trim();
   // 模型全名带供应商前缀，胶囊里只显示最后一段；完整 id 留在 title 里。
   const selectedModelLabel = selectedModelID
