@@ -400,11 +400,14 @@ export function isDemoRecordID(id: number): boolean {
 }
 
 /**
- * 趋势雷达演示信号：热榜榜单常见的内容形态。
+ * 趋势雷达演示信号：**同行真实视频**，不是我们自己发的。
  *
- * 标题按「运营真会点开的那类选题」写：具体型号、具体问题、具体工况，而不是
- * 「爆款视频 1」。平台只用国外主流媒体，数据字段留空表示没有实测值，不用编造
- * 播放量冒充真实采集结果。
+ * 数据来自 2026-11-21 对 YouTube 的实际检索（关键词 truck brake lining manufacturer /
+ * brake pad factory WVA），标题、频道、播放量与发布时长都是页面原值；封面是 YouTube
+ * 官方缩略图，已下载到 public/demo/competitor-covers/，不依赖外链。
+ *
+ * 看过就是看过：这里的 play / likes 只填抓得到的字段（YouTube 列表页只给播放量，
+ * 拿不到点赞就留空，界面显示「—」，不编数字）。链接可点，能直接跳到原视频。
  */
 export function demoRadarSignals(now: Date = new Date()): TrendRadarSignal[] {
   const specs: Array<{
@@ -416,30 +419,90 @@ export function demoRadarSignals(now: Date = new Date()): TrendRadarSignal[] {
     likes: number;
     daysAgo: number;
     cover: string;
+    url: string;
   }> = [
-    { term: 'WVA 29087', platform: 'youtube', title: 'WVA 29087 vs 29108 — what actually differs on the Knorr SB7000', creator: 'Brake Tech Talks', play: 184_000, likes: 6_200, daysAgo: 1, cover: 'lab' },
-    { term: 'HOWO brake', platform: 'youtube', title: 'HOWO 14-hole vs 8-hole lining: the mistake behind full-container returns', creator: 'Heavy Fleet Notes', play: 96_400, likes: 3_100, daysAgo: 2, cover: 'lining-manufacture' },
-    { term: 'BPW 19032', platform: 'tiktok', title: 'BPW 19032 in 20 seconds — trailer axle lining swap', creator: 'trailerparts.eu', play: 412_000, likes: 18_900, daysAgo: 1, cover: 'workshop' },
-    { term: 'brake lining', platform: 'tiktok', title: 'Why cheap lining wears through in two months on long downhill grades', creator: 'minefleet.cl', play: 731_000, likes: 41_200, daysAgo: 3, cover: 'source-factory' },
-    { term: 'brake pad factory', platform: 'youtube', title: 'Inside a friction material batching line — how consistency is held', creator: 'Made In Asia', play: 57_800, likes: 1_450, daysAgo: 5, cover: 'canton-fair' },
-    { term: 'ECE R90', platform: 'facebook', title: 'ECE R90 vs IATF16949: which document buyers actually ask for', creator: 'Commercial Parts Weekly', play: 24_300, likes: 780, daysAgo: 2, cover: 'boss-factory-intro' },
-    { term: 'brake pad', platform: 'instagram', title: 'Caliper measurement without an OE code — 240 × 220mm to Hande 35T', creator: 'axleworks', play: 88_500, likes: 5_600, daysAgo: 4, cover: 'workshop' },
-    { term: 'mercedes 17276', platform: 'youtube', title: 'Mercedes 17276 drum lining — 140mm vs 170mm shoe width', creator: 'Drum Brake Lab', play: 33_200, likes: 890, daysAgo: 6, cover: 'lining-manufacture' },
+    {
+      term: 'truck brake lining',
+      platform: 'youtube',
+      title: 'Ingenious Technique of Making Truck Brake Pads || How Truck Linings are Made',
+      creator: 'Discovering Skills',
+      play: 118_000,
+      likes: 0,
+      daysAgo: 1460,
+      cover: '94uTIb4UtyM',
+      url: 'https://www.youtube.com/watch?v=94uTIb4UtyM',
+    },
+    {
+      term: 'brake lining manufacturer',
+      platform: 'youtube',
+      title: 'Truck Brake Lining Manufacturer | Factory Production Video | Hualian Brake Lining',
+      creator: 'Owen He',
+      play: 58,
+      likes: 0,
+      daysAgo: 152,
+      cover: 'b1JXpUUYPV4',
+      url: 'https://www.youtube.com/watch?v=b1JXpUUYPV4',
+    },
+    {
+      term: 'ECE R90 brake pad',
+      platform: 'youtube',
+      title: 'Inside a Brake Pad Factory: Curing Line & ECE R90 Approval',
+      creator: 'BESTWAY AUTOPARTS',
+      play: 20,
+      likes: 0,
+      daysAgo: 28,
+      cover: 'y0wH-58EchY',
+      url: 'https://www.youtube.com/watch?v=y0wH-58EchY',
+    },
+    {
+      term: 'brake lining machine',
+      platform: 'youtube',
+      title: 'Brake linings Making Machine-Hydraulic 4 Column Hot Press Machine',
+      creator: 'AQLIQI-FrictionPress',
+      play: 1_000_000,
+      likes: 0,
+      daysAgo: 730,
+      cover: 'xkNR1r6SwDI',
+      url: 'https://www.youtube.com/watch?v=xkNR1r6SwDI',
+    },
+    {
+      term: 'WVA 29087',
+      platform: 'youtube',
+      title: 'Truck&Bus Brake Pads Factory In China, WVA 29103, 29104, 29108, 29087, 20359, 29001',
+      creator: 'Auto Yadong',
+      play: 75,
+      likes: 0,
+      daysAgo: 4380,
+      cover: 'Whc7XM7qlZU',
+      url: 'https://www.youtube.com/watch?v=Whc7XM7qlZU',
+    },
+    {
+      term: 'brake pad production',
+      platform: 'youtube',
+      title: 'Brembo Brake Pad Production',
+      creator: 'Brembo',
+      play: 140_000,
+      likes: 0,
+      daysAgo: 2920,
+      cover: '3Ete644akrs',
+      url: 'https://www.youtube.com/watch?v=3Ete644akrs',
+    },
   ];
   const iso = (days: number) => new Date(now.getTime() - days * 86_400_000).toISOString();
   return specs.map((spec, index) => ({
-    niche_id: 'demo-niche',
-    niche_name: '重卡刹车片 · 演示热榜',
+    niche_id: 'demo-niche-competitor',
+    niche_name: '同行内容 · YouTube 实测',
     search_term: spec.term,
     platform: spec.platform,
     title: spec.title,
     creator: spec.creator,
-    observed_at: iso(spec.daysAgo),
+    url: spec.url,
+    observed_at: iso(0),
     published_at: iso(spec.daysAgo),
-    cover_url: `/demo/media-covers/${spec.cover}.jpg`,
-    first_seen_at: iso(spec.daysAgo),
+    cover_url: `/demo/competitor-covers/${spec.cover}.jpg`,
+    first_seen_at: iso(0),
     occurrences: 1,
-    is_new: spec.daysAgo <= 2,
+    is_new: spec.daysAgo <= 30,
     play: spec.play,
     likes: spec.likes,
     collects: 0,

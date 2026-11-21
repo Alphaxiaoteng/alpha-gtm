@@ -491,24 +491,6 @@ export function PublishRecordsView() {
         {plans?.length ? <div>{plans.map((plan) => <PublishPlanRow key={plan.id} plan={plan} />)}</div> : !plansLoading && !plansError ? <p className="p-8 text-center text-sm text-gray-400">暂无发布计划。</p> : null}
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-[minmax(260px,0.8fr)_minmax(0,1.4fr)]">
-        <div className="ui-card overflow-hidden">
-          <div className="flex items-center justify-between border-b border-brand-border p-3">
-            <div className="flex items-center gap-2 text-sm font-bold text-gray-900"><AlertTriangle className="h-4 w-4 text-brand-warning" />任务中心</div>
-            <div className="flex rounded-lg border border-brand-border p-0.5 text-[11px]">
-              <button type="button" onClick={() => setFilter('attention')} className={`rounded px-2 py-1 ${filter === 'attention' ? 'bg-brand-accent/10 font-semibold text-brand-accent' : 'text-gray-500'}`}>需处理</button>
-              <button type="button" onClick={() => setFilter('all')} className={`rounded px-2 py-1 ${filter === 'all' ? 'bg-brand-accent/10 font-semibold text-brand-accent' : 'text-gray-500'}`}>全部</button>
-            </div>
-          </div>
-          {jobsError ? <p className="p-4 text-sm text-red-600">任务加载失败：{apiErrorText(jobsError, '未知错误')}</p> : null}
-          {jobsLoading ? <p className="p-4 text-sm text-gray-500">正在读取任务…</p> : null}
-          {visibleJobs?.length ? <div className="divide-y divide-brand-border">{visibleJobs.map((job) => <JobRow key={job.id} job={job} selected={selectedJobID === job.id} onSelect={() => setSelectedJobID(job.id)} />)}</div> : !jobsLoading && !jobsError ? <p className="p-8 text-center text-sm text-gray-400">{filter === 'attention' ? '当前没有需要处理的任务。' : '尚无发布任务。'}</p> : null}
-        </div>
-        <div>
-          {detailError ? <div className="ui-card-flat p-4 text-sm text-red-600">详情加载失败：{apiErrorText(detailError, '未知错误')}</div> : <JobDetailPanel job={selectedJob} loading={detailLoading} action={action} onCancel={() => runAction('cancel')} onRetry={() => runAction('retry')} onVerify={verifyCreatorBackend} verificationResult={verificationResult} onOpenPath={openDiagnostic} />}
-        </div>
-      </div>
-
       {manualJobs?.length ? (
         <div className="ui-card space-y-3 border-brand-warning/30/25 p-4">
           <div className="flex items-center gap-2 text-sm font-semibold text-brand-warning"><CheckCircle2 className="h-4 w-4" />等待创作者后台核验</div>
@@ -523,20 +505,6 @@ export function PublishRecordsView() {
         </div>
       ) : null}
 
-      <div className="ui-card overflow-hidden">
-        <div className="border-b border-brand-border p-4"><h4 className="text-sm font-bold text-gray-900">已确认发布</h4><p className="mt-1 text-xs text-gray-500">演练模式和尚未获得后台证据的任务不会出现在这里。</p></div>
-        {recordsError ? <p className="p-4 text-sm text-red-600">记录加载失败</p> : null}
-        {records?.length ? (
-          <div className="divide-y divide-brand-border">
-            {records.map((item) => (
-              <div key={item.id} className="grid grid-cols-[1fr_auto] gap-3 p-4">
-                <div><div className="flex items-center gap-2"><PlatformIcon platform={item.platform_code} className="h-[18px] w-[18px]" /><span className="font-semibold text-gray-900">{item.platform_code}</span><span className="rounded bg-emerald-500/10 px-1.5 py-0.5 text-[11px] text-emerald-700">{item.status}</span>{item.source === 'user_confirmed' ? <span className="text-[11px] text-gray-500">用户确认</span> : null}</div><p className="mt-1 text-xs text-gray-500">内容 #{item.content_id} · 账号 #{item.account_id} · {item.content_type} · 任务 #{item.job_id}</p>{item.external_post_id ? <p className="mt-1 font-mono text-[11px] text-gray-500">{item.external_post_id}</p> : null}</div>
-                {item.post_url ? <button type="button" onClick={() => openExternalURL(item.post_url!)} className="ui-btn h-fit"><ExternalLink className="h-3.5 w-3.5" />打开</button> : null}
-              </div>
-            ))}
-          </div>
-        ) : <p className="p-10 text-center text-sm text-gray-400">尚无已确认的发布记录。</p>}
-      </div>
     </section>
   );
 }

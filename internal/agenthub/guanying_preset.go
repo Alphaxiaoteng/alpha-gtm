@@ -129,7 +129,7 @@ func (s *Service) ensureGuanyingBots(ctx context.Context) error {
 			GroupName:    "专业团队",
 			Avatar:       "/bot-avatars/writer.svg",
 			Model:        GuanyingDefaultModel,
-			Pinned:       true,
+			Pinned:       false,
 			Effort:       "medium",
 			Capabilities: []string{"social_growth", "copywriting"},
 			Kickoff:      "告诉我账号与目标市场（越南 / 印尼 / 沙特 / 巴西 / 尼日利亚 / 俄罗斯），或贴一条现有素材，我出可直接发布的脚本与配文。",

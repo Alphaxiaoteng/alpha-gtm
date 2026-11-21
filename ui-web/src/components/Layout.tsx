@@ -4,7 +4,7 @@ import { prefetchView } from '../lib/routePrefetch';
 import { BUILTIN_ALPHA_AGENT_ID } from '../lib/botInbox';
 import useSWR from 'swr';
 import { api, setToken } from '../api';
-import { Activity, Bot, CheckCircle, Film, FolderOpen, Globe, PanelLeftOpen, Radio, Send, Settings, Sparkles, TrendingUp, UserRoundSearch, Users, XCircle, type LucideIcon } from 'lucide-react';
+import { Activity, Bot, CheckCircle, FolderOpen, Globe, PanelLeftOpen, Radio, Send, Settings, Sparkles, TrendingUp, Users, XCircle, type LucideIcon } from 'lucide-react';
 import { applySkin, getStoredSkin, type SkinId } from '../themes';
 import { LocalLoadingState } from './LocalLoadingState';
 import { AgentContextDrawer, AGENT_CONTEXT_OPEN_EVENT, type AgentContextSelection } from './AgentContextDrawer';
@@ -112,7 +112,7 @@ const SkinSwitch: React.FC<{ current: SkinId; onChange: (next: SkinId) => void; 
 };
 
 export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }) => {
-  const { productMode, activeTab, setActiveTab, setAgentDraft, openAgentDrawer, toast, sidebarState, toggleSidebar, headerExtras, radarContentView, setRadarContentView, activeBotID, setActiveBotID } = useUIStore();
+  const { productMode, activeTab, setActiveTab, setAgentDraft, openAgentDrawer, toast, sidebarState, toggleSidebar, headerExtras, activeBotID, setActiveBotID } = useUIStore();
   // Bot 页右栏：收件箱与 Bot 详情二选一，位置固定在右侧栏，左侧列表不受影响。
   const botInboxOpen = useUIStore((state) => state.botInboxOpen);
   // 兼容契约：暴露 sidebarHidden 别名（FeedbackDrawer 等仍依赖此命名定位自身位置）。
@@ -268,40 +268,6 @@ export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }
             </span>
           )}
         </button>
-
-        {/* 趋势雷达子项常显，不做折叠：演示时要能一眼看到有三个视图。 */}
-        {sidebarState !== 'rail' && isDashboard && (
-          <div className="ml-4 pl-3.5 border-l border-brand-border/70 space-y-0.5 my-1" role="group" aria-label="趋势雷达子功能">
-            {([
-              { id: 'keywords', label: '赛道热榜', icon: Radio },
-              { id: 'videos', label: '视频搜索', icon: Film },
-              { id: 'creators', label: '博主监控', icon: UserRoundSearch },
-            ] as const).map(({ id, label: subLabel, icon: SubIcon }) => {
-              const isSubActive = isActive && radarContentView === id;
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  data-testid={`nav-dashboard-${id}`}
-                  onPointerEnter={() => prefetchView('dashboard')}
-                  onFocus={() => prefetchView('dashboard')}
-                  onClick={() => {
-                    setActiveTab('dashboard');
-                    setRadarContentView(id);
-                  }}
-                  className={`flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-xs transition ${
-                    isSubActive
-                      ? 'bg-brand-accent/10 font-semibold text-brand-accent'
-                      : 'text-gray-500 font-medium hover:bg-black/[0.035] hover:text-gray-900'
-                  }`}
-                >
-                  <SubIcon className={`h-3.5 w-3.5 shrink-0 ${isSubActive ? 'text-brand-accent' : 'text-gray-400'}`} />
-                  <span className="truncate">{subLabel}</span>
-                </button>
-              );
-            })}
-          </div>
-        )}
       </div>
     );
   };
