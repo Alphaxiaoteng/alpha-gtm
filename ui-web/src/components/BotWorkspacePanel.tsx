@@ -510,46 +510,9 @@ export function BotWorkspacePanel({
               </p>
             </div>
 
-            <div className="rounded-xl bg-brand-surface-raised p-3" data-testid="bot-workspace-places">
-              <p className="text-[11px] font-semibold">工作位置</p>
-              <p className="mt-0.5 text-[10px] leading-4 text-brand-muted">
-                选择这个 Bot 在哪里工作。本项目只有内置浏览器是真的，其余位置还没有后端。
-              </p>
-              <div role="group" aria-label="电脑目标" className="mt-2 grid auto-rows-fr grid-cols-2 gap-1.5">
-                {places.map((place) => {
-                  const Icon = place.icon;
-                  return (
-                    <button
-                      key={place.id}
-                      type="button"
-                      data-testid={`bot-workspace-place-${place.id}`}
-                      disabled={!place.available}
-                      aria-pressed={place.current === true}
-                      title={place.reason}
-                      onClick={() => place.run?.()}
-                      className={`flex min-h-[62px] min-w-0 flex-col items-stretch justify-start gap-1 rounded-lg border px-2 py-2 text-left transition ${
-                        place.current
-                          ? 'border-brand-accent/45 bg-brand-accent/[0.05] text-brand-fg'
-                          : 'border-brand-border bg-brand-surface text-brand-fg'
-                      } ${place.available ? 'hover:brightness-95' : 'cursor-not-allowed opacity-75'}`}
-                    >
-                      <span className="flex items-center gap-1.5 text-[10px] font-semibold leading-4">
-                        {place.current ? (
-                          <Check className="h-3 w-3 shrink-0 text-brand-fg" />
-                        ) : (
-                          <Icon className="h-3 w-3 shrink-0 text-brand-muted" />
-                        )}
-                        <span className="min-w-0 flex-1 truncate">{place.label}</span>
-                        {place.current ? (
-                          <span className="shrink-0 rounded-full bg-brand-accent px-1.5 py-px text-[8px] font-semibold text-brand-on-accent">当前</span>
-                        ) : null}
-                      </span>
-                      <span className="line-clamp-2 block min-h-8 text-[9px] leading-4 text-brand-muted">{place.reason}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+            {/* 「工作位置」整块已移除：六个选项里五个是「未接入」的占位，
+                留着只会让面板看起来很空。真实能力（EgoLite 实时画面）就在上面。 */}
+
           </>
         ) : null}
 

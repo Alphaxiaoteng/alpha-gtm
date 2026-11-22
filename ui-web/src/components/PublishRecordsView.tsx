@@ -128,6 +128,32 @@ function canDeleteRemoteContent(item: PublishContentRecord) {
     && Boolean(item.external_post_id?.trim());
 }
 
+/**
+ * 封面：演示行读本地 demo_cover，真实行走后端 cover 接口。
+ * 图片缺失或接口 404 时保留灰底 + 平台图标占位，不让整块消失（行高也不跳）。
+ */
+function RecordCover({ src, platform }: { src: string; platform: string }) {
+  const [failed, setFailed] = useState(false);
+  if (!src || failed) {
+    return (
+      <div className="flex h-16 w-16 shrink-0 items-center justify-center border border-brand-border bg-brand-surface-raised">
+        <PlatformIcon platform={platform} className="h-6 w-6 opacity-60" />
+      </div>
+    );
+  }
+  return (
+    <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden border border-brand-border bg-brand-bg">
+      <img
+        src={src}
+        alt=""
+        loading="lazy"
+        className="h-full w-full object-cover"
+        onError={() => setFailed(true)}
+      />
+    </div>
+  );
+}
+
 function PublishPlanRow({ plan }: { plan: PublishPlanSummary }) {
   return (
     <article className="grid gap-2 border-b border-brand-border p-3 last:border-b-0 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
@@ -444,20 +470,15 @@ export function PublishRecordsView() {
           <div className="divide-y divide-brand-border">
             {contentRecords.map((item) => (
               <article key={item.id} className="flex items-center gap-3 p-3">
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden border border-brand-border bg-brand-bg">
-                  {/* 演示行也放真实产品/工厂实拍封面，不用平台图标凑数。 */}
-                  <img
-                    src={
-                      isDemoRecordID(item.id)
-                        ? (item as DemoPublishRecord).demo_cover ?? ''
-                        : `/api/publish-content-records/${item.id}/cover`
-                    }
-                    alt=""
-                    loading="lazy"
-                    className="h-full w-full object-cover"
-                    onError={(event) => { event.currentTarget.style.visibility = 'hidden'; }}
-                  />
-                </div>
+                {/* 演示行也放真实产品/工厂实拍封面；加载失败退回平台图标占位。 */}
+                <RecordCover
+                  platform={item.platform_code}
+                  src={
+                    isDemoRecordID(item.id)
+                      ? (item as DemoPublishRecord).demo_cover ?? ''
+                      : `/api/publish-content-records/${item.id}/cover`
+                  }
+                />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <PlatformIcon platform={item.platform_code} className="h-4 w-4" />
@@ -470,6 +491,16 @@ export function PublishRecordsView() {
                   <p className="mt-1 text-[10px] text-gray-400">{item.remote_state === 'scheduled' ? formatTime(item.scheduled_at) : formatTime(item.verified_at)}</p>
                   {item.error_code ? <p className="mt-1 truncate text-[10px] text-red-600">{item.error_code}</p> : null}
                 </div>
+                {item.post_url?.trim() ? (
+                  <button
+                    type="button"
+                    data-testid={`publish-record-open-${item.id}`}
+                    onClick={() => window.open(item.post_url!, '_blank', 'noopener')}
+                    className="ui-btn shrink-0"
+                  >
+                    <ExternalLink className="h-3.5 w-3.5" />打开原链接
+                  </button>
+                ) : null}
                 {canDeleteRemoteContent(item) ? (
                   <button type="button" onClick={() => void deleteRemoteContent(item)} disabled={deletingRecordID !== null} className="ui-btn shrink-0 text-red-600 disabled:opacity-40">
                     <Trash2 className="h-3.5 w-3.5" />{deletingRecordID === item.id ? '删除中…' : '删除'}

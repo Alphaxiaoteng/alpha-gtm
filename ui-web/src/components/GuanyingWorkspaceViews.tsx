@@ -1450,55 +1450,31 @@ export const GuanyingSeoBuilderView: React.FC = () => {
         </form>
       </div>
 
-      {/* 4 :8003 Style KPI Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          {
-            label: 'Sitemap 实测页面规模',
-            num: String(auditData?.sitemap_url_count ?? 468),
-            unit: 'URL',
-            barColor: 'bg-emerald-500',
-            dotColor: 'bg-emerald-500',
-            note: '产品与分类 278 条 (59.4%) + 资讯长文 190 条 (40.6%)，含 9 页风电片',
-          },
-          {
-            label: 'URL / Title 致命拼写硬伤',
-            num: '16',
-            unit: '处高危页',
-            barColor: 'bg-rose-500',
-            dotColor: 'bg-rose-500',
-            note: 'trcuk(5) · beake(3) · fiction(2) · btake · mercedsbenz · trailor · ivceo(2) · -for 截断',
-          },
-          {
-            label: '/seo 首页技术体检',
-            num: '29 / 33',
-            unit: '项通过',
-            barColor: 'bg-amber-500',
-            dotColor: 'bg-amber-500',
-            note: 'Fail: 首页/简介 H1=0｜Warn: 36图缺宽高防CLS · robots缺Sitemap · Offers大写+$0',
-          },
-          {
-            label: '竞品差距与弯道破局点',
-            num: '4',
-            unit: '项改进方向',
-            barColor: 'bg-blue-500',
-            dotColor: 'bg-blue-500',
-            note: '缺 Top10 榜单内容 · 缺卡钳/OE HTML 表 · 缺 PDF 目录留资 · 缺西/俄/阿语子站',
-          },
-        ].map((kpi) => (
-          <div key={kpi.label} className="ui-card relative overflow-hidden p-4">
-            <div className={`absolute inset-x-0 top-0 h-1 ${kpi.barColor}`} />
-            <div className="flex items-center gap-2 text-[11px] font-semibold text-brand-muted">
-              <span className={`h-2 w-2 rounded-full ${kpi.dotColor}`} />
-              <span>{kpi.label}</span>
-            </div>
-            <div className="mt-2 flex items-baseline gap-1.5">
-              <span className="text-2xl font-extrabold tracking-tight text-brand-fg">{kpi.num}</span>
-              <span className="text-xs font-semibold text-brand-muted">{kpi.unit}</span>
-            </div>
-            <p className="mt-1.5 text-[11px] leading-relaxed text-brand-muted">{kpi.note}</p>
+      {/* 首屏只回答一个问题：现在该改什么。
+          原来这里并排 4 张卡、每张塞一行技术细节（拼写词表、CLS、robots 指令…），
+          扫一眼全是数据看不出重点。改成「一句结论 + 3 个关键数字 + 一个主按钮」，
+          细节留给下面的审计页签。 */}
+      <div className="ui-card flex flex-col gap-4 p-5 lg:flex-row lg:items-center lg:justify-between">
+        <div className="min-w-0">
+          <p className="text-sm font-bold text-brand-fg">先修 16 处拼写硬伤与首页缺失的 H1</p>
+          <p className="mt-1 text-xs leading-relaxed text-brand-muted">
+            这两项直接影响 Google 能不能正确理解页面，改动量最小、收益最直接。结构化数据与留资钩子排在后面。
+          </p>
+        </div>
+        <div className="flex shrink-0 items-center gap-6">
+          <div className="text-center">
+            <div className="text-2xl font-extrabold tracking-tight text-brand-fg">{auditData?.sitemap_url_count ?? 468}</div>
+            <div className="text-[10px] font-medium text-brand-muted">已收录页面</div>
           </div>
-        ))}
+          <div className="text-center">
+            <div className="text-2xl font-extrabold tracking-tight text-rose-600">16</div>
+            <div className="text-[10px] font-medium text-brand-muted">待修拼写</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl font-extrabold tracking-tight text-amber-600">1</div>
+            <div className="text-[10px] font-medium text-brand-muted">缺失 H1</div>
+          </div>
+        </div>
       </div>
 
       {/* 4 Workbench Tabs (:8003 Overview / Audit / Competitors / Plan) */}

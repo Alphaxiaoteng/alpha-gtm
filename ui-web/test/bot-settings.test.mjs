@@ -258,12 +258,13 @@ test('Bot 列表按 group_name 分组，组头带数量，未分组归到「其�
   assert.match(rail, /const listBots = visibleBots;/);
   assert.match(rail, /data-testid="bot-rail-chief"/);
   assert.match(rail, /<AlphaPixelMark/);
-  // 置顶提到主 Agent 同一块顶部区域；部门只含未置顶的 Bot，避免同一项出现两次。
-  assert.match(rail, /buildBotSections\(unpinnedBots\)/);
-  assert.match(rail, /const pinnedBots = visibleBots\.filter\(\(bot\) => bot\.pinned\);/);
-  assert.match(rail, /const unpinnedBots = visibleBots\.filter\(\(bot\) => !bot\.pinned\);/);
-  assert.match(rail, /group: '置顶'/);
+  // 全部 Bot 按 group_name 平铺：不再切独立的「置顶」分区，置顶只影响组内排序。
+  assert.match(rail, /const sections = buildBotSections\(visibleBots\);/);
+  assert.doesNotMatch(rail, /group: '置顶'/);
   assert.match(rail, /data-testid=\{`bot-rail-group-\$\{section\.group\}`\}/);
+  // 只有一个部门时连部门标题都不画，卡片直接平铺。
+  assert.match(rail, /const showGroupHeader = sections\.length > 1;/);
+  assert.match(rail, /compact \|\| !showGroupHeader \? null :/);
   assert.match(rail, /\{section\.bots\.length\}/);
   // 组内顺序沿用后端契约：主 Bot → 置顶 → 新建在前
   assert.match(rail, /if \(Boolean\(left\.is_primary\) !== Boolean\(right\.is_primary\)\)/);
