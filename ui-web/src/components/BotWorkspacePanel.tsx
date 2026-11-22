@@ -471,10 +471,10 @@ export function BotWorkspacePanel({
                   </p>
                 )}
               </div>
+              {/* 只留一句状态：截图来源与刷新机制对用户不重要，说多了反而是噪音。 */}
               <p data-testid="bot-workspace-screen-note" className="mt-2 text-[9px] leading-4 text-brand-muted">
-                画面来自 EgoLite Space 的当前页面（只读，每 3 秒刷新），不是 Mac 桌面截屏。
-                {screenFrame?.capturedAt ? ` 更新于 ${new Date(screenFrame.capturedAt).toLocaleTimeString('zh-CN', { hour12: false })}` : ''}
-                {screenPaused ? ' · 已暂停刷新' : ''}
+                {screenPaused ? '已暂停' : '实时'}
+                {screenFrame?.capturedAt ? ` · ${new Date(screenFrame.capturedAt).toLocaleTimeString('zh-CN', { hour12: false })}` : ''}
               </p>
             </div>
 
@@ -749,10 +749,6 @@ export function BotWorkspacePanel({
             </button>
           </div>
         ) : null}
-
-        <p className="px-1 text-[9px] leading-4 text-brand-muted">
-          按任务需要，这个 Bot 目前只能使用内置浏览器；这台电脑的私有桌面、云端桌面和屏幕采集都还没有接入。
-        </p>
       </div>
     </div>
   );

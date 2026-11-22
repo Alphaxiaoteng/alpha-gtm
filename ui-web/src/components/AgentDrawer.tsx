@@ -503,6 +503,8 @@ export function AgentDrawer({ displayMode = 'drawer' }: { displayMode?: 'drawer'
     () => toolCards.filter((call) => call.status !== 'failed' && !call.error_code),
     [toolCards],
   );
+  // 聊天视图默认隐藏内部工具调用细节，运行中仅展示「思考中…」与最终回答。
+  const showToolCardsInChat = false;
   // 用户手动的展开/收起优先于「按状态默认」，否则状态跃迁会把卡片抢开或抢关。
   const [toolOpenState, setToolOpenState] = useState<Record<string, boolean>>({});
   // 交接结束后保留最近 3 条成功结果，不展示失败杂音。
@@ -1636,7 +1638,7 @@ export function AgentDrawer({ displayMode = 'drawer' }: { displayMode?: 'drawer'
                     }}
                   />
                 ) : null}
-                {visibleToolCards.length > 0 ? (
+                {showToolCardsInChat && visibleToolCards.length > 0 ? (
                   <section data-testid="agent-tool-cards-section" className="mr-5 border border-brand-border bg-brand-surface-raised p-3 text-[11px] text-brand-fg-subtle">
                     <div className="flex items-center justify-between gap-2">
                       <p className="font-semibold text-brand-fg">工具调用</p>
@@ -1817,8 +1819,8 @@ export function AgentDrawer({ displayMode = 'drawer' }: { displayMode?: 'drawer'
           <div data-testid="agent-run-strip" className="flex items-center gap-2 border-t border-brand-border px-5 py-2 text-[11px] text-brand-muted">
             <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-brand-success" />
             <span className="min-w-0 flex-1 truncate" role="status" aria-live="polite">
-              运行中 · 已用 <WorkingTimer since={runStartedAt || Date.now()} />
-              {visibleToolCards.length > 0 ? ` · 工具 ${visibleToolCards.length} 次` : ''}
+              思考中 · 已用 <WorkingTimer since={runStartedAt || Date.now()} />
+              {showToolCardsInChat && toolCards.length > 0 ? ` · 工具 ${toolCards.length} 次` : ''}
               {longRun ? ' · 仍在运行，可继续等待或停止' : ''}
             </span>
             <button

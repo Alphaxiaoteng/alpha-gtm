@@ -55,7 +55,8 @@ test('屏幕卡片直接显示 EgoLite Space 实时画面，不再要求 macOS �
   // 屏幕 = Space 的当前页面，只读、3 秒刷新。
   assert.match(panel, /screenFrame\?\.src/);
   assert.match(panel, /data-testid="bot-workspace-screen-frame"/);
-  assert.match(panel, /画面来自 EgoLite Space 的当前页面/);
+  // 说明文字已精简成一句状态（实时/暂停 + 更新时间），不再向用户解释截图机制。
+  assert.match(panel, /bot-workspace-screen-note/);
   // 屏幕 tab 不需要先选 Space：选择器只在浏览器 tab 出现。
   // 切片要取「screen 分支的 JSX 内部」，而不是到下一个字符串出现为止——
   // 后者会把后面整段浏览器分支也算进来，断言必然失败。
@@ -66,7 +67,7 @@ test('屏幕卡片直接显示 EgoLite Space 实时画面，不再要求 macOS �
   assert.doesNotMatch(screenBlock, /liveSpacePicker/);
   // 实时画面可以暂停，并显示更新时间。
   assert.match(panel, /data-testid="bot-workspace-screen-pause"/);
-  assert.match(panel, /更新于/);
+  assert.match(panel, /toLocaleTimeString\('zh-CN'/);
 
   // 不再出现桌面截屏/授权入口，也不调用桌面接口。
   assert.doesNotMatch(panel, /getDesktopScreen/);
