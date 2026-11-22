@@ -40,7 +40,7 @@
 
 中文原片进去，出来英语、印尼语、法语……30 条竖屏成片。30 条全链路成本 **¥3**。
 
-![三条成片](show/alphagtm/shots/slide-06.png)
+![英语 / 印尼语 / 法语三条成片](show/alphagtm/shots/alphagtm-fission.gif)
 
 ---
 
