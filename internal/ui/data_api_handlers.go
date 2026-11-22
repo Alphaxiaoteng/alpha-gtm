@@ -208,6 +208,10 @@ func fixedDataAPIEndpointCatalog() []dataAPIPlatform {
 		{code: "wechat_mp", name: "微信公众号"},
 		{code: "youtube", name: "YouTube"},
 		{code: "x", name: "X"},
+		// TikTok / Instagram 目前只在精选目录里做关键词搜索（趋势雷达的赛道配置
+		// 白名单还没放这两个平台），所以详情/博主能力会显示「本地生成」。
+		{code: "tiktok", name: "TikTok"},
+		{code: "instagram", name: "Instagram"},
 	}
 	capabilityLabels := []struct {
 		code  string

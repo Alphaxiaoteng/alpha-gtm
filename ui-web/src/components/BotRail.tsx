@@ -15,11 +15,10 @@ const UNREAD_DOT = '#2f6fed';
 const MAIN_AGENT_NAME = 'AlphaBot';
 
 // 部门分区：
-// 置顶的 Bot 会浮到独立的「置顶」分区，但
-// 部门名来自持久化的 `state.sections`，所以某个部门的 Bot 全被置顶时，部门标题照旧
-// 渲染。本应用没有独立部门表，部门名只写在 `agent_bots.group_name` 上——一旦把置顶
-// 的 Bot 从部门里摘走，那个部门就等于被删掉（用户报的「开发团队怎么没有了」）。
-// 因此这里保留置顶的排序与图钉标记，但不把 Bot 移出所属部门。
+// 名单按 `agent_bots.group_name` 分组平铺，不切独立的「置顶」分区；置顶只影响组内
+// 排序与卡片上的图钉标记。本应用没有独立部门表，部门名只写在 `group_name` 上——
+// 一旦把置顶的 Bot 从部门里摘走，那个部门就等于被删掉（用户报的「开发团队怎么
+// 没有了」）。只有一个部门时连部门标题都不画，整份名单直接平铺。
 //
 // 下面这段是纯函数区域（无 import、无 JSX），`ui-web/test/bot-inbox.test.mjs` 会把
 // 它转译后在 Node 里真跑，防止「全部置顶 → 部门消失」回归。
@@ -278,22 +277,16 @@ export function BotRail() {
       }
     : { name: MAIN_AGENT_NAME, bot: undefined as AgentBot | undefined, role: '' as PixelAvatarRole | '', unread: mainAgentUnread };
   const listBots = visibleBots;
-  // 置顶不再混在部门里：置顶的 Bot 提到主 Agent 同一块区域，部门和「置顶」平级
-  // 只是顺序上先出。部门分区因此只含未置顶的 Bot，避免同一个 Bot 出现两次。
-  const pinnedBots = visibleBots.filter((bot) => bot.pinned);
-  const unpinnedBots = visibleBots.filter((bot) => !bot.pinned);
-  // synthetic 标记：置顶是界面上人造出来的一层，不是真实分组。
-  // 对它右键「重命名分组」会把每个置顶 Bot 的 group_name 写成「置顶」，
-  // 等于凭空造出一个真实部门并把它们从原部门搬走。所以它不绑分组菜单。
+  // 全部 Bot 按 group_name 平铺：不再单独切出「置顶」分区，置顶只影响组内排序
+  // 和卡片上的图钉标记。只有一个部门时连部门标题也不画，五张卡直接连排。
+  const sections = buildBotSections(visibleBots);
+  const showGroupHeader = sections.length > 1;
+  // 「置顶」是旧版在界面上人造的分区，从来不是后端的真实部门。若历史数据里残留
+  // 同名分组，重命名会把它写成一个真实部门，所以它不绑分组右键菜单。
   const syntheticGroups = new Set(['置顶']);
-  const sections: Array<{ group: string; bots: typeof visibleBots }> = [
-    // 置顶紧跟在主 Agent 下面，和主 Agent 同属顶部区域；部门里不再重复。
-    ...(pinnedBots.length > 0 ? [{ group: '置顶', bots: pinnedBots }] : []),
-    ...buildBotSections(unpinnedBots),
-  ];
   // 移动分组的目标列表：现有分组去掉 Bot 所在的当前分组。
   const moveTargets = Array.from(new Set(sections.map((section) => section.group)))
-    .filter((group) => !syntheticGroups.has(group) && group !== groupNameOf(botMenu?.bot ?? {}));
+    .filter((group) => group !== groupNameOf(botMenu?.bot ?? {}));
 
   // 打开会话的真实依赖：与右侧收件箱面板共用 lib/botInbox 里的同一套流程，
   // 两处不会各自写一遍「建会话 → 请求 → 写已读 → 刷新」。
@@ -713,7 +706,7 @@ export function BotRail() {
               ))}
             </div>
           </div>
-        ) : listBots.length === 0 && pinnedBots.length === 0 ? (
+        ) : listBots.length === 0 ? (
           <p data-testid="bot-rail-no-match" className="px-2 py-6 text-center text-[11px] text-brand-muted">
             没有匹配的 Bot
           </p>
@@ -778,9 +771,9 @@ export function BotRail() {
             <div
               key={section.group}
               data-testid={`bot-rail-group-${section.group}`}
-              className="space-y-1 pt-2"
+              className={showGroupHeader ? 'space-y-1 pt-2' : 'space-y-1'}
             >
-              {compact ? null : (
+              {compact || !showGroupHeader ? null : (
                 <div
                   data-testid={`bot-rail-group-header-${section.group}`}
                   onContextMenu={(event) => {
@@ -808,9 +801,7 @@ export function BotRail() {
                   ) : (
                     <span className="truncate text-[11px] font-medium text-brand-muted/85">{section.group}</span>
                   )}
-                  {sections.length > 1 ? (
-                    <span className="shrink-0 text-[11px] tabular-nums text-brand-muted/70">{section.bots.length}</span>
-                  ) : null}
+                  <span className="shrink-0 text-[11px] tabular-nums text-brand-muted/70">{section.bots.length}</span>
                 </div>
               )}
               {section.bots.map((bot) => {
@@ -872,7 +863,9 @@ export function BotRail() {
                     } ${
                       active
                         ? 'bg-brand-fg/[0.06] text-brand-fg'
-                        : 'text-brand-fg hover:bg-brand-fg/[0.035]'
+                        : bot.pinned
+                          ? 'bg-brand-surface-raised text-brand-fg hover:bg-brand-fg/[0.04]'
+                          : 'text-brand-fg hover:bg-brand-fg/[0.035]'
                     }`}
                   >
                     {active ? (
@@ -914,6 +907,17 @@ export function BotRail() {
                         <span className="mt-0.5 block truncate text-[11px] leading-4 text-brand-muted">
                           {preview}
                         </span>
+                      </span>
+                    )}
+                    {compact || !bot.pinned ? null : (
+                      <span
+                        data-testid={`bot-rail-pin-${bot.id}`}
+                        role="img"
+                        aria-label="已置顶"
+                        title="已置顶"
+                        className="flex h-4 w-4 items-center justify-center text-[#c08a1e]"
+                      >
+                        <Pin className="h-4 w-4" strokeWidth={2.4} fill="currentColor" />
                       </span>
                     )}
                     {compact ? null : (

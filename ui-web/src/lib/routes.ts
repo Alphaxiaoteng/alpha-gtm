@@ -43,6 +43,13 @@ const SEGMENT_TAB: Record<string, string> = Object.fromEntries(
 SEGMENT_TAB.media = 'social-media';
 SEGMENT_TAB.studio = 'studio';
 SEGMENT_TAB.seo = 'studio';
+// 短地址兼容：侧栏/书签常写 /GTM/records，真源 segment 仍是 publish/records。
+SEGMENT_TAB.records = 'records';
+SEGMENT_TAB.crawler = 'crawler';
+SEGMENT_TAB.accounts = 'accounts';
+SEGMENT_TAB.monitor = 'monitor';
+SEGMENT_TAB.calendar = 'calendar';
+SEGMENT_TAB.bot = 'bot';
 
 // 旧地址仍然可用，避免历史书签失效。
 const LEGACY_ROUTES: Record<string, string> = {

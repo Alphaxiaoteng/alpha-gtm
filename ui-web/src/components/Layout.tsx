@@ -4,7 +4,7 @@ import { prefetchView } from '../lib/routePrefetch';
 import { BUILTIN_ALPHA_AGENT_ID } from '../lib/botInbox';
 import useSWR from 'swr';
 import { api, setToken } from '../api';
-import { Activity, Bot, CheckCircle, ChevronDown, ChevronRight, Film, FolderOpen, Globe, PanelLeftOpen, Radio, Send, Settings, Sparkles, Table2, TrendingUp, UserRoundSearch, Users, XCircle, type LucideIcon } from 'lucide-react';
+import { Activity, Bot, CheckCircle, FolderOpen, Globe, PanelLeftOpen, Send, Settings, Sparkles, TrendingUp, Users, XCircle, type LucideIcon } from 'lucide-react';
 import { applySkin, getStoredSkin, type SkinId } from '../themes';
 import { LocalLoadingState } from './LocalLoadingState';
 import { AgentContextDrawer, AGENT_CONTEXT_OPEN_EVENT, type AgentContextSelection } from './AgentContextDrawer';
@@ -30,24 +30,20 @@ interface Workspace {
   matches: TabType[];
 }
 
+// 趋势雷达与旧的「竞品分析」是同一批内容/趋势页面，合并成一个入口：
+// 侧栏只留趋势雷达（下挂赛道热榜 / 视频搜索 / 博主监控），crawler 页并进来后
+// 仍在这一行高亮。其余业务入口保持原样，不因为合并而消失。
 const WORKSPACES: Workspace[] = [
   {
     id: 'dashboard',
     label: '趋势雷达',
     icon: TrendingUp,
     defaultTab: 'dashboard',
-    matches: ['dashboard'],
-  },
-  {
-    id: 'crawler',
-    label: '竞品分析',
-    icon: Radio,
-    defaultTab: 'crawler',
-    matches: ['crawler'],
+    matches: ['dashboard', 'crawler'],
   },
   {
     id: 'social',
-    label: '媒体内容',
+    label: '素材裂变',
     icon: FolderOpen,
     defaultTab: 'social-media',
     matches: ['social-media', 'contents', 'templates'],
@@ -72,13 +68,6 @@ const WORKSPACES: Workspace[] = [
     icon: Send,
     defaultTab: 'records',
     matches: ['publish', 'batch', 'records', 'metrics', 'notifications'],
-  },
-  {
-    id: 'analytics',
-    label: '飞书与数据',
-    icon: Table2,
-    defaultTab: 'xhs-data',
-    matches: ['xhs-data'],
   },
   {
     id: 'settings',
@@ -123,10 +112,9 @@ const SkinSwitch: React.FC<{ current: SkinId; onChange: (next: SkinId) => void; 
 };
 
 export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }) => {
-  const { productMode, activeTab, setActiveTab, setAgentDraft, openAgentDrawer, toast, sidebarState, toggleSidebar, headerExtras, radarContentView, setRadarContentView, activeBotID, setActiveBotID } = useUIStore();
+  const { productMode, activeTab, setActiveTab, setAgentDraft, openAgentDrawer, toast, sidebarState, toggleSidebar, headerExtras, activeBotID, setActiveBotID } = useUIStore();
   // Bot 页右栏：收件箱与 Bot 详情二选一，位置固定在右侧栏，左侧列表不受影响。
   const botInboxOpen = useUIStore((state) => state.botInboxOpen);
-  const [radarSubmenuOpen, setRadarSubmenuOpen] = useState(true);
   // 兼容契约：暴露 sidebarHidden 别名（FeedbackDrawer 等仍依赖此命名定位自身位置）。
   const sidebarHidden = sidebarState === 'hidden';
   void sidebarHidden;
@@ -231,7 +219,6 @@ export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }
     const isActive = !agentSurfaceActive && currentWorkspace.id === workspace.id;
     const badge = workspace.id === 'ego' ? activeInstances || undefined : undefined;
     const label = workspaceLabel(workspace);
-    const isDashboard = workspace.id === 'dashboard';
 
     return (
       <div key={workspace.id} className="w-full">
@@ -244,9 +231,6 @@ export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }
           onFocus={() => prefetchView(workspace.defaultTab)}
           onClick={() => {
             setActiveTab(workspace.defaultTab);
-            if (isDashboard && sidebarState !== 'rail') {
-              setRadarSubmenuOpen((open) => (isActive ? !open : true));
-            }
           }}
           className={`ui-nav-item group relative flex w-full items-center ${sidebarState === 'rail' ? 'justify-center px-0 py-2.5' : 'justify-between px-3 py-2.5'} text-[13px] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-accent/40 ${
             isActive
@@ -273,18 +257,6 @@ export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }
             />
             {sidebarState !== 'rail' && <span className="truncate">{label}</span>}
           </span>
-          {sidebarState !== 'rail' && isDashboard && (
-            <span
-              className="text-gray-400 group-hover:text-gray-600 p-0.5 rounded transition"
-              onClick={(e) => {
-                e.stopPropagation();
-                setRadarSubmenuOpen((open) => !open);
-              }}
-              title={radarSubmenuOpen ? '折叠子功能' : '展开子功能'}
-            >
-              {radarSubmenuOpen ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
-            </span>
-          )}
           {badge !== undefined && !sidebarState && (
             <span
               className="inline-flex items-center gap-1 min-w-[1.25rem] h-5 px-1.5 text-[10px] font-semibold rounded-full text-white leading-none shadow-xs shrink-0 transition-transform duration-150 group-hover:scale-105"
@@ -295,40 +267,6 @@ export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }
             </span>
           )}
         </button>
-
-        {/* 趋势雷达父子路径下拉菜单：拆分为三个子功能 */}
-        {sidebarState !== 'rail' && isDashboard && radarSubmenuOpen && (
-          <div className="ml-4 pl-3.5 border-l border-brand-border/70 space-y-0.5 my-1" role="group" aria-label="趋势雷达子功能">
-            {([
-              { id: 'keywords', label: '赛道热榜', icon: Radio },
-              { id: 'videos', label: '视频搜索', icon: Film },
-              { id: 'creators', label: '博主监控', icon: UserRoundSearch },
-            ] as const).map(({ id, label: subLabel, icon: SubIcon }) => {
-              const isSubActive = isActive && radarContentView === id;
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  data-testid={`nav-dashboard-${id}`}
-                  onPointerEnter={() => prefetchView('dashboard')}
-                  onFocus={() => prefetchView('dashboard')}
-                  onClick={() => {
-                    setActiveTab('dashboard');
-                    setRadarContentView(id);
-                  }}
-                  className={`flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-xs transition ${
-                    isSubActive
-                      ? 'bg-brand-accent/10 font-semibold text-brand-accent'
-                      : 'text-gray-500 font-medium hover:bg-black/[0.035] hover:text-gray-900'
-                  }`}
-                >
-                  <SubIcon className={`h-3.5 w-3.5 shrink-0 ${isSubActive ? 'text-brand-accent' : 'text-gray-400'}`} />
-                  <span className="truncate">{subLabel}</span>
-                </button>
-              );
-            })}
-          </div>
-        )}
       </div>
     );
   };
@@ -347,12 +285,27 @@ export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }
 
 
         <div className={`border-b border-brand-border ${sidebarState === 'rail' ? 'px-1.5 py-2' : 'px-3.5 py-2.5'} space-y-2.5`}>
-          <div className={`flex items-center ${sidebarState === 'rail' ? 'justify-center' : 'justify-between'}`}>
+          <div className={`flex items-center ${sidebarState === 'rail' ? 'justify-center' : 'gap-2.5'}`}>
             <img
               src="/brand/01-lockup-dark-halftone.svg"
               alt="AlphaGTM"
-              className={`${sidebarState === 'rail' ? 'h-6 w-8 object-cover object-left' : 'h-7 w-auto max-w-[168px] object-contain'} select-none rounded`}
+              className={`${sidebarState === 'rail' ? 'h-6 w-8 object-cover object-left' : 'h-6 w-auto max-w-[62px] object-contain'} shrink-0 select-none rounded`}
             />
+            {sidebarState !== 'rail' && (
+              // 品牌名跟在 logo 后面，单行展示。英文用衬线体拉开与正文的对比，
+              // 中文跟在后面用小一号的常规体，靠字距而不是字重来区分层级。
+              <div className="min-w-0 truncate whitespace-nowrap leading-none">
+                <span
+                  className="text-[16px] font-semibold tracking-[0.01em] text-brand-fg"
+                  style={{ fontFamily: '"Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif' }}
+                >
+                  Alpha GTM
+                </span>
+                <span className="ml-1.5 text-[12px] font-medium tracking-[0.08em] text-brand-muted">
+                  阿尔法营销
+                </span>
+              </div>
+            )}
           </div>
           <div
             data-testid="workspace-mode-switch"
@@ -520,7 +473,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }
         </div>
       </main>
       <AgentContextDrawer selection={contextSelection} onClose={() => setContextSelection(null)} />
-      {activeTab !== 'bot' ? <BackgroundDrawer /> : null}
+      <BackgroundDrawer />
 
       {toast.message && (
         <div

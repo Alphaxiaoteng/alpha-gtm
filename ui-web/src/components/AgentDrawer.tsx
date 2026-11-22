@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
-import { AlertTriangle, Check, CheckCircle2, ChevronDown, Download, FolderOpen, GitFork, History, Monitor, ShieldCheck, X } from 'lucide-react';
+import { AlertTriangle, Check, CheckCircle2, ChevronDown, Download, FolderOpen, GitFork, History, ShieldCheck, X } from 'lucide-react';
 import useSWR from 'swr';
 import {
   api,
@@ -503,6 +503,8 @@ export function AgentDrawer({ displayMode = 'drawer' }: { displayMode?: 'drawer'
     () => toolCards.filter((call) => call.status !== 'failed' && !call.error_code),
     [toolCards],
   );
+  // 聊天视图默认隐藏内部工具调用细节，运行中仅展示「思考中…」与最终回答。
+  const showToolCardsInChat = false;
   // 用户手动的展开/收起优先于「按状态默认」，否则状态跃迁会把卡片抢开或抢关。
   const [toolOpenState, setToolOpenState] = useState<Record<string, boolean>>({});
   // 交接结束后保留最近 3 条成功结果，不展示失败杂音。
@@ -933,17 +935,6 @@ export function AgentDrawer({ displayMode = 'drawer' }: { displayMode?: 'drawer'
     window.addEventListener('alpha-nexus:agent-model-verified', handleVerifiedModel);
     return () => window.removeEventListener('alpha-nexus:agent-model-verified', handleVerifiedModel);
   }, [providerID, conversation?.id, runBusy, input]);
-
-  // 「电脑」按钮：打开右侧电脑面板并停在电脑页。没选 Bot 时兜底到内置主 Agent，
-  // 保证任何情况下都有反应。右侧详情在本产品里是常驻面板，所以这里不做开关
-  // （关了会把 Bot 详情一起关掉），只负责切到画面。
-  const openComputerPanel = () => {
-    const state = useUIStore.getState();
-    const target = currentBot?.id || conversation?.bot_id || state.activeBotID || BUILTIN_ALPHA_AGENT_ID;
-    state.setActiveBotID(target);
-    state.setBotDetailTab('computer');
-    state.setBotInboxOpen(false);
-  };
 
   const insertBotMention = (bot: AgentBot) => {
     setInput((current) => current.replace(/@[^@\s]*$/, `@${bot.name} `));
@@ -1520,22 +1511,6 @@ export function AgentDrawer({ displayMode = 'drawer' }: { displayMode?: 'drawer'
               </>
             ) : null}
           </div>
-          <button
-            type="button"
-            data-testid="agent-computer-button"
-            onClick={openComputerPanel}
-            title="电脑"
-            aria-label="打开电脑面板"
-            aria-pressed={Boolean(activeBotID)}
-            className={`relative flex h-7 w-7 items-center justify-center rounded-full bg-brand-surface/90 shadow-sm ring-1 ring-black/5 transition ${
-              activeBotID ? 'text-brand-accent' : 'text-brand-muted hover:text-brand-muted'
-            }`}
-          >
-            <Monitor className="h-4 w-4" />
-            {runBusy ? (
-              <span aria-hidden="true" data-testid="agent-computer-live" className="absolute right-0.5 top-0.5 h-1.5 w-1.5 animate-pulse rounded-full bg-brand-success/100" />
-            ) : null}
-          </button>
           {displayMode === 'drawer' ? (
             <button
               type="button"
@@ -1663,7 +1638,7 @@ export function AgentDrawer({ displayMode = 'drawer' }: { displayMode?: 'drawer'
                     }}
                   />
                 ) : null}
-                {visibleToolCards.length > 0 ? (
+                {showToolCardsInChat && visibleToolCards.length > 0 ? (
                   <section data-testid="agent-tool-cards-section" className="mr-5 border border-brand-border bg-brand-surface-raised p-3 text-[11px] text-brand-fg-subtle">
                     <div className="flex items-center justify-between gap-2">
                       <p className="font-semibold text-brand-fg">工具调用</p>
@@ -1844,8 +1819,8 @@ export function AgentDrawer({ displayMode = 'drawer' }: { displayMode?: 'drawer'
           <div data-testid="agent-run-strip" className="flex items-center gap-2 border-t border-brand-border px-5 py-2 text-[11px] text-brand-muted">
             <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-brand-success" />
             <span className="min-w-0 flex-1 truncate" role="status" aria-live="polite">
-              运行中 · 已用 <WorkingTimer since={runStartedAt || Date.now()} />
-              {visibleToolCards.length > 0 ? ` · 工具 ${visibleToolCards.length} 次` : ''}
+              思考中 · 已用 <WorkingTimer since={runStartedAt || Date.now()} />
+              {showToolCardsInChat && toolCards.length > 0 ? ` · 工具 ${toolCards.length} 次` : ''}
               {longRun ? ' · 仍在运行，可继续等待或停止' : ''}
             </span>
             <button

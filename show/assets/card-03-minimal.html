@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>封面卡片 03 · 极简</title>
+<style>
+@font-face{font-family:"Pinyon Script";src:url(../alphagtm/assets/fonts/pinyon-script.woff2) format("woff2");font-weight:400;font-display:block}
+:root{
+  --bg:#050507;--ink:#f7f6f2;--ink2:#c9c7c0;--muted:#7e7d88;
+  --red:#D41432;--gold:#C9A96E;--line:rgba(201,169,110,.30);
+  --display:"Bodoni 72","Bodoni 72 OS",Didot,"Songti SC",serif;
+  --sans:"Montserrat","PingFang SC",system-ui,sans-serif;
+  --mono:"JetBrains Mono","SF Mono",ui-monospace,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1600px;height:900px;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.stage{position:relative;width:1600px;height:900px;padding:70px 96px;display:flex;flex-direction:column}
+.stage::before{content:"";position:absolute;inset:34px;border:1px solid var(--line);pointer-events:none}
+.stage::after{content:"";position:absolute;left:96px;top:34px;width:70px;height:3px;background:var(--red)}
+.top{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2;padding:0 18px}
+.top img{height:30px;filter:brightness(0) invert(1) grayscale(1);opacity:.85}
+.top .ev{font:400 12px/1 var(--mono);letter-spacing:.28em;color:var(--muted)}
+.mid{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 18px;position:relative;z-index:2}
+.script{font-family:"Pinyon Script",cursive;color:var(--red);font-size:120px;line-height:.9;transform:skewX(-8deg);transform-origin:0 70%}
+.cn{font-family:var(--display);font-size:40px;letter-spacing:.24em;color:var(--ink2);margin:14px 0 30px}
+h1{font-family:var(--display);font-size:74px;line-height:1.22;font-weight:700;letter-spacing:.02em}
+h1 .l{display:block}
+h1 .g{color:var(--gold);font-weight:400;font-style:italic}
+.rule{width:96px;height:1px;background:var(--gold);margin:32px 0 22px}
+.sub{font-size:19px;color:var(--ink2);line-height:1.7;letter-spacing:.04em}
+.bottom{display:flex;justify-content:space-between;align-items:flex-end;padding:0 18px;position:relative;z-index:2}
+.bottom .l{font:400 13px/1.8 var(--mono);color:var(--ink2);letter-spacing:.1em}
+.bottom .l b{color:var(--ink)}
+.bottom .r{font:400 13px/1.8 var(--mono);color:var(--muted);letter-spacing:.12em;text-align:right}
+.bottom .r b{color:var(--gold)}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="top">
+    <img src="../alphagtm/assets/alphafde-gradient-logo.png" alt="AlphaFDE">
+    <span class="ev">INTERCITY HACK · 湖州 · 2026.11</span>
+  </div>
+  <div class="mid">
+    <div class="script">Alpha GTM</div>
+    <div class="cn">阿尔法营销</div>
+    <h1><span class="l">湖州冠英</span><span class="l"><span class="g">FDE</span> 解决方案</span><span class="l">+ 出海 GTM Harness</span></h1>
+    <div class="rule"></div>
+    <div class="sub">让中国工厂的生意，跑在一套系统里。<br>一人运营 30 国账号，内容、线索与报价依据都可追溯。</div>
+  </div>
+  <div class="bottom">
+    <div class="l">参赛团队 <b>AlphaGTM</b> · 命题企业 <b>浙江冠英汽车零部件</b></div>
+    <div class="r"><b>alphagtm.pages.dev</b><br>扫码查看解决方案</div>
+  </div>
+</div>
+</body>
+</html>

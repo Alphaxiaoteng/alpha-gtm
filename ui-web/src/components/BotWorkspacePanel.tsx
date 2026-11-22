@@ -1,19 +1,14 @@
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import {
-  Box,
-  Check,
-  Cloud,
   Database,
   ExternalLink,
   FolderOpen,
   Globe,
   Loader2,
   Monitor,
-  Power,
   RotateCcw,
   SlidersHorizontal,
-  Sparkles,
   X,
   type LucideIcon,
 } from 'lucide-react';
@@ -66,23 +61,10 @@ const TABS: Array<{ id: WorkspaceTab; label: string; icon: LucideIcon }> = [
   { id: 'files', label: '文件', icon: FolderOpen },
 ];
 
-/** One 工作位置 option, in a 2×3 grid. */
-interface PlaceOption {
-  id: 'auto' | 'cloud' | 'private' | 'local' | 'browser' | 'off';
-  label: string;
-  icon: LucideIcon;
-  desc: string;
-  /** False means the surface behind it does not exist in Alpha-Nexus yet. */
-  available: boolean;
-  /** Why it cannot be selected, or what really happens when it is. */
-  reason: string;
-  current?: boolean;
-  run?: () => void;
-}
 
 /**
  * The computer panel inside the Bot inspector's 电脑 tab: the screen card,
- * the 工作位置 grid and the four sub-panels. Only surfaces that really exist
+ * and the four sub-panels. Only surfaces that really exist
  * here are interactive — the built-in EgoLite browser and this Mac's runtime
  * status. Cloud desktop, private desktop, auto routing and screen capture have
  * no backend in this project, so they say so and stay disabled instead of
@@ -335,20 +317,6 @@ export function BotWorkspacePanel({
         : `EgoLite 不可用${doctor.missing.length ? ` · 缺 ${doctor.missing.join('、')}` : ''}`
       : '读取中…';
 
-  // Only 浏览器 is a real place in this project (EgoLite carries it). Everything
-  // else has no backend: no cloud desktop, no private desktop, no auto routing,
-  // and no per-Bot computer binding, so the truthful current place is 关闭.
-  const places: readonly PlaceOption[] = [
-    { id: 'auto', label: '自动', icon: Sparkles, desc: '自动选择', available: false, reason: '自动路由未接入' },
-    { id: 'cloud', label: '云端桌面', icon: Cloud, desc: '云端的一台桌面', available: false, reason: '云端桌面未接入' },
-    { id: 'private', label: '私有桌面', icon: Box, desc: '隔离的本地桌面', available: false, reason: '私有桌面未接入' },
-    { id: 'local', label: '这台电脑', icon: Monitor, desc: '你的屏幕和应用', available: false, reason: '本机只有运行时，没有受控桌面（未接入）' },
-    // 浏览器位置不是跳转：选中后就在本面板显示这个 Space 的实时画面。
-    { id: 'browser', label: '浏览器', icon: Globe, desc: '仅限网页', available: true, current: tab === 'browser', reason: '在这里实时查看 EgoLite Space 画面', run: () => setTab('browser') },
-    // 只有没在看浏览器画面时，「关闭」才是当前状态——两者互斥。
-    { id: 'off', label: '关闭', icon: Power, desc: '无电脑访问权限', available: false, current: tab !== 'browser', reason: '这些 Bot 没有独立电脑，当前就是这个状态' },
-  ];
-
   const liveSpacePicker = namedLiveSpaces.length > 0 ? (
       <div className="rounded-xl bg-brand-surface-raised p-2.5" data-testid="bot-workspace-live-spaces">
         <div className="flex items-center justify-between gap-2 px-0.5">
@@ -503,53 +471,14 @@ export function BotWorkspacePanel({
                   </p>
                 )}
               </div>
+              {/* 只留一句状态：截图来源与刷新机制对用户不重要，说多了反而是噪音。 */}
               <p data-testid="bot-workspace-screen-note" className="mt-2 text-[9px] leading-4 text-brand-muted">
-                画面来自 EgoLite Space 的当前页面（只读，每 3 秒刷新），不是 Mac 桌面截屏。
-                {screenFrame?.capturedAt ? ` 更新于 ${new Date(screenFrame.capturedAt).toLocaleTimeString('zh-CN', { hour12: false })}` : ''}
-                {screenPaused ? ' · 已暂停刷新' : ''}
+                {screenPaused ? '已暂停' : '实时'}
+                {screenFrame?.capturedAt ? ` · ${new Date(screenFrame.capturedAt).toLocaleTimeString('zh-CN', { hour12: false })}` : ''}
               </p>
             </div>
 
-            <div className="rounded-xl bg-brand-surface-raised p-3" data-testid="bot-workspace-places">
-              <p className="text-[11px] font-semibold">工作位置</p>
-              <p className="mt-0.5 text-[10px] leading-4 text-brand-muted">
-                选择这个 Bot 在哪里工作。本项目只有内置浏览器是真的，其余位置还没有后端。
-              </p>
-              <div role="group" aria-label="电脑目标" className="mt-2 grid auto-rows-fr grid-cols-2 gap-1.5">
-                {places.map((place) => {
-                  const Icon = place.icon;
-                  return (
-                    <button
-                      key={place.id}
-                      type="button"
-                      data-testid={`bot-workspace-place-${place.id}`}
-                      disabled={!place.available}
-                      aria-pressed={place.current === true}
-                      title={place.reason}
-                      onClick={() => place.run?.()}
-                      className={`flex min-h-[62px] min-w-0 flex-col items-stretch justify-start gap-1 rounded-lg border px-2 py-2 text-left transition ${
-                        place.current
-                          ? 'border-brand-accent/45 bg-brand-accent/[0.05] text-brand-fg'
-                          : 'border-brand-border bg-brand-surface text-brand-fg'
-                      } ${place.available ? 'hover:brightness-95' : 'cursor-not-allowed opacity-75'}`}
-                    >
-                      <span className="flex items-center gap-1.5 text-[10px] font-semibold leading-4">
-                        {place.current ? (
-                          <Check className="h-3 w-3 shrink-0 text-brand-fg" />
-                        ) : (
-                          <Icon className="h-3 w-3 shrink-0 text-brand-muted" />
-                        )}
-                        <span className="min-w-0 flex-1 truncate">{place.label}</span>
-                        {place.current ? (
-                          <span className="shrink-0 rounded-full bg-brand-accent px-1.5 py-px text-[8px] font-semibold text-brand-on-accent">当前</span>
-                        ) : null}
-                      </span>
-                      <span className="line-clamp-2 block min-h-8 text-[9px] leading-4 text-brand-muted">{place.reason}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+
           </>
         ) : null}
 
@@ -820,10 +749,6 @@ export function BotWorkspacePanel({
             </button>
           </div>
         ) : null}
-
-        <p className="px-1 text-[9px] leading-4 text-brand-muted">
-          按任务需要，这个 Bot 目前只能使用内置浏览器；这台电脑的私有桌面、云端桌面和屏幕采集都还没有接入。
-        </p>
       </div>
     </div>
   );

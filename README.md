@@ -52,6 +52,24 @@
 
 ---
 
+## 技术栈：强后端，不是套壳
+
+这不是「前端写个界面、后端转发一下」的套壳项目。真正的业务逻辑在 **Go** 里跑：账号矩阵、发布状态机、批量队列、平台契约、SQLite 状态、EgoLite Space 调度，全部是后端实现。
+
+| 层 | 技术 | 规模 / 边界 |
+|---|---|---|
+| **后端主栈** | **Go 1.26** | **702 个 Go 文件、约 22 万行** |
+| 数据库 | SQLite（`modernc.org/sqlite`，纯 Go，无 CGO） | 本地单机，状态在 `~/.alpha-nexus-egolite/` |
+| 浏览器控制 | `chromedp`（CDP）+ 平台 Publisher 契约 | 发布前准备、受限提交，不裸管浏览器 |
+| CLI / 能力目录 | `cobra` + 统一 Tool Registry | CLI、Tool Agent、UI 共用同一能力面 |
+| 前端 | React 19 + TypeScript 6 + Vite 8 + Tailwind 4 | 只是本地管理界面（`ui-web/`），不承载业务规则 |
+| 桌面壳（可选） | Wails v2 | 默认只跑浏览器版管理界面 |
+| 视频编码 | Rust（`rust/screen-encode`） | 素材处理侧工具 |
+
+一句话：**业务在 Go，界面在 TS**。前端只调用本地 HTTP API / Registry，不写独立发布逻辑；换掉前端也不影响业务跑。
+
+---
+
 ## 看完整方案
 
 - **10 页路演**：<https://alphagtm.pages.dev/>

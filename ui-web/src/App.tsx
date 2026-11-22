@@ -7,7 +7,7 @@ const BrowserWorkspaceView = lazy(() => import('./components/BrowserWorkspaceVie
 const PublishWorkspaceView = lazy(() => import('./components/PublishWorkspaceView').then((m) => ({ default: m.PublishWorkspaceView })));
 const SocialMediaWorkspaceView = lazy(() => import('./components/SocialMediaWorkspaceView').then((m) => ({ default: m.SocialMediaWorkspaceView })));
 const DashboardView = lazy(() => import('./components/DashboardView').then((m) => ({ default: m.DashboardView })));
-const XHSDataDashboardView = lazy(() => import('./components/GuanyingWorkspaceViews').then((m) => ({ default: m.GuanyingDataFeishuView })));
+const XHSDataDashboardView = lazy(() => import('./components/XHSDataDashboardView').then((m) => ({ default: m.XHSDataDashboardView })));
 const ContentCalendarView = lazy(() => import('./components/ContentCalendarView').then((m) => ({ default: m.ContentCalendarView })));
 const ShopWorkspaceView = lazy(() => import('./components/ShopWorkspaceView').then((m) => ({ default: m.ShopWorkspaceView })));
 const StudioWorkspaceView = lazy(() => import('./components/GuanyingWorkspaceViews').then((m) => ({ default: m.GuanyingSeoBuilderView })));

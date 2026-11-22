@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import useSWR from 'swr';
-import { Activity, AlertTriangle, CheckCircle2, ChevronRight, Loader2, X } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, ChevronRight, X } from 'lucide-react';
 import { api, type JobEvent, type PublishJobSummary } from '../api';
 
 /**
@@ -61,11 +61,6 @@ export const BackgroundDrawer: React.FC = () => {
   });
 
   const running = useMemo(() => (jobs ?? []).filter(isRunning), [jobs]);
-  const failedCount = useMemo(
-    () => (jobs ?? []).filter((job) => String(job.status ?? '').toLowerCase() === 'failed').length,
-    [jobs],
-  );
-
   const close = useCallback(() => setOpen(false), []);
 
   useEffect(() => {
@@ -79,27 +74,8 @@ export const BackgroundDrawer: React.FC = () => {
 
   return (
     <>
-      <button
-        type="button"
-        data-testid="background-drawer-trigger"
-        onClick={() => setOpen((value) => !value)}
-        aria-expanded={open}
-        title="后台任务与日志"
-        className="fixed bottom-4 right-4 z-40 flex items-center gap-2 rounded-full border border-brand-border bg-brand-surface px-3.5 py-2 text-[11px] font-bold text-gray-700 shadow-lg transition hover:border-brand-accent/50"
-      >
-        {running.length > 0 ? (
-          <Loader2 className="h-3.5 w-3.5 animate-spin text-brand-accent" />
-        ) : failedCount > 0 ? (
-          <AlertTriangle className="h-3.5 w-3.5 text-rose-500" />
-        ) : (
-          <Activity className="h-3.5 w-3.5 text-gray-400" />
-        )}
-        <span>
-          后台
-          {running.length > 0 ? ` · ${running.length} 进行中` : failedCount > 0 ? ` · ${failedCount} 失败` : ''}
-        </span>
-      </button>
-
+      {/* 右下角「后台」浮标已去掉：它固定悬浮在内容之上，会压住输入框与最后一屏内容。
+          抽屉本身保留，需要时由外部通过 openBackgroundDrawer 打开。 */}
       {open ? (
         <div
           role="dialog"

@@ -46,8 +46,10 @@ import {
   type TrendRadarRSSSource,
   type TrendRadarSchedule,
   type TrendRadarSignal,
+  type TrendRadarSummary,
 } from '../api';
 import { useUIStore } from '../store';
+import { demoRadarSignals, hasCompetitorHotlist, shouldFillGTMDemo } from '../lib/demoData';
 import AddCreatorDialog from './AddCreatorDialog';
 import { LocalLoadingState } from './LocalLoadingState';
 import { PlatformIcon } from './PlatformIcon';
@@ -62,7 +64,6 @@ type RadarSection = 'content' | 'collect' | 'logs';
 
 // 一屏渲染几百张卡片会让首帧明显变慢；先给一屏，再按需追加。
 const SIGNAL_PAGE_SIZE = 60;
-type RadarContentView = 'keywords' | 'videos' | 'creators';
 type KeywordLayout = 'folders' | 'list';
 type SignalSort = 'latest' | 'recurring' | 'engagement';
 type VideoLookupStage = 'idle' | 'parsing' | 'fetching' | 'analyzing';
@@ -337,7 +338,7 @@ export const DashboardView: React.FC = () => {
   const videoLookupSearching = videoLookupStage !== 'idle';
 
   const {
-    data,
+    data: summaryRaw,
     error,
     isLoading,
     isValidating,
@@ -347,6 +348,39 @@ export const DashboardView: React.FC = () => {
     revalidateOnReconnect: false,
     refreshInterval: 0,
   });
+  // 最新热榜 = TikHub 实抓同行（TikTok 59 + Instagram 50，见 public/demo/radar-real.json）。
+  // /GTM 与创空间静态页打开即填充；本机已有 ≥10 条 TikTok/Instagram 信号时完全让位。
+  // 旧的男性情感/视频号赛道信号不算「最新同行热榜」，会被替换以免用户看到过时空壳。
+  const summarySettled = summaryRaw !== undefined || Boolean(error);
+  const usingDemoSignals =
+    shouldFillGTMDemo() && summarySettled && !hasCompetitorHotlist(summaryRaw?.signals);
+  const demoSummaryShell: TrendRadarSummary = {
+    generated_at: new Date().toISOString(),
+    snapshot_state: 'ready',
+    storage: 'demo/radar-real.json · TikHub 实抓',
+    search_runs: 0,
+    signals: [],
+    video_lookups: [],
+    niches: [
+      {
+        id: 'demo-niche-competitor',
+        name: '同行内容 · TikTok / Instagram 实测',
+        description: '2026-11-21 TikHub 实抓刹车片/汽配同行热榜',
+        enabled: true,
+        search_terms: ['brake pads', 'brake lining', 'heavy duty brake'],
+        platforms: ['tiktok', 'instagram'],
+        platform_limits: { tiktok: 60, instagram: 50 },
+        state: 'ready',
+        result_count: 109,
+        search_runs: 1,
+      },
+    ],
+    creators: [],
+    sources: [],
+  };
+  const data = usingDemoSignals
+    ? { ...(summaryRaw ?? demoSummaryShell), signals: demoRadarSignals(), niches: summaryRaw?.niches?.length ? summaryRaw.niches : demoSummaryShell.niches }
+    : summaryRaw;
   const {
     data: config,
     mutate: mutateConfig,
@@ -1476,28 +1510,8 @@ export const DashboardView: React.FC = () => {
           {section === 'content' && !selectedSignal && (
             <section className="overflow-hidden">
               <div className="flex flex-wrap items-center gap-2 border-b border-brand-border px-3.5 py-2" role="tablist" aria-label="雷达内容类型">
-                {([
-                  ['keywords', '关键词搜索', Folder],
-                  ['videos', '视频搜索', Film],
-                  ['creators', '博主监控', UserRoundSearch],
-                ] as Array<[RadarContentView, string, React.ElementType]>).map(([id, label, Icon]) => (
-                  <button
-                    key={id}
-                    type="button"
-                    role="tab"
-                    aria-selected={contentView === id}
-                    onClick={() => {
-                      setContentView(id);
-                      if (id !== 'creators') setSelectedCreatorKey('');
-                    }}
-                    className={`flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition ${
-                      contentView === id ? 'bg-brand-surface-raised text-brand-fg shadow-xs' : 'text-brand-fg-subtle hover:bg-black/[0.04] hover:text-brand-fg'
-                    }`}
-                  >
-                    <Icon className="h-3.5 w-3.5" />
-                    {label}
-                  </button>
-                ))}
+                {/* 关键词搜索 / 视频搜索 / 博主监控 三个切换已去掉：内容统一在热榜里展示，
+                    不再要求用户先选一种视图。 */}
                 {contentView === 'creators' ? (
                   <div className="ml-auto flex items-center gap-1 rounded-md border border-brand-border p-0.5" role="tablist" aria-label="博主监控子视图">
                     {([
@@ -3267,10 +3281,10 @@ const SignalRow: React.FC<{
     <article
       data-testid={`trend-signal-${signal.call_id || `${signal.platform}-${signal.title}`}`}
       onClick={() => onDetail(signal)}
-      className="group flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 px-4 py-3 cursor-pointer transition-all duration-150 hover:hover:bg-brand-surface-raised hover:shadow-sm"
+      className="group flex flex-col gap-3 px-4 py-3 cursor-pointer transition-all duration-150 hover:bg-brand-surface-raised hover:shadow-sm lg:flex-row lg:items-start"
     >
       {/* 左侧：排名勋章 + 9:16 竖屏大封面 */}
-      <div className="flex items-center gap-3 shrink-0">
+      <div className="flex shrink-0 items-start gap-3">
         {rank !== undefined ? (
           <span
             className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs font-black shadow-sm ${
@@ -3291,7 +3305,7 @@ const SignalRow: React.FC<{
 
         <div
           aria-label={`查看作品详情：${signal.title}`}
-          className="relative aspect-[9/16] h-32 sm:h-40 shrink-0 overflow-hidden rounded-xl border border-brand-border bg-black text-left shadow-sm transition group-hover:scale-[1.02] group-hover:shadow"
+          className="relative aspect-[9/16] h-28 shrink-0 overflow-hidden rounded-xl border border-brand-border bg-black text-left shadow-sm transition group-hover:scale-[1.02] group-hover:shadow lg:h-36"
         >
           {signal.cover_url ? (
             <img
@@ -3315,9 +3329,9 @@ const SignalRow: React.FC<{
           </span>
         </div>
       </div>
-      {/* 中间：标题、作者、赛道、摘要 */}
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
+      {/* 中间：标题、作者、赛道、摘要。min-w 保证窄屏下还能正常横排换行。 */}
+      <div className="min-w-[12rem] flex-1">
+        <div className="flex flex-wrap items-center gap-1.5">
           <span className="rounded bg-brand-surface-raised px-2 py-0.5 text-[10px] font-bold text-brand-accent">
             {signal.niche_name}
           </span>
@@ -3357,7 +3371,7 @@ const SignalRow: React.FC<{
       </div>
 
       {/* 右侧：超大醒目互动数据看板 + 操作按钮 */}
-      <div className="flex shrink-0 items-center justify-between md:justify-end gap-4 border-t border-brand-border pt-3 md:border-t-0 md:pt-0 md:self-stretch">
+      <div className="flex shrink-0 flex-wrap items-center gap-4 lg:justify-end">
         {/* 数据块：大字体强调 */}
         <div className="flex items-center gap-4 sm:gap-6">
           <div className="text-center">
@@ -3573,7 +3587,7 @@ const SignalDetailModal: React.FC<{
                   <div className="max-w-xl">
                     <div className="flex items-center gap-2 text-brand-accent">
                       <Sparkles className="h-5 w-5" />
-                      <h3 className="text-base font-bold text-brand-fg">AI 爆款内容拆解与深度分析</h3>
+                      <h3 className="text-base font-bold text-brand-fg">AI 爆款内容拆解</h3>
                     </div>
                     <p className="mt-1.5 text-xs sm:text-[13px] leading-relaxed text-brand-fg-subtle">
                       一键提炼该爆款的【开场3秒钩子】、【情绪共鸣点】、【对标受众画像】与【复刻脚本结构】。
@@ -3586,7 +3600,7 @@ const SignalDetailModal: React.FC<{
                     disabled={analyzing}
                   >
                     {analyzing ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
-                    {analyzing ? '正在深度拆解中…' : '开始 AI 深度拆解'}
+                    {analyzing ? '正在拆解…' : '开始 AI 拆解'}
                   </button>
                 </div>
               </section>
@@ -3652,7 +3666,7 @@ const SignalDetailModal: React.FC<{
 
                   <div className="grid gap-2 sm:grid-cols-2">
                     <AnalysisCard title="爆款潜力与传播因子">{videoResult.viral_potential}</AnalysisCard>
-                    <AnalysisCard title="前 3 秒黄金钩子 (Hook)" tone="text-brand-warning">{videoResult.hook}</AnalysisCard>
+                    <AnalysisCard title="前 3 秒钩子 (Hook)" tone="text-brand-warning">{videoResult.hook}</AnalysisCard>
                     <AnalysisCard title="目标受众人群" tone="text-brand-muted">{videoResult.audience}</AnalysisCard>
                     <AnalysisCard title="核心情绪驱动力" tone="text-brand-muted">{videoResult.emotional_drivers.join('；') || '未验证'}</AnalysisCard>
                   </div>

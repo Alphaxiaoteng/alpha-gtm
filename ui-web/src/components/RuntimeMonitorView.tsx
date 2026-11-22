@@ -87,7 +87,7 @@ function ANCArchitectureView({ backendOnline, onOpenMonitor }: ANCArchitectureVi
     ['02', '能力编排', 'tools.Registry 统一暴露能力，Workflow 与 Agent 不绕过控制面。', Layers3],
     ['03', '受控执行', '本地服务、EgoLite Space 与人工接管共同完成真实动作。', ShieldCheck],
     ['04', '证据与复盘', '围绕目标、动作、结果和偏差完成全流程复盘。', GitBranch],
-    ['05', '知识主干', '验证过的方法沉淀为知识、Skill 与下一次可调用流程。', BookOpen],
+    ['05', '知识主干', '验证过的方法保存为知识、Skill 与下一次可调用的流程。', BookOpen],
   ] as const;
 
   return (
@@ -129,7 +129,7 @@ function ANCArchitectureView({ backendOnline, onOpenMonitor }: ANCArchitectureVi
       <section className="ui-card overflow-hidden">
         <div className="border-b border-brand-border px-5 py-4">
           <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.18em] text-brand-accent">Architecture loop</p>
-          <h2 className="mt-1.5 text-base font-bold text-gray-950">五层闭环</h2>
+          <h2 className="mt-1.5 text-base font-bold text-gray-950">五层结构</h2>
           <p className="mt-1 text-[11px] text-gray-500">每一层都有明确职责，失败和人工接管同样进入复盘。</p>
         </div>
         <div className="grid gap-px bg-brand-border md:grid-cols-5">

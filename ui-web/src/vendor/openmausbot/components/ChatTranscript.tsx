@@ -115,11 +115,19 @@ export function ChatTranscript({
     }
     return -1;
   })();
+  const lastUserIndex = (() => {
+    for (let index = items.length - 1; index >= 0; index -= 1) {
+      const item = items[index]!;
+      if (item.kind === "message" && item.message.role === "user") return index;
+    }
+    return -1;
+  })();
   const lastBotRow = lastBotIndex === -1 ? null : items[lastBotIndex]!;
   const lastBotKind = lastBotRow?.kind === "message" ? lastBotRow.message.kind : null;
-  // Nothing of the bot's own words is in the transcript yet (or its last row is a step, not
-  // text), so the turn's arrival is a row of its own: the dots, as upstream draws them.
-  const thinkingRow = working && lastBotKind !== "text";
+  // Nothing of the bot's own text for the current turn is in the transcript yet
+  // (lastBotIndex <= lastUserIndex means only previous turns have bot replies),
+  // so keep the thinking indicator visible until this turn's reply text arrives.
+  const thinkingRow = working && !(lastBotIndex > lastUserIndex && lastBotKind === "text");
 
   return (
     <div
@@ -190,7 +198,7 @@ export function ChatTranscript({
             {renderAvatar ? renderAvatar() : <BotAvatar bot={bot} size={40} state="working" motion="working" motionKey={0} animated />}
             <span className="flex items-center gap-1.5 text-[13px] text-brand-fg/45">
               <WorkingDots size={5} />
-              正在思考
+              思考中…
             </span>
           </div>
         ) : null}

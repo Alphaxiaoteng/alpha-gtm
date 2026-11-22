@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AlphaGTM · 封面 1600×900</title>
+<style>
+@font-face{font-family:"Pinyon Script";src:url(../alphagtm/assets/fonts/pinyon-script.woff2) format("woff2");font-weight:400;font-display:block}
+:root{
+  --bg:#050507; --ink:#f7f6f2; --ink-2:#c9c7c0; --muted:#8e8d9c;
+  --accent:#D41432; --gold:#C9A96E; --line:rgba(201,169,110,.28);
+  --display:"Bodoni 72","Bodoni 72 OS",Didot,"Songti SC",serif;
+  --sans:"Montserrat","PingFang SC",system-ui,sans-serif;
+  --mono:"JetBrains Mono","SF Mono",ui-monospace,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1600px;height:900px;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.stage{position:relative;width:1600px;height:900px;padding:66px 88px 58px;display:flex;flex-direction:column}
+
+/* 背景：极淡的暖金右上晕 + 底部一缕红，克制 */
+.stage::before{content:"";position:absolute;right:-220px;top:-300px;width:900px;height:900px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,169,110,.09),rgba(201,169,110,0) 62%)}
+.stage::after{content:"";position:absolute;left:88px;bottom:0;width:340px;height:2px;background:linear-gradient(90deg,var(--accent),rgba(212,20,50,0))}
+
+/* 顶栏 */
+.top{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:2}
+.top img{height:32px;width:auto;display:block;opacity:.92}
+.top .ev{font:400 12px/1 var(--mono);letter-spacing:.26em;color:var(--muted);text-transform:uppercase}
+
+/* 主体 */
+.main{flex:1;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2}
+.kicker{font:500 12px/1 var(--mono);letter-spacing:.32em;color:var(--gold);text-transform:uppercase;margin-bottom:30px}
+.script-row{display:flex;align-items:baseline;gap:26px;margin-bottom:26px}
+.script{display:block;font-family:"Pinyon Script",cursive;color:var(--accent);
+  font-size:112px;line-height:.9;transform:skewX(-8deg);transform-origin:0 70%}
+.script-cn{font-family:var(--display);font-size:40px;letter-spacing:.16em;color:var(--ink-2)}
+h1{font-family:var(--display);font-weight:700;font-size:88px;line-height:1.16;letter-spacing:.01em}
+h1 .line{display:block}
+.claim{margin-top:34px;font-family:var(--display);font-size:32px;line-height:1.5;color:var(--ink-2);letter-spacing:.02em}
+.claim em{font-style:normal;color:var(--gold)}
+.rule{width:120px;height:1px;background:var(--gold);margin:40px 0 26px;opacity:.7}
+.sub{font-size:18px;line-height:1.7;color:var(--muted);letter-spacing:.04em;max-width:760px}
+
+/* 底栏 */
+.bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;
+  padding-top:24px;border-top:1px solid var(--line);position:relative;z-index:2}
+.bottom .l{font:400 13px/1.8 var(--mono);color:var(--ink-2);letter-spacing:.1em}
+.bottom .l b{color:var(--ink);font-weight:600}
+.bottom .r{font:400 13px/1.8 var(--mono);color:var(--muted);letter-spacing:.12em;text-align:right}
+.bottom .r b{color:var(--gold);font-weight:500}
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <div class="top">
+    <img src="../alphagtm/assets/alphafde-gradient-logo.png" alt="AlphaFDE">
+    <span class="ev">INTERCITY HACK 湖州 · AI + GTM</span>
+  </div>
+
+  <div class="main">
+    <span class="kicker">湖州冠英 · 出海增长提案</span>
+    <div class="script-row"><span class="script">Alpha GTM</span><span class="script-cn">阿尔法营销</span></div>
+    <h1><span class="line">湖州冠英FDE解决方案</span><span class="line">出海GTM Harness</span></h1>
+    <p class="claim">让中国工厂的生意，<em>跑在一套系统里</em></p>
+    <div class="rule"></div>
+    <p class="sub">内容生产、账号运营交给 Agent；型号、线索与报价依据留在一处，人做判断。</p>
+  </div>
+
+  <div class="bottom">
+    <div class="l">参赛团队 <b>AlphaGTM</b>　·　命题企业 <b>浙江冠英汽车零部件</b></div>
+    <div class="r"><b>alphagtm.pages.dev</b><br>2026.11</div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -877,6 +877,7 @@ func botPersonaBlock(bot *Bot) string {
 	if effort := strings.TrimSpace(bot.Effort); effort != "" {
 		builder.WriteString("投入程度：" + effort + "\n")
 	}
+	builder.WriteString("聊天风格要求：像微信上跟熟人同事说话一样自然、有人味、口语化，直接说重点；默认控制在 1~3 句短话（100 字以内），能一句话说清绝不写两句。严禁输出长篇大论、Markdown 多级标题/清单模板，也不要提“我查了xx工具/数据库”，除非用户明确要求给完整代码或长方案。\n")
 	builder.WriteString("要求：\n")
 	builder.WriteString(strings.TrimSpace(bot.Instructions))
 	return builder.String()
@@ -890,7 +891,9 @@ func BotProvider(model string) ProviderID {
 	if strings.HasPrefix(model, "alpha-nexus-llm/") {
 		return ProviderCustom
 	}
-	if strings.HasPrefix(model, "openainext14/") ||
+	if strings.HasPrefix(model, "wechat-direct/") ||
+		strings.HasPrefix(model, "wechat/") ||
+		strings.HasPrefix(model, "openainext14/") ||
 		strings.HasPrefix(model, "b1x/") ||
 		strings.HasPrefix(model, "opencode/") ||
 		strings.HasPrefix(model, "magpie/") ||
