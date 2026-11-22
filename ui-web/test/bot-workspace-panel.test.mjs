@@ -57,7 +57,11 @@ test('屏幕卡片直接显示 EgoLite Space 实时画面，不再要求 macOS �
   assert.match(panel, /data-testid="bot-workspace-screen-frame"/);
   assert.match(panel, /画面来自 EgoLite Space 的当前页面/);
   // 屏幕 tab 不需要先选 Space：选择器只在浏览器 tab 出现。
-  const screenBlock = panel.slice(panel.indexOf("tab === 'screen'"), panel.indexOf("tab === 'browser'"));
+  // 切片要取「screen 分支的 JSX 内部」，而不是到下一个字符串出现为止——
+  // 后者会把后面整段浏览器分支也算进来，断言必然失败。
+  const screenStart = panel.indexOf("{tab === 'screen' ? (");
+  assert.ok(screenStart > 0, 'screen 的 JSX 分支应存在');
+  const screenBlock = panel.slice(screenStart, panel.indexOf("{tab === 'browser' ? (", screenStart));
   assert.ok(screenBlock.length > 0);
   assert.doesNotMatch(screenBlock, /liveSpacePicker/);
   // 实时画面可以暂停，并显示更新时间。
@@ -76,34 +80,19 @@ test('屏幕卡片直接显示 EgoLite Space 实时画面，不再要求 macOS �
   assert.match(panel, /data-testid="bot-workspace-screen-fallback"/);
 });
 
-test('工作位置 2×3：只有浏览器是真实入口，其余全部 fail-closed', async () => {
+test('「工作位置」整块已移除，面板只保留真实能力', async () => {
   const panel = await read(workspacePath);
 
-  assert.match(panel, /grid-cols-2/);
-  for (const label of ['自动', '云端桌面', '私有桌面', '这台电脑', '浏览器', '关闭']) {
-    assert.match(panel, new RegExp(`label: '${label}'`), `missing place ${label}`);
+  // 六个选项里五个是「未接入」的占位，按产品要求整块删掉。
+  assert.doesNotMatch(panel, /bot-workspace-places/);
+  assert.doesNotMatch(panel, /工作位置/);
+  for (const label of ['自动', '云端桌面', '私有桌面', '这台电脑']) {
+    assert.doesNotMatch(panel, new RegExp(`label: '${label}'`), `${label} 不应再出现`);
   }
-  // 六个位置只有一个是可点的。
-  const enabled = panel.match(/available: true/g) ?? [];
-  assert.equal(enabled.length, 1, 'exactly one place may be enabled');
-
-  const browser = placeBlock(panel, 'browser');
-  assert.match(browser, /available: true/);
-  // 浏览器位置不是跳转：选中在本面板看 Space 实时画面。
-  assert.match(browser, /setTab\('browser'\)/);
-  assert.doesNotMatch(browser, /setActiveTab\('fleet'\)/);
-
-  for (const id of ['auto', 'cloud', 'private', 'local', 'off']) {
-    const block = placeBlock(panel, id);
-    assert.match(block, /available: false/, `${id} must stay disabled`);
-    assert.match(block, /未接入|没有独立电脑|没有受控桌面/, `${id} must say why it cannot switch`);
-    assert.doesNotMatch(block, /setActiveTab/, `${id} must not navigate`);
-  }
-  // 「关闭」和「浏览器」互斥：不在看画面时才是当前态，不装成已连接。
-  assert.match(placeBlock(panel, 'off'), /current: tab !== 'browser'/);
-  assert.match(placeBlock(panel, 'browser'), /current: tab === 'browser'/);
-  assert.match(panel, /aria-pressed=\{place\.current === true\}/);
-  assert.match(panel, /disabled=\{!place\.available\}/);
+  // 真实能力仍在：屏幕 / 浏览器 / 数据 / 文件四个分段与 EgoLite 实时画面。
+  assert.match(panel, /bot-workspace-screen/);
+  assert.match(panel, /bot-workspace-browser/);
+  assert.match(panel, /liveSpacePicker/);
 });
 
 test('只使用现有只读能力：healthz / ego doctor / ego spaces，不调没有的桌面接口', async () => {

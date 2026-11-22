@@ -13,6 +13,7 @@
  * 只有真实数据为空时才启用，绝不覆盖已有数据；界面上带「演示数据」标记。
  */
 import type { Account, PublishContentRecord, TrendRadarSignal } from '../api';
+import realRadarJSON from '../../public/demo/radar-real.json?raw';
 
 /** 页面顶部与卡片上统一的演示标签。 */
 export const DEMO_BADGE = '演示数据';
@@ -406,14 +407,97 @@ export function isDemoRecordID(id: number): boolean {
 /**
  * 趋势雷达演示信号：**同行真实视频**，不是我们自己发的。
  *
- * 数据来自 2026-11-21 对 YouTube 的实际检索（关键词 truck brake lining manufacturer /
- * brake pad factory WVA），标题、频道、播放量与发布时长都是页面原值；封面是 YouTube
- * 官方缩略图，已下载到 public/demo/competitor-covers/，不依赖外链。
+ * 两批数据都是抓回来的原值，按优先级取：
  *
- * 看过就是看过：这里的 play / likes 只填抓得到的字段（YouTube 列表页只给播放量，
- * 拿不到点赞就留空，界面显示「—」，不编数字）。链接可点，能直接跳到原视频。
+ * 1. `public/demo/radar-real.json`：2026-11-21 经 TikHub 实抓的 TikTok
+ *    （`/api/v1/tiktok/app/v3/fetch_video_search_result`）与 Instagram
+ *    （`/api/v1/instagram/v2/general_search`）搜索结果，关键词 truck brake pad /
+ *    brake lining / brake pad / brake pad factory / brake parts / WVA 29087
+ *    (brake pad) / brake lining manufacturer，每词取互动最高的若干条。
+ * 2. 该 JSON 没有任何条目、或运行期解析失败时，退回下面的 YouTube 实测条目
+ *    （2026-11-21 手动检索，关键词 truck brake lining manufacturer /
+ *    brake pad factory WVA）。
+ *
+ * 标题、作者、播放、点赞、发布时间都是抓回来的原值。平台没给播放数时写 0——
+ * compactNumber 会把 0 渲染成「—」，所以界面上看到的是「没有这个数」，不是「0 播放」。
+ * 封面全部下载到 `public/demo/competitor-covers/`，文件名就是内容 id，
+ * 不引用会过期的 CDN 链接，任何一条 cover_url 都指向真实存在的本地文件。
  */
+
+/** radar-real.json 的一条记录；null 表示平台没返回这个字段。 */
+interface DemoRealItem {
+  id: string;
+  platform: string;
+  search_term: string;
+  title: string;
+  creator?: string;
+  creator_handle?: string;
+  play?: number | null;
+  likes?: number | null;
+  collects?: number | null;
+  shares?: number | null;
+  published_at?: string;
+  url: string;
+  cover_url: string;
+}
+
+let realSignalsCache: DemoRealItem[] | null | undefined;
+
+/**
+ * 读取 TikHub 实抓结果。`?raw` 由 Vite 在构建期把 JSON 变成字符串，
+ * 因此演示数据是同步可用的，不会出现「先空一帧再补上」的闪烁。
+ *
+ * 注意这是构建期 import：文件被删掉会让构建直接失败，而不是悄悄退回。
+ * 这样反而更安全——真丢文件时构建会报错，不会上线一个热榜全空的版本。
+ * 运行期解析失败（文件被改坏）则返回 null，退回 YouTube 静态数据。
+ */
+function loadRealSignals(): DemoRealItem[] | null {
+  if (realSignalsCache !== undefined) return realSignalsCache;
+  try {
+    const parsed = JSON.parse(realRadarJSON) as { items?: DemoRealItem[] };
+    const items = Array.isArray(parsed.items) ? parsed.items : [];
+    realSignalsCache = items.length > 0 ? items : null;
+  } catch {
+    realSignalsCache = null;
+  }
+  return realSignalsCache;
+}
+
 export function demoRadarSignals(now: Date = new Date()): TrendRadarSignal[] {
+  const iso = (days: number) => new Date(now.getTime() - days * 86_400_000).toISOString();
+  const real = loadRealSignals();
+  if (real) {
+    return real.map((item, index) => {
+      const publishedMs = item.published_at ? Date.parse(item.published_at) : NaN;
+      const daysAgo = Number.isNaN(publishedMs) ? Infinity : (now.getTime() - publishedMs) / 86_400_000;
+      return {
+        niche_id: 'demo-niche-competitor',
+        niche_name: '同行内容 · TikTok / Instagram 实测',
+        search_term: item.search_term,
+        platform: item.platform,
+        title: item.title,
+        creator: item.creator || '',
+        creator_id: item.creator_handle || '',
+        url: item.url,
+        observed_at: iso(0),
+        published_at: item.published_at || undefined,
+        cover_url: item.cover_url,
+        first_seen_at: iso(0),
+        occurrences: 1,
+        is_new: daysAgo <= 30,
+        play: item.play ?? 0,
+        likes: item.likes ?? 0,
+        collects: item.collects ?? 0,
+        shares: item.shares ?? 0,
+        demo_rank: index + 1,
+      } as TrendRadarSignal & { demo_rank: number };
+    });
+  }
+  return demoYouTubeSignals(iso);
+}
+
+/** 抓不到 radar-real.json 时的退路：2026-11-21 手动检索到的 YouTube 同行视频。 */
+function demoYouTubeSignals(iso: (days: number) => string): TrendRadarSignal[] {
   const specs: Array<{
     term: string;
     platform: string;
@@ -492,7 +576,6 @@ export function demoRadarSignals(now: Date = new Date()): TrendRadarSignal[] {
       url: 'https://www.youtube.com/watch?v=3Ete644akrs',
     },
   ];
-  const iso = (days: number) => new Date(now.getTime() - days * 86_400_000).toISOString();
   return specs.map((spec, index) => ({
     niche_id: 'demo-niche-competitor',
     niche_name: '同行内容 · YouTube 实测',

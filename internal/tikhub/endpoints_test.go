@@ -11,7 +11,7 @@ import (
 
 func TestCuratedEndpointsKeepOnlyTrendRadarCore(t *testing.T) {
 	endpoints := CuratedEndpoints()
-	if len(endpoints) < 24 || len(endpoints) > 28 {
+	if len(endpoints) < 26 || len(endpoints) > 30 {
 		t.Fatalf("curated endpoint count=%d, want focused catalog", len(endpoints))
 	}
 	requiredPlatforms := map[string]map[string]bool{
@@ -22,6 +22,8 @@ func TestCuratedEndpointsKeepOnlyTrendRadarCore(t *testing.T) {
 		"wechat_mp":    {},
 		"youtube":      {},
 		"x":            {},
+		"tiktok":       {},
+		"instagram":    {},
 	}
 	for _, endpoint := range endpoints {
 		if endpoint.ID == "" || endpoint.Name == "" || endpoint.Method == "" || endpoint.Path == "" || endpoint.DocsURL == "" {
@@ -43,6 +45,13 @@ func TestCuratedEndpointsKeepOnlyTrendRadarCore(t *testing.T) {
 		}
 	}
 	for platform, capabilities := range requiredPlatforms {
+		if platform == "tiktok" || platform == "instagram" {
+			// 这两个平台当前只做趋势雷达关键词搜索，详情/博主接口未接线。
+			if !capabilities["keyword_search"] {
+				t.Fatalf("%s missing keyword_search", platform)
+			}
+			continue
+		}
 		if platform == "youtube" || platform == "x" {
 			for _, capability := range []string{"keyword_search", "content_detail"} {
 				if !capabilities[capability] {

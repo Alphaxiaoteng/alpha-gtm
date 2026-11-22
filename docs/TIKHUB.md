@@ -43,7 +43,7 @@ GET /api/trend-radar/summary
 - 抖音、小红书：支持赛道搜索和博主资料/作品监控。
 - YouTube、X：支持赛道搜索与内容详情；YouTube 另提供官方字幕读取。
 - 视频号、快手、公众号：支持赛道搜索；固定目录也保留资料/作品接口供手动调用。
-- 数据 API 固定平台为抖音、小红书、视频号、快手、公众号、YouTube、X；文章平台只保留公众号。
+- 数据 API 固定平台为抖音、小红书、视频号、快手、公众号、YouTube、X，外加只做关键词搜索的 TikTok、Instagram；文章平台只保留公众号。
 - 搜索结果按赛道和搜索词归档；重复出现次数、首次发现、最近发现和可用互动指标由本地分析层计算。
 
 配置 API：
@@ -67,8 +67,27 @@ DELETE /api/trend-radar/creators/{platform}/{user_id}
 | 公众号 | 微信搜一搜文章垂类、文章详情、公众号资料、文章列表 |
 | YouTube | 结构化综合搜索 V2、视频详情、视频字幕 |
 | X | Top 关键词搜索、帖子详情 |
+| TikTok | App V3 视频关键词搜索（`/api/v1/tiktok/app/v3/fetch_video_search_result`） |
+| Instagram | V2 综合关键词搜索（`/api/v1/instagram/v2/general_search`） |
 
-共 26 个固定接口。抖音关键词搜索使用官方当前的 `POST /api/v1/douyin/search/fetch_video_search_v2`，YouTube 使用结构化 `GET /api/v1/youtube/web_v2/get_general_search_v2`，X 使用 `GET /api/v1/twitter/web/fetch_search_timeline`。榜单、评论、回复分页、冷门垂类和重复版本不进入 Nexus 精选目录。
+共 28 个固定接口。抖音关键词搜索使用官方当前的 `POST /api/v1/douyin/search/fetch_video_search_v2`，YouTube 使用结构化 `GET /api/v1/youtube/web_v2/get_general_search_v2`，X 使用 `GET /api/v1/twitter/web/fetch_search_timeline`。榜单、评论、回复分页、冷门垂类和重复版本不进入 Nexus 精选目录。
+
+### TikTok / Instagram 的当前边界（2026-11-21 核实）
+
+两个平台的路径与参数都对照 `api.tikhub.io` 的 OpenAPI 规格与真实返回核实过，不是按命名猜的：
+
+- TikTok 视频搜索返回 `data.search_item_list[].aweme_info`，标题在 `desc`，作者在
+  `author.nickname/unique_id`，互动在 `statistics.{play_count,digg_count,collect_count,share_count}`，
+  封面在 `video.cover.url_list[]`，发布时间在 `create_time`。固定参数 `offset=0 / count=20 / region=US`。
+- Instagram 综合搜索返回 `data.data.items[]`，每页约 8-10 条，翻页用响应里的 `pagination_token`。
+  标题在 `caption.text`，作者在 `user.{full_name,username}`，互动在 `play_count / like_count /
+  share_count`（没有收藏数），封面在 `thumbnail_url`，发布时间在 `taken_at`（秒级 Unix）。
+- 两个平台目前**只进精选目录 + 设置页接口工作台**，还没有进趋势雷达的赛道平台白名单
+  （`internal/tikhub/radar_config.go` 与前端赛道编辑的平台选项都还是 7 个平台），
+  所以暂时不能配置成定时赛道；要启用需要同时改后端白名单、`radarKeywordEndpoint`、
+  `allowedScheduleEndpoints`、信号归一化的平台分支与封面域名允许列表。
+- 关键词上 WVA 编码这类短串会撞到非汽配内容（WVA 同时也是 West Virginia / 自行车手的缩写），
+  抓取时按标题是否含 brake/pad/lining 过滤，不按标题猜品类。
 
 ## 接口调用工作台
 

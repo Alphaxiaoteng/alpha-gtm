@@ -233,6 +233,23 @@ func CuratedEndpoints() []EndpointDefinition {
 			Method: http.MethodGet, Path: "/api/v1/twitter/web/fetch_tweet_detail", DocsURL: "https://docs.tikhub.io/191321709e0",
 			Params: []EndpointParameter{stringParam("tweet_id", "帖子 ID", true, "X status ID")},
 		},
+		// TikTok / Instagram 目前只在关键词搜索这一档接线；作品详情与博主接口还没有，
+		// 趋势雷达的赛道平台白名单也还没有这两个平台（见 docs/TIKHUB.md 的平台表）。
+		// 路径与参数已对照 api.tikhub.io 的 OpenAPI 规格核实（2026-11-21），不是按命名猜的。
+		{
+			ID: "tiktok.video_search", Platform: "tiktok", Name: "视频关键词搜索", Capability: "keyword_search",
+			Method: http.MethodGet, Path: "/api/v1/tiktok/app/v3/fetch_video_search_result",
+			DocsURL: "https://api.tikhub.io/#/TikTok-App-V3-API/fetch_video_search_result_api_v1_tiktok_app_v3_fetch_video_search_result_get",
+			// 与其它搜索端点同一口径：只暴露关键词，翻页与地区走固定参数。
+			FixedParams: map[string]any{"offset": 0, "count": 20, "region": "US"},
+			Params:      []EndpointParameter{stringParam("keyword", "关键词", true, "例如：truck brake pad")},
+		},
+		{
+			ID: "instagram.general_search", Platform: "instagram", Name: "综合关键词搜索", Capability: "keyword_search",
+			Method: http.MethodGet, Path: "/api/v1/instagram/v2/general_search",
+			DocsURL: "https://api.tikhub.io/#/Instagram-V2-API/general_search_api_v1_instagram_v2_general_search_get",
+			Params:  []EndpointParameter{stringParam("keyword", "关键词", true, "例如：brake lining")},
+		},
 	}
 }
 

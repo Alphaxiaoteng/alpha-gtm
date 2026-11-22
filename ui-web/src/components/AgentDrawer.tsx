@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
-import { AlertTriangle, Check, CheckCircle2, ChevronDown, Download, FolderOpen, GitFork, History, Monitor, ShieldCheck, X } from 'lucide-react';
+import { AlertTriangle, Check, CheckCircle2, ChevronDown, Download, FolderOpen, GitFork, History, ShieldCheck, X } from 'lucide-react';
 import useSWR from 'swr';
 import {
   api,
@@ -933,17 +933,6 @@ export function AgentDrawer({ displayMode = 'drawer' }: { displayMode?: 'drawer'
     window.addEventListener('alpha-nexus:agent-model-verified', handleVerifiedModel);
     return () => window.removeEventListener('alpha-nexus:agent-model-verified', handleVerifiedModel);
   }, [providerID, conversation?.id, runBusy, input]);
-
-  // 「电脑」按钮：打开右侧电脑面板并停在电脑页。没选 Bot 时兜底到内置主 Agent，
-  // 保证任何情况下都有反应。右侧详情在本产品里是常驻面板，所以这里不做开关
-  // （关了会把 Bot 详情一起关掉），只负责切到画面。
-  const openComputerPanel = () => {
-    const state = useUIStore.getState();
-    const target = currentBot?.id || conversation?.bot_id || state.activeBotID || BUILTIN_ALPHA_AGENT_ID;
-    state.setActiveBotID(target);
-    state.setBotDetailTab('computer');
-    state.setBotInboxOpen(false);
-  };
 
   const insertBotMention = (bot: AgentBot) => {
     setInput((current) => current.replace(/@[^@\s]*$/, `@${bot.name} `));

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import useSWR from 'swr';
-import { Activity, AlertTriangle, CheckCircle2, ChevronRight, Loader2, X } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, ChevronRight, X } from 'lucide-react';
 import { api, type JobEvent, type PublishJobSummary } from '../api';
 
 /**
@@ -61,11 +61,6 @@ export const BackgroundDrawer: React.FC = () => {
   });
 
   const running = useMemo(() => (jobs ?? []).filter(isRunning), [jobs]);
-  const failedCount = useMemo(
-    () => (jobs ?? []).filter((job) => String(job.status ?? '').toLowerCase() === 'failed').length,
-    [jobs],
-  );
-
   const close = useCallback(() => setOpen(false), []);
 
   useEffect(() => {

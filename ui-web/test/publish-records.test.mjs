@@ -2,39 +2,34 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 
-test('task center stays manual-refresh and follows backend action capabilities', async () => {
+test('页面只保留内容记录与发布计划，不再有任务中心', async () => {
   const view = await readFile(new URL('../src/components/PublishRecordsView.tsx', import.meta.url), 'utf8');
   const api = await readFile(new URL('../src/api.ts', import.meta.url), 'utf8');
 
-  assert.doesNotMatch(view, /refreshInterval|setInterval|setTimeout|streamJobEvents/);
-  assert.match(view, /job\.can_cancel/);
-  assert.match(view, /job\.can_retry/);
+  // 任务中心整块已按产品要求移除（它长期是空态，且与发布记录重复）。
+  assert.doesNotMatch(view, /任务中心/);
+  assert.doesNotMatch(view, /data-testid="publish-backend-verify"/);
+  assert.doesNotMatch(view, /visibleJobs|selectedJobID/);
+  // 页面仍是手动刷新，不引入后台轮询。
+  assert.doesNotMatch(view, /refreshInterval|setInterval|streamJobEvents/);
+  // 内容记录与发布计划两个区块保留。
+  assert.match(view, /data-testid="publish-content-records"/);
+  assert.match(view, /data-testid="publish-plans"/);
+  // 后端取消/重试接口本身仍在（发布页会用），只是不在本页调用。
   assert.match(api, /`\/api\/jobs\/\$\{id\}\/cancel`/);
   assert.match(api, /`\/api\/jobs\/\$\{id\}\/retry`/);
-  assert.doesNotMatch(view, /\/resume/);
-  assert.match(view, /useEffect\(\(\) => \{/);
-  assert.match(view, /setSelectedJobID\(visibleJobs\[0\]\.id\)/);
 });
 
-test('submitted XHS jobs expose a read-only creator-backend verification action', async () => {
-  const view = await readFile(new URL('../src/components/PublishRecordsView.tsx', import.meta.url), 'utf8');
+test('核验接口仍然保留，但本页不再暴露后台核验入口', async () => {
   const api = await readFile(new URL('../src/api.ts', import.meta.url), 'utf8');
+  const view = await readFile(new URL('../src/components/PublishRecordsView.tsx', import.meta.url), 'utf8');
 
+  // 核验 API 仍在（发布链路要用），只是任务中心移除后本页没有调用入口。
   assert.match(api, /verifyPublishJobBackend/);
   assert.match(api, /`\/api\/publish-jobs\/\$\{id\}\/verify-published`/);
-  assert.match(view, /canVerifyXHSCreatorBackend\(job\)/);
-  assert.match(view, /data-testid="publish-backend-verify"/);
-  assert.match(view, /仅核验后台（不会再次发布）/);
-  assert.match(view, /data-testid="publish-backend-verification-result"/);
-  assert.match(view, />状态</);
-  assert.match(view, />阶段</);
-  assert.match(view, />错误码</);
-  assert.match(view, /api\.verifyPublishJobBackend\(selectedJobID\)/);
+  assert.doesNotMatch(view, /verifyCreatorBackend|canVerifyXHSCreatorBackend/);
+  // 本页绝不自行提交发布。
   assert.doesNotMatch(view, /submitPublishPlan/);
-  const verifyHandler = view.match(/const verifyCreatorBackend = async \(\) => \{[\s\S]*?\n  \};/u)?.[0] ?? '';
-  assert.match(verifyHandler, /api\.verifyPublishJobBackend/);
-  assert.match(verifyHandler, /Promise\.allSettled/);
-  assert.doesNotMatch(verifyHandler, /retryJob|submitPublishPlan|runAction\s*\(\s*['"]retry/u);
 });
 
 test('remote content cards keep schedule, publish, delete and failure states distinct', async () => {

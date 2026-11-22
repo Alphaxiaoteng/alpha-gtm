@@ -1,19 +1,14 @@
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import {
-  Box,
-  Check,
-  Cloud,
   Database,
   ExternalLink,
   FolderOpen,
   Globe,
   Loader2,
   Monitor,
-  Power,
   RotateCcw,
   SlidersHorizontal,
-  Sparkles,
   X,
   type LucideIcon,
 } from 'lucide-react';
@@ -66,23 +61,10 @@ const TABS: Array<{ id: WorkspaceTab; label: string; icon: LucideIcon }> = [
   { id: 'files', label: '文件', icon: FolderOpen },
 ];
 
-/** One 工作位置 option, in a 2×3 grid. */
-interface PlaceOption {
-  id: 'auto' | 'cloud' | 'private' | 'local' | 'browser' | 'off';
-  label: string;
-  icon: LucideIcon;
-  desc: string;
-  /** False means the surface behind it does not exist in Alpha-Nexus yet. */
-  available: boolean;
-  /** Why it cannot be selected, or what really happens when it is. */
-  reason: string;
-  current?: boolean;
-  run?: () => void;
-}
 
 /**
  * The computer panel inside the Bot inspector's 电脑 tab: the screen card,
- * the 工作位置 grid and the four sub-panels. Only surfaces that really exist
+ * and the four sub-panels. Only surfaces that really exist
  * here are interactive — the built-in EgoLite browser and this Mac's runtime
  * status. Cloud desktop, private desktop, auto routing and screen capture have
  * no backend in this project, so they say so and stay disabled instead of
@@ -335,20 +317,6 @@ export function BotWorkspacePanel({
         : `EgoLite 不可用${doctor.missing.length ? ` · 缺 ${doctor.missing.join('、')}` : ''}`
       : '读取中…';
 
-  // Only 浏览器 is a real place in this project (EgoLite carries it). Everything
-  // else has no backend: no cloud desktop, no private desktop, no auto routing,
-  // and no per-Bot computer binding, so the truthful current place is 关闭.
-  const places: readonly PlaceOption[] = [
-    { id: 'auto', label: '自动', icon: Sparkles, desc: '自动选择', available: false, reason: '自动路由未接入' },
-    { id: 'cloud', label: '云端桌面', icon: Cloud, desc: '云端的一台桌面', available: false, reason: '云端桌面未接入' },
-    { id: 'private', label: '私有桌面', icon: Box, desc: '隔离的本地桌面', available: false, reason: '私有桌面未接入' },
-    { id: 'local', label: '这台电脑', icon: Monitor, desc: '你的屏幕和应用', available: false, reason: '本机只有运行时，没有受控桌面（未接入）' },
-    // 浏览器位置不是跳转：选中后就在本面板显示这个 Space 的实时画面。
-    { id: 'browser', label: '浏览器', icon: Globe, desc: '仅限网页', available: true, current: tab === 'browser', reason: '在这里实时查看 EgoLite Space 画面', run: () => setTab('browser') },
-    // 只有没在看浏览器画面时，「关闭」才是当前状态——两者互斥。
-    { id: 'off', label: '关闭', icon: Power, desc: '无电脑访问权限', available: false, current: tab !== 'browser', reason: '这些 Bot 没有独立电脑，当前就是这个状态' },
-  ];
-
   const liveSpacePicker = namedLiveSpaces.length > 0 ? (
       <div className="rounded-xl bg-brand-surface-raised p-2.5" data-testid="bot-workspace-live-spaces">
         <div className="flex items-center justify-between gap-2 px-0.5">
@@ -510,8 +478,6 @@ export function BotWorkspacePanel({
               </p>
             </div>
 
-            {/* 「工作位置」整块已移除：六个选项里五个是「未接入」的占位，
-                留着只会让面板看起来很空。真实能力（EgoLite 实时画面）就在上面。 */}
 
           </>
         ) : null}

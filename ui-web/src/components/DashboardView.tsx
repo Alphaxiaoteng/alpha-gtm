@@ -63,7 +63,6 @@ type RadarSection = 'content' | 'collect' | 'logs';
 
 // 一屏渲染几百张卡片会让首帧明显变慢；先给一屏，再按需追加。
 const SIGNAL_PAGE_SIZE = 60;
-type RadarContentView = 'keywords' | 'videos' | 'creators';
 type KeywordLayout = 'folders' | 'list';
 type SignalSort = 'latest' | 'recurring' | 'engagement';
 type VideoLookupStage = 'idle' | 'parsing' | 'fetching' | 'analyzing';

@@ -890,7 +890,9 @@ func BotProvider(model string) ProviderID {
 	if strings.HasPrefix(model, "alpha-nexus-llm/") {
 		return ProviderCustom
 	}
-	if strings.HasPrefix(model, "openainext14/") ||
+	if strings.HasPrefix(model, "wechat-direct/") ||
+		strings.HasPrefix(model, "wechat/") ||
+		strings.HasPrefix(model, "openainext14/") ||
 		strings.HasPrefix(model, "b1x/") ||
 		strings.HasPrefix(model, "opencode/") ||
 		strings.HasPrefix(model, "magpie/") ||

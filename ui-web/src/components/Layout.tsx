@@ -4,7 +4,7 @@ import { prefetchView } from '../lib/routePrefetch';
 import { BUILTIN_ALPHA_AGENT_ID } from '../lib/botInbox';
 import useSWR from 'swr';
 import { api, setToken } from '../api';
-import { Activity, Bot, CheckCircle, FolderOpen, Globe, PanelLeftOpen, Radio, Send, Settings, Sparkles, TrendingUp, Users, XCircle, type LucideIcon } from 'lucide-react';
+import { Activity, Bot, CheckCircle, FolderOpen, Globe, PanelLeftOpen, Send, Settings, Sparkles, TrendingUp, Users, XCircle, type LucideIcon } from 'lucide-react';
 import { applySkin, getStoredSkin, type SkinId } from '../themes';
 import { LocalLoadingState } from './LocalLoadingState';
 import { AgentContextDrawer, AGENT_CONTEXT_OPEN_EVENT, type AgentContextSelection } from './AgentContextDrawer';
@@ -219,7 +219,6 @@ export const Layout: React.FC<LayoutProps> = ({ children, agentStage, authUser }
     const isActive = !agentSurfaceActive && currentWorkspace.id === workspace.id;
     const badge = workspace.id === 'ego' ? activeInstances || undefined : undefined;
     const label = workspaceLabel(workspace);
-    const isDashboard = workspace.id === 'dashboard';
 
     return (
       <div key={workspace.id} className="w-full">

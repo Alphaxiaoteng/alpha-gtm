@@ -1,9 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import useSWR from 'swr';
 import { useUIStore } from '../store';
-import { api, type PublishRecord } from '../api';
+
 import { Clock, Copy, ExternalLink, Film, Languages, Loader2, Sparkles } from 'lucide-react';
-import { type ContentPublishInfo, type LocalContentKind } from './LocalContentView';
+import { type LocalContentKind } from './LocalContentView';
 import type { GuanyingVideoItem } from './GuanyingWorkspaceViews';
 
 type SocialMediaSection = LocalContentKind;
@@ -22,20 +22,11 @@ const FISSION_OUTPUTS: Record<string, Array<{ lang: string; label: string; url: 
   ],
 };
 
-/** 裂变两段：先 20 秒生成过场，再逐条揭示成片（每条间隔 10 秒）。 */
+/** 生成过场时长：两条成片并发处理，同一时刻一起出片。 */
 const FISSION_STAGE_MS = 20_000;
-const FISSION_REVEAL_STEP_MS = 10_000;
-
-// 发布状态归一化：后端 publish_records.status 取值较多，这里只分三类用于展示。
-function normalizePublishStatus(status: string): 'published' | 'pending' | 'idle' {
-  if (status === 'published') return 'published';
-  if (status === 'pending' || status === 'manual_takeover' || status === 'awaiting_review' || status === 'submitted') return 'pending';
-  return 'idle';
-}
 
 
 export function SocialMediaWorkspaceView({ initialSection = 'video' }: { initialSection?: SocialMediaSection }) {
-  const domain = useUIStore((state) => state.productMode);
   // 页面只剩素材裂变，不再需要分 tab 切换；initialSection 保留只为兼容 App 的调用。
   void initialSection;
 
@@ -49,14 +40,10 @@ export function SocialMediaWorkspaceView({ initialSection = 'video' }: { initial
     setFissionID(videoID);
     setRevealedCount(0);
     setFissionStage('generating');
+    // 两条成片并发生成：等 20 秒过场结束后同时出片，不再一条一条排队。
     window.setTimeout(() => {
       setFissionStage('revealing');
-      setRevealedCount(1);
-      // 每隔 10 秒揭示一条，最后一条出现后停在中态。
-      const outputs = FISSION_OUTPUTS[videoID]?.length ?? 0;
-      for (let i = 1; i < outputs; i += 1) {
-        window.setTimeout(() => setRevealedCount(i + 1), i * FISSION_REVEAL_STEP_MS);
-      }
+      setRevealedCount(FISSION_OUTPUTS[videoID]?.length ?? 0);
     }, FISSION_STAGE_MS);
   };
 
@@ -68,7 +55,6 @@ export function SocialMediaWorkspaceView({ initialSection = 'video' }: { initial
 
   const fissionOutputs = fissionID ? FISSION_OUTPUTS[fissionID] ?? [] : [];
 
-  const { data: publishRecords } = useSWR<PublishRecord[]>('api/publish-records', api.getPublishRecords);
   const { data: realVideos } = useSWR<GuanyingVideoItem[]>('guanying-videos/manifest', async () => {
     try {
       const res = await fetch('/guanying-videos/manifest.json');
@@ -81,21 +67,6 @@ export function SocialMediaWorkspaceView({ initialSection = 'video' }: { initial
 
 
 
-
-  // content_id -> 各平台发布信息（仅取本内容库可发布的平台账号）。
-  const publishByContent = useMemo(() => {
-    const map = new Map<number, ContentPublishInfo[]>();
-    for (const rec of publishRecords ?? []) {
-      const list = map.get(rec.content_id) ?? [];
-      list.push({
-        platformCode: rec.platform_code,
-        status: normalizePublishStatus(rec.status),
-        accountId: rec.account_id,
-      });
-      map.set(rec.content_id, list);
-    }
-    return map;
-  }, [publishRecords]);
 
   return (
     <section className="space-y-5" data-testid="social-media-workspace">

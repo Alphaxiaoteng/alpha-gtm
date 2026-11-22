@@ -125,13 +125,15 @@ test('search terms can be edited and persisted without automatic network calls',
   assert.doesNotMatch(dashboard, /label:\s*'提示词'/);
 });
 
-test('radar content separates keyword video and creator folder views', () => {
-  assert.match(dashboard, /type RadarContentView = 'keywords' \| 'videos' \| 'creators'/);
+test('radar content shows one flat list, without the keyword/video/creator switcher', () => {
+  // 关键词搜索 / 视频搜索 / 博主监控 三个视图切换已按产品要求去掉：
+  // 雷达内容统一在热榜里展示，不再要求用户先选一种视图。
   for (const view of ['关键词搜索', '视频搜索', '博主监控']) {
-    assert.match(dashboard, new RegExp(view));
+    assert.doesNotMatch(dashboard, new RegExp(`'${view}'`), `${view} 不应再作为切换项出现`);
   }
+  assert.doesNotMatch(dashboard, /type RadarContentView = 'keywords'/);
+  // 博主文件夹相关能力仍在（只是不再由顶部 tab 进入）。
   assert.match(dashboard, /creator\.folder_path/);
-  assert.match(dashboard, /openPathInFinder\(selectedCreator\.folder_path\)/);
   assert.match(dashboard, /返回博主文件夹/);
 });
 
